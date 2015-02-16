@@ -14,6 +14,8 @@ if [[ ! $? -eq 0 ]]; then
 fi
 sudo yunohost app setting friendica admin_user -v $user
 
+final_path=/var/www/friendica
+
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a friendica
 if [[ ! $? -eq 0 ]]; then
