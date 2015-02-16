@@ -1,0 +1,13 @@
+#!/bin/bash
+
+db_user=friendica
+db_name=friendica
+root_pwd=$(sudo cat /etc/yunohost/mysql)
+domain=$(sudo yunohost app setting friendica domain)
+
+mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+
+sudo rm -rf /var/www/friendica
+sudo rm -f /etc/nginx/conf.d/$domain.d/friendica.conf
+
+sudo service nginx reload

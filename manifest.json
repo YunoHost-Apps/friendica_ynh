@@ -1,0 +1,49 @@
+{
+    "name": "Friendica",
+    "id": "friendica",
+    "description": {
+        "en": "Social Communication Server",
+        "fr": "Serveur de Communication Social"
+    },
+    "developer": {
+        "name": "aymhce",
+        "email": "aymhce@gmail.com",
+        "url": "http://friendica.com"
+    },
+    "multi_instance": "true",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for Friendica"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for Friendica"
+                },
+                "example": "/friendica",
+                "default": "/friendica"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the Friendica administrator (must be an existing YunoHost user)"
+                },
+                "example": "homer"
+            },
+            {
+                "name": "public_site",
+                "ask": {
+                    "en": "Is it a public Friendica site ?",
+                    "fr": "Est-ce un site public ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            }
+        ]
+    }
+}
