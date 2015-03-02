@@ -28,7 +28,8 @@ admin_mail=$(sudo yunohost user info $user | grep "mail:" | cut -d' ' -f2)
 # Get code
 version=$(cat upstream_version)
 git clone -b "${version}" 'https://github.com/friendica/friendica.git'
-sudo chown -R admin friendica
+git clone -b "master" 'https://github.com/friendica/friendica-addons.git'
+sudo mv friendica-addons friendica/addon
 sudo cp -ar friendica $final_path
 
 # Generate random password
@@ -65,14 +66,12 @@ sudo sed -i "s/\['admin_email'\] = '';/\['admin_email'\] = '$admin_mail';/g" $fi
 mysql -u $db_user -p$db_pwd $db_user < $final_path/database.sql
 
 # Ldap auth
+#wget -O ldapauth.php https://raw.githubusercontent.com/friendica/friendica-addons/master/ldapauth/ldapauth.php > /dev/null 2>&1
+#echo "Copy ldapauth.php to $final_path/addon/ldapauth..."
+#mkdir -p $final_path/addon/ldapauth
+#sudo cp ldapauth.php $final_path/addon/ldapauth
 
-wget -O ldapauth.php https://raw.githubusercontent.com/friendica/friendica-addons/master/ldapauth/ldapauth.php > /dev/null 2>&1
-echo "Copy ldapauth.php to $final_path/addon/ldapauth..."
-mkdir -p $final_path/addon/ldapauth
-sudo cp ldapauth.php $final_path/addon/ldapauth
-
-# Ldap auth config
-
+# addon config
 sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
 
 # set permission
