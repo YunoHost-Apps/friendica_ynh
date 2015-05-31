@@ -16,14 +16,16 @@
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for Friendica"
+                    "en": "Choose a domain for Friendica",
+                    "fr": "Choisissez un domaine pour Friendica"
                 },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "ask": {
-                    "en": "Choose a path for Friendica"
+                    "en": "Choose a path for Friendica",
+                    "fr": "Choisissez un chemain pour Friendica"
                 },
                 "example": "/friendica",
                 "default": "/friendica"
@@ -31,7 +33,8 @@
             {
                 "name": "admin",
                 "ask": {
-                    "en": "Choose the Friendica administrator (must be an existing YunoHost user)"
+                    "en": "Choose the Friendica administrator (must be an existing YunoHost user)",
+                    "fr": "Choisissez l'administrateur pour Friendica (l'utilisateur YunoHost doit exister)"
                 },
                 "example": "homer"
             },
