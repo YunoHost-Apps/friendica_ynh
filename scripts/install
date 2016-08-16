@@ -82,7 +82,7 @@ sudo yunohost app ssowatconf
 
 #protect URIs
 
-if [ $is_public = "No" ];
+if [ $is_public = "0" ];
 then
     sudo yunohost app setting friendica protected_uris -v "/"
     sudo yunohost app ssowatconf
