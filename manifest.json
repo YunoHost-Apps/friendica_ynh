@@ -1,16 +1,27 @@
 {
     "name": "Friendica",
     "id": "friendica",
+    "packaging_format": 1,
     "description": {
         "en": "Social Communication Server",
         "fr": "Serveur de Communication Social"
     },
-    "developer": {
-        "name": "aymhce",
-        "email": "aymhce@gmail.com",
-        "url": "http://friendica.com"
+    "url": "http://friendi.ca",
+    "license": "free",
+    "maintainer": {
+        "name": "Anmol Sharma",
+        "email": "anmol@datamol.in"
+    },
+    "requirements": {
+        "yunohost": ">> 2.5.6"
     },
     "multi_instance": "false",
+    "multi_instance": false,
+    "services": [
+        "nginx",
+        "php5-fpm",
+        "mysql"
+    ],
     "arguments": {
         "install" : [
             {
@@ -26,11 +37,11 @@
                 "name": "path",
  		"type": "path",
                 "ask": {
-                    "en": "Choose a path for Friendica",
-                    "fr": "Choisissez un chemain pour Friendica"
+                    "en": "No choice, Friendica must be installed on the ROOT domain, so be careful",
+                    "fr": "Pas de choix, Friendica doit etre installe a la racine, soyez prudent"
                 },
-                "example": "/friendica",
-                "default": "/friendica"
+                "example": "/",
+                "default": "/"
             },
             {
                 "name": "admin",
@@ -48,7 +59,7 @@
                     "en": "Is it a public Friendica site ?",
                     "fr": "Est-ce un site public ?"
                 },
-                "default": "1"
+                "default": "true"
             }
         ]
     }

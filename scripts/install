@@ -1,71 +1,109 @@
 #!/bin/bash
 
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
 # Retrieve arguments
-domain=$1
-path=$2
-user=$3
-is_public=$4
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
-# Check user parameter
-sudo yunohost user list --json | grep -q "\"username\": \"$user\""
-if [[ ! $? -eq 0 ]]; then
-    echo "Wrong user"
-    exit 1
-fi
-sudo yunohost app setting friendica admin_user -v $user
+# This is a multi-instance app, meaning it can be installed several times independently
+# The id of the app as stated in the manifest is available as $YNH_APP_ID
+# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
+# The app instance name is available as $YNH_APP_INSTANCE_NAME
+#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
+#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
+#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
+# The app instance name is probably what you are interested the most, since this is
+# guaranteed to be unique. This is a good unique identifier to define installation path,
+# db names, ...
+app=$YNH_APP_INSTANCE_NAME
 
-final_path=/var/www/friendica
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
 
-# Check domain/path availability
-sudo yunohost app checkurl $domain$path -a friendica
-if [[ ! $? -eq 0 ]]; then
-    exit 1
-fi
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
+
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app path $path_url
+ynh_app_setting_set $app admin $admin
+ynh_app_setting_set $app is_public $is_public
 
 # Get admin mail
-admin_mail=$(sudo yunohost user info $user | grep "mail:" | cut -d' ' -f2)
+admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 
-# Get code
-version=$(cat upstream_version)
-repo_url=$(cat ../conf/repo_url)
-repo_url_addons=$(cat ../conf/repo_url_addons)
-git clone -b "${version}" $repo_url friendica
-git clone -b "master" $repo_url_addons friendica-addons
-sudo mv friendica-addons friendica/addon
-sudo cp -ar friendica $final_path
+#=================================================
+# CREATE A MYSQL DATABASE
+#=================================================
+# If your app uses a MySQL database, you can use these lines to bootstrap
+# a database, an associated user and save the password in app settings
 
-# Generate random password
+db_name=$(ynh_sanitize_dbid $app)
+ynh_app_setting_set $app db_name $db_name
+ynh_mysql_setup_db $db_name $db_name
+tar.gz
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
 
-db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{24\}\).*/\1/p')
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
+ynh_setup_source "../conf/addons.src" "$final_path/addon"
 
-# Use 'friendica' as database name and user
-db_user=friendica
 
-# Initialize database and store mysql password for upgrade
-sudo yunohost app initdb $db_user -p $db_pwd
-sudo yunohost app setting friendica mysqlpwd -v $db_pwd
 
-# Modify Nginx configuration file and copy it to Nginx conf directory
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
 
-final_path=/var/www/friendica
-
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/friendica.conf
-
+# Create a dedicated nginx config
+ynh_nginx_config
 # configure friendica
 
 sudo cp $final_path/htconfig.php $final_path/.htconfig.php
 
 sudo sed -i "s@your.mysqlhost.com@localhost@g" $final_path/.htconfig.php
-sudo sed -i "s@mysqlusername@$db_user@g" $final_path/.htconfig.php
-sudo sed -i "s@mysqldatabasename@$db_user@g" $final_path/.htconfig.php
+sudo sed -i "s@mysqlusername@$db_name@g" $final_path/.htconfig.php
+sudo sed -i "s@mysqldatabasename@$db_name@g" $final_path/.htconfig.php
 sudo sed -i "s@mysqlpassword@$db_pwd@g" $final_path/.htconfig.php
 sudo sed -i "s/\['admin_email'\] = '';/\['admin_email'\] = '$admin_mail';/g" $final_path/.htconfig.php
 
 # init db
-
-mysql -u $db_user -p$db_pwd $db_user < $final_path/database.sql
+ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
 
 # addon config
 sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
@@ -73,17 +111,32 @@ sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
 # set permission
 
 sudo chown -R www-data:www-data $final_path
+# 3 - some extra folders
+sudo mkdir -p "${final_path}/view/smarty3"
+sudo chmod -R 777 $final_path/view/smarty3
 
-# Reload Nginx and regenerate SSOwat conf
+# Set up poller
+sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
+sudo cp ../conf/poller-cron /etc/cron.d/$app
 
-sudo service nginx reload
-sudo yunohost app setting friendica skipped_uris -v "/"
-sudo yunohost app ssowatconf
+#=================================================
+# SETUP SSOWAT
+#=================================================
 
-#protect URIs
-
-if [ $is_public = "0" ];
-then
-    sudo yunohost app setting friendica protected_uris -v "/"
-    sudo yunohost app ssowatconf
+if [ $is_public -eq 0 ]
+then	# Remove the public access
+	ynh_app_setting_delete $app skipped_uris
 fi
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set $app unprotected_uris "/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+sudo systemctl reload php5-fpm
+sudo systemctl reload nginx
+sudo yunohost app ssowatconf

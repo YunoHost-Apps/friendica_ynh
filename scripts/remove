@@ -1,13 +1,43 @@
 #!/bin/bash
 
-db_user=friendica
-db_name=friendica
-root_pwd=$(sudo cat /etc/yunohost/mysql)
-domain=$(sudo yunohost app setting friendica domain)
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+source _common.sh
+source /usr/share/yunohost/helpers
 
-sudo rm -rf /var/www/friendica
-sudo rm -f /etc/nginx/conf.d/$domain.d/friendica.conf
+#=================================================
+# LOAD SETTINGS
+#=================================================
 
-sudo service nginx reload
+app=$YNH_APP_INSTANCE_NAME
+
+domain=$(ynh_app_setting_get $app domain)
+db_name=$(ynh_app_setting_get $app db_name)
+
+#=================================================
+# REMOVE THE MYSQL DATABASE
+#=================================================
+
+# Remove a database if it exists, along with the associated user
+ynh_mysql_remove_db $db_name $db_name
+
+#=================================================
+# REMOVE APP MAIN DIR
+#=================================================
+
+# Remove the app directory securely
+ynh_secure_remove "/var/www/$app"
+
+#=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
+
+# Remove a cron file
+ynh_secure_remove "/etc/cron.d/$app"
