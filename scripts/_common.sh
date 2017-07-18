@@ -29,7 +29,7 @@ ynh_add_nginx_config () {
 	if test -n "${final_path:-}"; then
 		ynh_replace_string "__FINALPATH__" "$final_path" "$finalnginxconf"
 	fi
-	ynh_store_checksum_config "$finalnginxconf"
+	
 
 	sudo systemctl reload nginx
 }
