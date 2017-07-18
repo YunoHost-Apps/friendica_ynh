@@ -98,7 +98,7 @@ sudo cp -r ../conf/friendica-addons/${addons_file}/. $final_path/addon
 #=================================================
 
 # Create a dedicated nginx config
-ynh_nginx_config
+ynh_add_nginx_config
 # configure friendica
 
 sudo cp $final_path/htconfig.php $final_path/.htconfig.php
