@@ -74,7 +74,7 @@ admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 db_name=$(ynh_sanitize_dbid $app)
 ynh_app_setting_set $app db_name $db_name
 ynh_mysql_setup_db $db_name $db_name
-tar.gz
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
