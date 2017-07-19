@@ -11,4 +11,3 @@ Friendica integration for YunoHost<br>
 - [X] Ldap integration.
 - [ ] Update script
 - [ ] Backup and restore script.
-Add php-fpm.ini and php-fpm.conf(for the red error message in admin panel).
