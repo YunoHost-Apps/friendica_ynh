@@ -41,7 +41,7 @@
                     "fr": "Choisissez l'administrateur pour Friendica (l'utilisateur YunoHost doit exister)"
                 },
                 "example": "homer"
-            },
+            }
 
         ]
     }
