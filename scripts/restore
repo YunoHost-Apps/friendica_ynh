@@ -31,7 +31,7 @@ path_url=$(ynh_app_setting_get $app path)
 is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
 db_name=$(ynh_app_setting_get $app db_user)
-db_pwd=$(ynh_app_setting_get $app db_pwd)
+
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
@@ -51,6 +51,7 @@ ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
 ynh_mysql_setup_db $db_name $db_name $db_pwd
 ynh_mysql_connect_as $db_name $db_pwd $db_name < ./db.sql
 
