@@ -52,7 +52,7 @@ ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 # RESTORE THE MYSQL DATABASE
 #=================================================
 ynh_mysql_setup_db $db_name $db_name $db_pwd
-ynh_mysql_connect_as $db_name $db_pwd $db_name < db.sql
+mysql --debug-check -u $db_user -p$db_pwd $db_user < ./db.sql
 
 #=================================================
 # RESTORE THE APP MAIN DIR
