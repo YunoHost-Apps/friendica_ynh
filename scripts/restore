@@ -28,7 +28,6 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get $app domain)
 path_url=$(ynh_app_setting_get $app path)
-is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
 db_name=$(ynh_app_setting_get $app db_name)
 
@@ -68,14 +67,8 @@ sudo chmod -R 777 $final_path/view/smarty3
 #=================================================
 ynh_restore_file "/etc/cron.d/$app"
 
-
-# Make app public if necessary
-if [ "$is_public" = "Yes" ];
-then
-        ynh_app_setting_set $app skipped_uris "/"
-else
-        ynh_app_setting_set $app protected_uris "/"
-fi
+# unprotected_uris allows SSO credentials to be passed anyway.
+ynh_app_setting_set $app unprotected_uris "/"
 
 # And Reload services
 sudo service php5-fpm reload

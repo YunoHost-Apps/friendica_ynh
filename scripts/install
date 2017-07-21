@@ -22,9 +22,9 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
+path_url='/'
 admin=$YNH_APP_ARG_ADMIN
-is_public=$YNH_APP_ARG_IS_PUBLIC
+is_public='true'
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -130,16 +130,10 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 # SETUP SSOWAT
 #=================================================
 
-if [ $is_public -eq 0 ]
-then	# Remove the public ac https://yourhostname.tld/install/testrewrite acess
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
+
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set $app unprotected_uris "/"
-fi
+
 
 #=================================================
 # RELOAD NGINX

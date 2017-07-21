@@ -28,20 +28,10 @@
                 "name": "domain",
                 "type": "domain",
 		"ask": {
-                    "en": "Choose a domain for Friendica",
-                    "fr": "Choisissez un domaine pour Friendica"
+                    "en": "Choose a domain for Friendica.Friendica must be installed on the ROOT domain, so be careful",
+                    "fr": "Choisissez un domaine pour Friendica.Friendica doit etre installe a la racine, soyez prudent"
                 },
                 "example": "domain.org"
-            },
-            {
-                "name": "path",
- 		"type": "path",
-                "ask": {
-                    "en": "No choice, Friendica must be installed on the ROOT domain, so be careful",
-                    "fr": "Pas de choix, Friendica doit etre installe a la racine, soyez prudent"
-                },
-                "example": "/",
-                "default": "/"
             },
             {
                 "name": "admin",
@@ -52,15 +42,7 @@
                 },
                 "example": "homer"
             },
-            {
-                "name": "is_public",
-		"type": "boolean",
-                "ask": {
-                    "en": "Is it a public Friendica site ?",
-                    "fr": "Est-ce un site public ?"
-                },
-                "default": "true"
-            }
+
         ]
     }
 }
