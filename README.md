@@ -1,5 +1,7 @@
-friendica_ynh
-==========
+# Friendica social network for YunoHost
+
+[![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
+
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
 <strong>Version:</strong>3.5.2<br><br>
