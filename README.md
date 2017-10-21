@@ -4,12 +4,12 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-<strong>Version:</strong>3.5.2<br><br>
+<strong>Version:</strong>3.5.4<br><br>
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 3.5.2 (commit e3f60fe70620f49d8dddc8ee95b420f0e399ab06)
-* https://github.com/friendica/friendica-addons: 3.5.2 (commit 1cd8289a9223bef8ab77fe5169bd4132ef5d1086)
+* https://github.com/friendica/friendica: 3.5.4 (commit f4632319c0554fdca10aafd0e53d5306f0538db1)
+* https://github.com/friendica/friendica-addons: 3.5.4 (commit 6a809a926c1818232c3ebafbffe5b4fd54eae805)
 
 ## Important Notes
 
