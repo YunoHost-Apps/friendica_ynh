@@ -4,12 +4,13 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-<strong>Version:</strong>3.5.4<br><br>
+<strong>Version:</strong>3.6<br><br>
+<strong>If you are updating from a very old version of Friendica, you have to first update to version 3.5.4(from here https://github.com/YunoHost-Apps/friendica_ynh/tree/58774643d2d8918e9eff0ba1c1ba38d2beea79ca) before you can update to the 3.6 release.</strong> 
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 3.5.4 (commit f4632319c0554fdca10aafd0e53d5306f0538db1)
-* https://github.com/friendica/friendica-addons: 3.5.4 (commit 6a809a926c1818232c3ebafbffe5b4fd54eae805)
+* https://github.com/friendica/friendica: 3.6 (commit bacc5de3a229ab069db527854adbe6f1e593cd5a)
+* https://github.com/friendica/friendica-addons: 3.6 (commit dbe8118e406510d85404d9577f83d68782cfe2a0)
 
 ## Important Notes
 
