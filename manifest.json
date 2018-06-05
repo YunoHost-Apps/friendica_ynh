@@ -8,15 +8,19 @@
     },
     "url": "http://friendi.ca",
     "license": "free",
+    "version": "3.4",
     "maintainer": {
         "name": "Anmol Sharma",
-        "email": "anmol@datamol.in"
+        "email": "anmol@datamol.org"
     },
     "requirements": {
-        "yunohost": ">> 2.5.6"
-    },
-    "multi_instance": "false",
-    "multi_instance": false,
+		"yunohost": ">= 2.7.2"
+    }
+    "previous_maintainers": {
+        "name": "aymhce",
+        "email": "aymhce@gmail.com"
+        },
+    "multi_instance": "true",
     "services": [
         "nginx",
         "php5-fpm",

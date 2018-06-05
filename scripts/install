@@ -24,7 +24,10 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url='/'
 admin=$YNH_APP_ARG_ADMIN
+admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 is_public=1
+database="1"
+
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -61,9 +64,17 @@ ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path $path_url
 ynh_app_setting_set $app admin $admin
 ynh_app_setting_set $app is_public $is_public
+ynh_app_setting_set $app email $admin_mail
+ynh_app_setting_set $app database $database
 
-# Get admin mail
-admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+pkg_dependencies="php5-cli php5-imagick php5-gd php5-mcrypt" 
+if [ "$(lsb_release --codename --short)" != "jessie" ]; then
+	pkg_dependencies="$pkg_dependencies php-xml"
+fi
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE A MYSQL DATABASE
@@ -84,14 +95,8 @@ ynh_app_setting_set $app final_path $final_path
 ynh_setup_source "$final_path"
 
 # 2 - Addons
-addons_file=`sudo cat ../conf/friendica-addons/source_file`;
-sudo wget -nv -i ../conf/friendica-addons/source_url -O ${addons_file}.zip
-sudo md5sum -c ../conf/friendica-addons/source_md5 --status || (echo "Corrupt source" >&2 && false)
-sudo unzip -q ${addons_file}.zip -d ../conf/friendica-addons/
 sudo mkdir $final_path/addon
-sudo cp -r ../conf/friendica-addons/${addons_file}/. $final_path/addon
-
-
+ynh_setup_source "$final_path/addon" "addons"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -99,6 +104,8 @@ sudo cp -r ../conf/friendica-addons/${addons_file}/. $final_path/addon
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
+
+
 # configure friendica
 
 sudo cp $final_path/htconfig.php $final_path/.htconfig.php
@@ -115,24 +122,47 @@ ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql
 # addon config
 sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
 
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+
+# Create a system user
+ynh_system_user_create $app
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
 # set permission
 
 sudo chown -R www-data:www-data $final_path
 # 3 - some extra folders
 sudo mkdir -p "${final_path}/view/smarty3"
 sudo chmod -R 777 $final_path/view/smarty3
+chown -R $app: $final_path
 
 # Set up poller
 sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 #=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+# Calculate and store the config file checksum into the app settings
+ynh_store_file_checksum "$final_path/.htconfig.php"
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 
 
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set $app unprotected_uris "/"
+# unprotected_uris allows SSO credentials to be passed anyway.
+ynh_app_setting_set $app unprotected_uris "/"
 
 
 #=================================================

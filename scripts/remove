@@ -19,6 +19,13 @@ domain=$(ynh_app_setting_get $app domain)
 db_name=$(ynh_app_setting_get $app db_name)
 
 #=================================================
+# REMOVE DEPENDENCIES
+#=================================================
+
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
+
+#=================================================
 # REMOVE THE MYSQL DATABASE
 #=================================================
 
@@ -39,5 +46,21 @@ ynh_secure_remove "/var/www/$app"
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
 
+#=================================================
+# REMOVE PHP-FPM CONFIGURATION
+#=================================================
+
+# Remove the dedicated php-fpm config
+ynh_remove_fpm_config
+
 # Remove a cron file
 ynh_secure_remove "/etc/cron.d/$app"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# REMOVE DEDICATED USER
+#=================================================
+
+# Delete a system user
+ynh_system_user_delete $app
