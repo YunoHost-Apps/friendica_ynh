@@ -8,14 +8,14 @@
     },
     "url": "http://friendi.ca",
     "license": "free",
-    "version": "3.4",
+    "version": "2018.05",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"
     },
     "requirements": {
 		"yunohost": ">= 2.7.2"
-    }
+    },
     "previous_maintainers": {
         "name": "aymhce",
         "email": "aymhce@gmail.com"
@@ -31,7 +31,7 @@
             {
                 "name": "domain",
                 "type": "domain",
-		"ask": {
+				"ask": {
                     "en": "Choose a domain for Friendica.Friendica must be installed on the ROOT domain, so be careful",
                     "fr": "Choisissez un domaine pour Friendica.Friendica doit etre installe a la racine, soyez prudent"
                 },
@@ -39,7 +39,7 @@
             },
             {
                 "name": "admin",
-		"type": "user",
+				"type": "user",
                 "ask": {
                     "en": "Choose the Friendica administrator (must be an existing YunoHost user)",
                     "fr": "Choisissez l'administrateur pour Friendica (l'utilisateur YunoHost doit exister)"
