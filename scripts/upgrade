@@ -103,7 +103,15 @@ ynh_store_file_checksum "$final_path/.htconfig.php"
 sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
+# Run composer 
+cd $final_path && sudo php bin/composer.phar install
 
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+
+# unprotected_uris allows SSO credentials to be passed anyway.
 ynh_app_setting_set $app skipped_uris "/"
 
 
