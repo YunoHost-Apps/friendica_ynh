@@ -108,48 +108,12 @@ ynh_add_nginx_config
 
 # configure friendica
 sudo cp /var/www/friendica/htconfig.php /var/www/friendica/.htconfig.php
-
 ynh_replace_string "your.mysqlhost.com" "localhost" "$final_path/.htconfig.php"
 ynh_replace_string "mysqlusername" "$db_name" "$final_path/.htconfig.php"
 ynh_replace_string "mysqldatabasename" "$db_name" "$final_path/.htconfig.php"
 ynh_replace_string "mysqlpassword" "$db_pwd" "$final_path/.htconfig.php"
 ynh_replace_string "['admin_email'] = '';" "['admin_email'] = '$admin_mail';" "$final_path/.htconfig.php"
 ynh_replace_string "die('The configuration you did manually contains some mistakes. Please have a look at your .htconfig.php file.');" "// die('The configuration you did manually contains some mistakes. Please have a look at your .htconfig.php file.');" "$final_path/.htconfig.php"
-
-# init db
-ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
-
-# addon config
-sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
-
-# set permission
-
-sudo chown -R www-data:www-data $final_path
-# 3 - some extra folders
-sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
-
-# Set up poller
-sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
-sudo cp ../conf/poller-cron /etc/cron.d/$app
-
-cd $final_path && sudo php bin/composer.phar install
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-
-
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set $app unprotected_uris "/"
-
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-sudo systemctl reload php5-fpm
-sudo systemctl reload nginx
-sudo yunohost app ssowatconf
 
 
 # init db
@@ -194,7 +158,6 @@ ynh_store_file_checksum "$final_path/.htconfig.php"
 
 # Run composer 
 cd $final_path && sudo php bin/composer.phar install
-
 
 #=================================================
 # SETUP SSOWAT
