@@ -4,13 +4,12 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-<strong>Version:</strong>3.6<br><br>
-<strong>If you are updating from a very old version of Friendica, you have to first update to version 3.5.4(from here https://github.com/YunoHost-Apps/friendica_ynh/tree/58774643d2d8918e9eff0ba1c1ba38d2beea79ca) before you can update to the 3.6 release.</strong> 
+**Version:2018.05**<br><br>
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 3.6 (commit bacc5de3a229ab069db527854adbe6f1e593cd5a)
-* https://github.com/friendica/friendica-addons: 3.6 (commit dbe8118e406510d85404d9577f83d68782cfe2a0)
+* https://github.com/friendica/friendica: 2018.05 (commit 2a760bb770c015703567caa91054bcb3c9422fc0)
+* https://github.com/friendica/friendica-addons: 2018.05 (commit 97108080c26ab7b98b30e4b6c61f057314b44577)
 
 ## Important Notes
 
@@ -25,6 +24,7 @@ Before installing, read the [Friendica installation instructions](https://github
 - [X] Ldap integration.
 - [X] Upgrade script
 - [X] Backup and restore script.
+- [X] Multi-instance 
 
 ## Installation
 
@@ -33,30 +33,6 @@ Friendica requires a dedicated domain, so obtain one and add it using the YunoHo
 
 Friendica requires browser-approved SSL certificates. If you have certificates not issued by [Let's Encrypt](https://letsencrypt.org/), install them manually as usual.
 
-#### YunoHost >= 2.5 :
-Once the dedicated domain has been added to YunoHost, go again to the admin panel, go to domains then select your domain and click on "Install Let's Encrypt certificate".
-
-#### Yunohost < 2.5 :
-For older versions of YunoHost, once you have added the new domain, SSH into your YunoHost server and perform the following steps:
-
-1. Install [certbot](https://certbot.eff.org/) to make installing free SSL certificates from Let's Encrypt simple.
-
-1. Stop nginx
-
-		service nginx stop
-
-1. Run the **certbot** utility with the **certonly** option
-
-		certbot certonly
-
-1. Copy the generated certificate and key into the appropriate location for YunoHost to use
-
-		cp /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem /etc/yunohost/certs/YOUR_DOMAIN/crt.pem
-		cp /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem /etc/yunohost/certs/YOUR_DOMAIN/key.pem
-
-1. Restart nginx
-
-		service nginx start
 
 ### Install the Friendica application
 Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL
@@ -65,5 +41,5 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 Make sure to select your domain from the previous section as the application domain.
 
-When installation is complete, you will need to visit your new hub and login from the admin account you provided at the time of installation.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse) </b>
-Other users can use the Ldap authentication to be a normal user on the hub.
+After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it) </b>
+Public users can register and use the instance as normal users. SSO users can login with there username and password as normal users too.
