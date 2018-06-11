@@ -143,7 +143,8 @@ sudo chmod -R 777 $final_path/view/smarty3
 chown -R $app: $final_path
 
 # Set up poller
-sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
+ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
+ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 #=================================================
