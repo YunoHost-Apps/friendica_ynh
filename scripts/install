@@ -104,7 +104,7 @@ ynh_add_nginx_config
 
 
 # configure friendica
-sudo cp /var/www/friendica/htconfig.php /var/www/friendica/.htconfig.php
+sudo cp "$final_path/htconfig.php" "$final_path/.htconfig.php"
 ynh_replace_string "your.mysqlhost.com" "localhost" "$final_path/.htconfig.php"
 ynh_replace_string "mysqlusername" "$db_name" "$final_path/.htconfig.php"
 ynh_replace_string "mysqldatabasename" "$db_name" "$final_path/.htconfig.php"
