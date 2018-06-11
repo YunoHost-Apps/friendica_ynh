@@ -20,7 +20,7 @@
         "name": "aymhce",
         "email": "aymhce@gmail.com"
         },
-    "multi_instance": "true",
+    "multi_instance": true,
     "services": [
         "nginx",
         "php5-fpm",
