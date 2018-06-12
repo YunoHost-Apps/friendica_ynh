@@ -33,11 +33,8 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 # Add Dependencies
-pkg_dependencies="php5-cli php5-imagick php5-gd php5-mcrypt"
-if [ "$(lsb_release --codename --short)" != "jessie" ]; then
-	pkg_dependencies="$pkg_dependencies php-xml"
-fi
-ynh_install_app_dependencies $pkg_dependencies
+ynh_install_app_dependencies php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
+
 
 # Create a temporary directory
 tmpdir="$(mktemp -d)"
@@ -100,7 +97,8 @@ ynh_backup_if_checksum_is_different "$final_path/.htconfig.php"
 ynh_store_file_checksum "$final_path/.htconfig.php"
 
 # Set up poller
-sed -i "s@YNH_WWW_PATH@$final_path@g" ../conf/poller-cron
+ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
+ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 # Run composer 
