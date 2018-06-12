@@ -104,6 +104,7 @@ ynh_add_nginx_config
 
 
 # configure friendica
+
 sudo cp "$final_path/htconfig.php" "$final_path/.htconfig.php"
 ynh_replace_string "your.mysqlhost.com" "localhost" "$final_path/.htconfig.php"
 ynh_replace_string "mysqlusername" "$db_name" "$final_path/.htconfig.php"
@@ -155,7 +156,7 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 ynh_store_file_checksum "$final_path/.htconfig.php"
 
 # Run composer 
-cd $final_path && sudo php bin/composer.phar install
+(cd $final_path && sudo php bin/composer.phar install)
 
 #=================================================
 # SETUP SSOWAT

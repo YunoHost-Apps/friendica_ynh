@@ -102,7 +102,7 @@ ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 # Run composer 
-cd $final_path && sudo php bin/composer.phar install
+(cd $final_path && sudo php bin/composer.phar install)
 
 #=================================================
 # SETUP SSOWAT
