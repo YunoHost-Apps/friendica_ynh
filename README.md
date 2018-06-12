@@ -1,5 +1,7 @@
 # Friendica social network for YunoHost
 
+[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://ci-apps.yunohost.org/jenkins/job/friendica%20%28Community%29/lastBuild/consoleFull)
+
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
 
