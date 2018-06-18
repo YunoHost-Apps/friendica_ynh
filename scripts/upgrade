@@ -41,9 +41,6 @@ tmpdir="$(mktemp -d)"
 # Backup the config file in the temp dir
 cp -a "$final_path/.htconfig.php" "$tmpdir/.htconfig.php"
 
-# Remove the app directory securely
-ynh_secure_remove "$final_path"
-
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
 	final_path=/var/www/$app
