@@ -138,7 +138,7 @@ ynh_add_fpm_config
 sudo chown -R www-data:www-data $final_path
 # 3 - some extra folders
 sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
+sudo chmod -R 775 $final_path/view/smarty3
 chown -R $app: $final_path
 
 # Set up poller

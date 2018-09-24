@@ -40,6 +40,9 @@ ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-ima
 tmpdir="$(mktemp -d)"
 # Backup the config file in the temp dir
 cp -a "$final_path/.htconfig.php" "$tmpdir/.htconfig.php"
+if [ -f $final_path/.htaccess ]; then
+    cp -a "$final_path/.htaccess" "$tmpdir/.htaccess"
+fi
 
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
@@ -57,6 +60,9 @@ path_url=$(ynh_normalize_url_path $path_url)
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
 sudo cp -a "$tmpdir/.htconfig.php" "${final_path}"
+if [ -f $final_path/.htaccess ]; then
+    cp -af "$tmpdir/.htaccess" "${final_path}"
+fi
 sudo rm -Rf "$tmpdir"
 
 #Copy Addons
@@ -65,7 +71,7 @@ ynh_setup_source "$final_path/addon" "addons"
 
 # 3 - some extra folders
 sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
+sudo chmod -R 775 $final_path/view/smarty3
 
 #=================================================
 # CREATE DEDICATED USER
