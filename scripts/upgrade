@@ -110,9 +110,9 @@ ynh_add_nginx_config
 ynh_add_fpm_config
 
 # Verify the checksum and backup the file if it's different
-ynh_backup_if_checksum_is_different "$final_path/.htconfig.php"
+ynh_backup_if_checksum_is_different "$final_path/config/local.ini.php"
 # Recalculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/.htconfig.php"
+ynh_store_file_checksum "$final_path/config/local.ini.php"
 
 # Set up poller
 ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
