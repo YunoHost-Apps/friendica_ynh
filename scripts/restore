@@ -90,9 +90,9 @@ chmod -R 775 $final_path/view/smarty3
 # RESTORE THE CRON FILE
 #=================================================
 ynh_restore_file "/etc/cron.d/$app"
-
-# Run composer 
-(cd $final_path && sudo php bin/composer.phar install)
+ 
+# Install composer
+init_composer "$final_path"
 
 # unprotected_uris allows SSO credentials to be passed anyway.
 ynh_app_setting_set $app unprotected_uris "/"
