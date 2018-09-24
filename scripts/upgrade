@@ -43,6 +43,7 @@ cp -a "$final_path/.htconfig.php" "$tmpdir/.htconfig.php"
 if [ -f $final_path/.htaccess ]; then
     cp -a "$final_path/.htaccess" "$tmpdir/.htaccess"
 fi
+rm -Rf "$final_path"
 
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
