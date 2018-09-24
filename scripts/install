@@ -154,8 +154,8 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum "$final_path/config/local.ini.php"
 
-# Install composer
-init_composer "$final_path"
+# Run composer 
+(cd $final_path && sudo php bin/composer.phar install)
 
 #=================================================
 # SETUP SSOWAT

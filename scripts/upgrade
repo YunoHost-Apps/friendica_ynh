@@ -119,8 +119,8 @@ ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
 ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
 
-# Install composer
-init_composer "$final_path"
+# Run composer 
+(cd $final_path && sudo php bin/composer.phar install)
 
 #=================================================
 # SETUP SSOWAT
