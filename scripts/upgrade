@@ -74,10 +74,10 @@ path_url=$(ynh_normalize_url_path $path_url)
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
-sudo cp -af "$tmpdir/.htaccess" "${final_path}/."
-sudo cp -af "$tmpdir/view/smarty3" "${final_path}/view/."
+sudo cp -af "$tmpdir/.htaccess"            "${final_path}/."
+sudo cp -af "$tmpdir/view/smarty3"         "${final_path}/view/."
 sudo cp -af "$tmpdir/config/local.ini.php" "${final_path}/config/."
-
+sudo cp -af "../conf/addon.ini.php"        "${final_path}/config/."
 
 sudo rm -Rf "$tmpdir"
 

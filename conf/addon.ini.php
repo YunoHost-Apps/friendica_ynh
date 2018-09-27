@@ -6,27 +6,16 @@
 ;consumerkey = localhost
 ;consumersecret = mysqlusername
 
+[system]
+addon = ldapauth
+
 [ldapauth]
-	// ldap hostname server - required
-	ldap_server = localhost
-	// dn to search users - required
-	ldap_searchdn = ou=users,dc=yunohost,dc=org
-	// attribute to find username - required
-	ldap_userattr = uid
-
-	// admin dn - optional - only if ldap server dont have anonymous access
-	//ldap_binddn = cn=admin,dc=example,dc=com
-	// admin password - optional - only if ldap server dont have anonymous access
-	//ldap_bindpw = password
-
-	// for create Friendica account if user exist in ldap
-	//     required an email and a simple (beautiful) nickname on user ldap object
-	//   active account creation - optional - default none
-	ldap_autocreateaccount = true
-	//   attribute to get email - optional - default : 'mail'
-	ldap_autocreateaccount_emailattribute = mail
-	//   attribute to get nickname - optional - default : 'givenName'
-	ldap_autocreateaccount_nameattribute = givenName
+ldap_server = 'localhost'
+ldap_searchdn = 'ou=users,dc=yunohost,dc=org'
+ldap_userattr = 'uid'
+ldap_autocreateaccount = 'true'
+ldap_autocreateaccount_emailattribute = 'mail'
+ldap_autocreateaccount_nameattribute = 'name'
 
 
 INI;
