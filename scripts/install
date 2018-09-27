@@ -89,6 +89,7 @@ ynh_mysql_setup_db $db_name $db_name
 ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
+cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Addons
 sudo mkdir $final_path/addon
@@ -103,20 +104,20 @@ ynh_add_nginx_config
 
 
 # configure friendica
-sudo cp "../conf/htconfig.php" "/var/www/$app/.htconfig.php"
-ynh_replace_string "your.mysqlhost.com" "localhost"   "$final_path/.htconfig.php"
-ynh_replace_string "mysqlusername"      "$db_name"    "$final_path/.htconfig.php"
-ynh_replace_string "mysqldatabasename"  "$db_name"    "$final_path/.htconfig.php"
-ynh_replace_string "mysqlpassword"      "$db_pwd"     "$final_path/.htconfig.php"
-ynh_replace_string "__ADMIN_EMAIL__"    "$admin_mail" "$final_path/.htconfig.php"
-ynh_replace_string "die('The configuration you did manually contains some mistakes. Please have a look at your .htconfig.php file.');" "// die('The configuration you did manually contains some mistakes. Please have a look at your .htconfig.php file.');" "$final_path/.htconfig.php"
+sudo cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
+ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
+ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
+ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
+ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
+ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
+ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
 
 
 # init db
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
 
 # addon config
-sudo su -c "cat ../conf/conf.php >> $final_path/.htconfig.php"
+sudo  cp  "../conf/addon.ini.php" "$final_path/config/."
 
 #=================================================
 # CREATE DEDICATED USER
@@ -138,7 +139,7 @@ ynh_add_fpm_config
 sudo chown -R www-data:www-data $final_path
 # 3 - some extra folders
 sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
+sudo chmod -R 775 $final_path/view/smarty3
 chown -R $app: $final_path
 
 # Set up poller
@@ -151,7 +152,7 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/.htconfig.php"
+ynh_store_file_checksum "$final_path/config/local.ini.php"
 
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)

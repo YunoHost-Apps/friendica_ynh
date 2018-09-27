@@ -6,7 +6,7 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2018.05**<br><br>
+**Version:2018.09**<br><br>
 
 Current snapshot in *sources*:
 

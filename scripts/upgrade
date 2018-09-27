@@ -18,6 +18,9 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get $app domain)
 path_url=$(ynh_app_setting_get $app path)
 final_path=$(ynh_app_setting_get $app final_path)
+db_name=$(ynh_app_setting_get $app db_name)
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+admin_mail=$(ynh_app_setting_get $app email)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -39,7 +42,22 @@ ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-ima
 # Create a temporary directory
 tmpdir="$(mktemp -d)"
 # Backup the config file in the temp dir
-cp -a "$final_path/.htconfig.php" "$tmpdir/.htconfig.php"
+cp -af "$final_path/.htaccess" "$tmpdir/."
+sudo mkdir -p "$tmpdir/view"
+cp -af "$final_path/view/smarty3" "$tmpdir/view/."
+if [ -f $final_path/.htconfig.php ]; then
+    rm  "$final_path/.htconfig.php"
+    cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
+    ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
+    ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
+    ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
+    ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
+    ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
+    ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
+fi
+sudo mkdir -p "$tmpdir/config"
+cp -af "$final_path/config/local.ini.php" "$tmpdir/config/."
+rm -Rf "$final_path"
 
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
@@ -56,7 +74,11 @@ path_url=$(ynh_normalize_url_path $path_url)
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
-sudo cp -a "$tmpdir/.htconfig.php" "${final_path}"
+sudo cp -af "$tmpdir/.htaccess"            "${final_path}/."
+sudo cp -af "$tmpdir/view/smarty3"         "${final_path}/view/."
+sudo cp -af "$tmpdir/config/local.ini.php" "${final_path}/config/."
+sudo cp -af "../conf/addon.ini.php"        "${final_path}/config/."
+
 sudo rm -Rf "$tmpdir"
 
 #Copy Addons
@@ -64,8 +86,7 @@ sudo mkdir $final_path/addon
 ynh_setup_source "$final_path/addon" "addons"
 
 # 3 - some extra folders
-sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
+sudo chmod -R 775 $final_path/view/smarty3
 
 #=================================================
 # CREATE DEDICATED USER
@@ -89,9 +110,9 @@ ynh_add_nginx_config
 ynh_add_fpm_config
 
 # Verify the checksum and backup the file if it's different
-ynh_backup_if_checksum_is_different "$final_path/.htconfig.php"
+ynh_backup_if_checksum_is_different "$final_path/config/local.ini.php"
 # Recalculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/.htconfig.php"
+ynh_store_file_checksum "$final_path/config/local.ini.php"
 
 # Set up poller
 ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
