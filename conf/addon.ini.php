@@ -15,7 +15,6 @@ ldap_searchdn = 'ou=users,dc=yunohost,dc=org'
 ldap_userattr = 'uid'
 ldap_autocreateaccount = 'true'
 ldap_autocreateaccount_emailattribute = 'mail'
-ldap_autocreateaccount_nameattribute = 'name'
 
 
 INI;
