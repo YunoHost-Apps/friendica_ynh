@@ -35,7 +35,12 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
+#=================================================
+# CHECK THE PATH
+#=================================================
 
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
 
 # Add Dependencies
 ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
@@ -52,20 +57,17 @@ fi
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
+
+# Copy config file for correct place
 cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
+
+# Replace strings in config file
 ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
 ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
 ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
 ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
 ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
 ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
-
-#=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
 
 
 #Copy Addons
@@ -87,7 +89,6 @@ chown -R $app: $final_path
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-# configure friendica
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -101,7 +102,7 @@ ynh_backup_if_checksum_is_different "$final_path/config/local.ini.php"
 # Recalculate and store the config file checksum into the app settings
 ynh_store_file_checksum "$final_path/config/local.ini.php"
 
-# Set up poller
+# Set up cron job
 ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
 ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
