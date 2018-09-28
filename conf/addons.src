@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/friendica/friendica-addons/archive/2018.05.zip 
-SOURCE_SUM=e00143e9302b25b01886deac5302d326 
+SOURCE_URL=https://github.com/friendica/friendica-addons/archive/2018.09.zip
+SOURCE_SUM=9a9e4702419e369ffc7ecfd8fb5b5f97
 SOURCE_SUM_PRG=md5sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=true

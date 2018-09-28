@@ -18,6 +18,9 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get $app domain)
 path_url=$(ynh_app_setting_get $app path)
 final_path=$(ynh_app_setting_get $app final_path)
+db_name=$(ynh_app_setting_get $app db_name)
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+admin_mail=$(ynh_app_setting_get $app email)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -32,21 +35,6 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Add Dependencies
-ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
-
-
-# Create a temporary directory
-tmpdir="$(mktemp -d)"
-# Backup the config file in the temp dir
-cp -a "$final_path/.htconfig.php" "$tmpdir/.htconfig.php"
-
-# If final_path doesn't exist, create it
-if [ -z $final_path ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
-fi
-
 #=================================================
 # CHECK THE PATH
 #=================================================
@@ -54,18 +42,40 @@ fi
 # Normalize the URL path syntax
 path_url=$(ynh_normalize_url_path $path_url)
 
+# Add Dependencies
+ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
+
+
+# If final_path doesn't exist, create it
+if [ -z $final_path ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set $app final_path $final_path
+fi
+if [ -f $final_path/.htconfig.php ]; then
+	rm "$final_path/.htconfig.php"
+fi
+
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
-sudo cp -a "$tmpdir/.htconfig.php" "${final_path}"
-sudo rm -Rf "$tmpdir"
+
+# Copy config file for correct place
+cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
+
+# Replace strings in config file
+ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
+ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
+ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
+ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
+ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
+ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
+
 
 #Copy Addons
-sudo mkdir $final_path/addon
+rm -Rf "$final_path/addon"
 ynh_setup_source "$final_path/addon" "addons"
 
 # 3 - some extra folders
-sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 777 $final_path/view/smarty3
+sudo chmod -R 775 $final_path/view/smarty3
 
 #=================================================
 # CREATE DEDICATED USER
@@ -79,7 +89,6 @@ chown -R $app: $final_path
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-# configure friendica
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -89,11 +98,11 @@ ynh_add_nginx_config
 ynh_add_fpm_config
 
 # Verify the checksum and backup the file if it's different
-ynh_backup_if_checksum_is_different "$final_path/.htconfig.php"
+ynh_backup_if_checksum_is_different "$final_path/config/local.ini.php"
 # Recalculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/.htconfig.php"
+ynh_store_file_checksum "$final_path/config/local.ini.php"
 
-# Set up poller
+# Set up cron job
 ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
 ynh_replace_string "__USER__" "$app" ../conf/poller-cron
 sudo cp ../conf/poller-cron /etc/cron.d/$app
