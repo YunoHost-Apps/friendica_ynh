@@ -41,20 +41,16 @@ ynh_abort_if_errors
 ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
 
 
-# Create a temporary directory
-tmpdir="$(mktemp -d)"
-# Backup the config file in the temp dir
-cp -af "$final_path/.htaccess" "$tmpdir/."
-sudo mkdir -p "$tmpdir/view"
-cp -af "$final_path/view/smarty3" "$tmpdir/view/."
-if [ -f $final_path/.htconfig.php ]; then
-	rm "$final_path/.htconfig.php"
-fi
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
 	final_path=/var/www/$app
 	ynh_app_setting_set $app final_path $final_path
 fi
+if [ -f $final_path/.htconfig.php ]; then
+	rm "$final_path/.htconfig.php"
+fi
+
+# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
 cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
 ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
@@ -71,16 +67,9 @@ ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER
 # Normalize the URL path syntax
 path_url=$(ynh_normalize_url_path $path_url)
 
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
-sudo cp -af "$tmpdir/.htaccess"            "${final_path}/."
-sudo cp -af "$tmpdir/view/smarty3"         "${final_path}/view/."
-sudo cp -af "../conf/addon.ini.php"        "${final_path}/config/."
-
-sudo rm -Rf "$tmpdir"
 
 #Copy Addons
-sudo mkdir $final_path/addon
+rm -Rf "$final_path/addon"
 ynh_setup_source "$final_path/addon" "addons"
 
 # 3 - some extra folders
