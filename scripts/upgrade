@@ -47,7 +47,9 @@ tmpdir="$(mktemp -d)"
 cp -af "$final_path/.htaccess" "$tmpdir/."
 sudo mkdir -p "$tmpdir/view"
 cp -af "$final_path/view/smarty3" "$tmpdir/view/."
-rm -Rf "$final_path"
+if [ -f $final_path/.htconfig.php ]; then
+	rm "$final_path/.htconfig.php"
+fi
 # If final_path doesn't exist, create it
 if [ -z $final_path ]; then
 	final_path=/var/www/$app
