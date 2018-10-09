@@ -10,8 +10,8 @@
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2018.05 (commit 2a760bb770c015703567caa91054bcb3c9422fc0)
-* https://github.com/friendica/friendica-addons: 2018.05 (commit 97108080c26ab7b98b30e4b6c61f057314b44577)
+* https://github.com/friendica/friendica: 2018.09 (commit c48fcd4a8f329946cdf09d214596ecf29e859cff)
+* https://github.com/friendica/friendica-addons: 2018.09 (commit 9c275a4185956fb2ca790263fb72f6da6311742f)
 
 ## Important Notes
 
