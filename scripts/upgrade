@@ -21,6 +21,7 @@ final_path=$(ynh_app_setting_get $app final_path)
 db_name=$(ynh_app_setting_get $app db_name)
 db_pwd=$(ynh_app_setting_get $app mysqlpwd)
 admin_mail=$(ynh_app_setting_get $app email)
+admin=$(ynh_app_setting_get $app admin)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -55,6 +56,11 @@ if [ -f $final_path/.htconfig.php ]; then
 	rm "$final_path/.htconfig.php"
 fi
 
+if [ -z $admin_mail ]; then	# If admin_mail setting doesn't exist
+	admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
+	ynh_app_setting_set $app email $admin_mail
+fi
+
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
 
@@ -84,9 +90,6 @@ sudo chmod -R 775 $final_path/view/smarty3
 # Create a system user
 ynh_system_user_create $app
 
-# Set app as owner
-chown -R $app: $final_path
-
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
@@ -109,6 +112,9 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)
+
+# Set app as owner
+chown -R $app: $final_path
 
 #=================================================
 # SETUP SSOWAT
