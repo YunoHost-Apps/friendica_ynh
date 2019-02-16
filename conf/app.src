@@ -1,6 +1,6 @@
-SOURCE_URL=https://github.com/friendica/friendica/archive/2018.09.zip
-SOURCE_SUM=02407b87da8d645faaa88429970617231d71bb7611ebe2770f5cca5c54e60e2e
+SOURCE_URL=https://github.com/friendica/friendica/releases/download/2019.01/friendica-full-2019.01.tar.bz2
+SOURCE_SUM=f56f9f9e8de4380d10ec625d253bf346be3143011ce693d9e0f9f26ed05b0bacf
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=zip
+SOURCE_FORMAT=tar.bz2
 SOURCE_IN_SUBDIR=true
 SOURCE_FILENAME=
