@@ -104,13 +104,13 @@ ynh_add_nginx_config
 
 
 # configure friendica
-sudo cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
-ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
-ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
-ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
-ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
-ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
-ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
+sudo cp -f "/var/www/$app/config/local-sample.config.php" "/var/www/$app/config/local.config.php"
+ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.config.php"
+ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.config.php"
+ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.config.php"
+ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.config.php"
+ynh_replace_string "'admin_email' => '',"      "'admin_email' => '$admin_mail'," "$final_path/config/local.config.php"
+ynh_replace_string "REGISTER_OPEN" "REGISTER_CLOSED" "$final_path/config/local.config.php"
 
 
 # init db
