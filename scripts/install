@@ -117,7 +117,7 @@ ynh_replace_string "REGISTER_OPEN" "REGISTER_CLOSED" "$final_path/config/local.c
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
 
 # addon config
-sudo  cp  "../conf/addon.ini.php" "$final_path/config/."
+sudo  cp  "../conf/addon.config.php" "$final_path/config/."
 
 #=================================================
 # CREATE DEDICATED USER
@@ -151,7 +151,7 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/config/local.ini.php"
+ynh_store_file_checksum "$final_path/config/local.config.php"
 
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)
