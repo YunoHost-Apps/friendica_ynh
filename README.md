@@ -10,8 +10,8 @@
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2018.09 (commit c48fcd4a8f329946cdf09d214596ecf29e859cff)
-* https://github.com/friendica/friendica-addons: 2018.09 (commit 9c275a4185956fb2ca790263fb72f6da6311742f)
+* https://github.com/friendica/friendica: 2019.01 
+* https://github.com/friendica/friendica-addons: 2018.01
 
 ## Important Notes
 
@@ -22,11 +22,8 @@ Before installing, read the [Friendica installation instructions](https://github
 <b>Note:</b>You can use accounts from YunoHost's LDAP. There are not yet active SSO.<br><br>
 
 # To-do
-- [X] Installation and remove script.
-- [X] Ldap integration.
-- [X] Upgrade script
-- [X] Backup and restore script.
-- [X] Multi-instance 
+- [ ] Fail2Ban support
+
 
 ## Installation
 
