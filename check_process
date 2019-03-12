@@ -10,7 +10,7 @@
 			setup_private=0
 			setup_public=1
 			upgrade=1
-			upgrade=0	from_commit=CommitHash
+			upgrade=1	from_commit=1c018b9ed379e25d5bcab4bd27e9833feee9da68
 			backup_restore=1
 			multi_instance=1
 			incorrect_path=1
@@ -31,4 +31,4 @@
 		Level 10=0
 	;;; Options
 	Email=anmol@datamol.org
-	Notification=none
+	Notification=change
