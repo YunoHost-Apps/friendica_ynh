@@ -1,5 +1,4 @@
-;; Default test
-	auto_remove=1
+;; Test complet
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
 		admin="john"	(USER)
@@ -11,18 +10,19 @@
 			setup_private=0
 			setup_public=1
 			upgrade=1
+			upgrade=1	from_commit=1c018b9ed379e25d5bcab4bd27e9833feee9da68
 			backup_restore=1
 			multi_instance=1
 			incorrect_path=1
 			port_already_use=0
 			change_url=0
+			
 	;;; Levels
 		Level 1=auto
 		Level 2=auto
 		Level 3=auto
 	# There is LDAP support for the app
 		Level 4=1
-	# Level 5:
 		Level 5=auto
 		Level 6=auto
 		Level 7=auto
@@ -31,4 +31,4 @@
 		Level 10=0
 	;;; Options
 	Email=anmol@datamol.org
-	Notification=none
+	Notification=change

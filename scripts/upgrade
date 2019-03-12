@@ -12,6 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -24,8 +25,20 @@ admin_mail=$(ynh_app_setting_get $app email)
 admin=$(ynh_app_setting_get $app admin)
 
 #=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_print_info "Ensuring downward compatibility..."
+
+# If db_name doesn't exist, create it
+if [ -z $db_name ]; then
+	db_name=$(ynh_sanitize_dbid $app)
+	ynh_app_setting_set $app db_name $db_name
+fi
+
+#=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_print_info "Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -52,11 +65,19 @@ if [ -z $final_path ]; then
 	final_path=/var/www/$app
 	ynh_app_setting_set $app final_path $final_path
 fi
+
+# Remove files for upgrade compatibilty from previous versions of Friendica 
 if [ -f $final_path/.htconfig.php ]; then
 	rm "$final_path/.htconfig.php"
 fi
 
-if [ -z $admin_mail ]; then	# If admin_mail setting doesn't exist
+if [ -f $final_path/.htconfig.php ]; then
+	rm "$final_path/config/local.ini.php"
+fi
+
+
+# If admin_mail setting doesn't exist, create it
+if [ -z $admin_mail ]; then	
 	admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 	ynh_app_setting_set $app email $admin_mail
 fi
@@ -65,15 +86,15 @@ fi
 ynh_setup_source "$final_path"
 
 # Copy config file for correct place
-cp -f "/var/www/$app/config/local-sample.ini.php" "/var/www/$app/config/local.ini.php"
+cp -f "/var/www/$app/config/local-sample.config.php" "/var/www/$app/config/local.config.php"
 
 # Replace strings in config file
-ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.ini.php"
-ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.ini.php"
-ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.ini.php"
-ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.ini.php"
-ynh_replace_string "admin_email ="      "admin_email = $admin_mail" "$final_path/config/local.ini.php"
-ynh_replace_string "register_policy = REGISTER_OPEN" "register_policy = REGISTER_CLOSED" "$final_path/config/local.ini.php"
+ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.config.php"
+ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.config.php"
+ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.config.php"
+ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.config.php"
+ynh_replace_string "'admin_email' => '',"      "'admin_email' => '$admin_mail'," "$final_path/config/local.config.php"
+ynh_replace_string "REGISTER_OPEN"  "REGISTER_CLOSED" "$final_path/config/local.config.php"
 
 
 #Copy Addons
@@ -86,9 +107,15 @@ sudo chmod -R 775 $final_path/view/smarty3
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
+ynh_print_info "Making sure dedicated system user exists..."
 
-# Create a system user
+# Create a dedicated user (if not existing)
 ynh_system_user_create $app
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_print_info "Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -96,14 +123,17 @@ ynh_add_nginx_config
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
+ynh_print_info "Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
 
-# Verify the checksum and backup the file if it's different
-ynh_backup_if_checksum_is_different "$final_path/config/local.ini.php"
-# Recalculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/config/local.ini.php"
+
+### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
+### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
+ynh_backup_if_checksum_is_different "$final_path/config/local.config.php"
+# Recalculate and store the checksum of the file for the next upgrade.
+ynh_store_file_checksum "$final_path/config/local.config.php"
 
 # Set up cron job
 ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
@@ -112,6 +142,7 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)
+(cd $final_path && sudo bin/console config system addon ldapauth)
 
 # Set app as owner
 chown -R $app: $final_path
@@ -119,13 +150,21 @@ chown -R $app: $final_path
 #=================================================
 # SETUP SSOWAT
 #=================================================
-
+ynh_print_info "Upgrading SSOwat configuration..."
 
 # unprotected_uris allows SSO credentials to be passed anyway.
 ynh_app_setting_set $app skipped_uris "/"
 
 
-# Reload services
-sudo service php5-fpm reload || true
-sudo service nginx reload || true
-sudo yunohost app ssowatconf
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_print_info "Reloading nginx web server..."
+
+systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Upgrade of $app completed"
