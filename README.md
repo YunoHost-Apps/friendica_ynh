@@ -40,5 +40,5 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 Make sure to select your domain from the previous section as the application domain.
 
-After the installation,login with the username provided at the time of the installation with your SSO password. You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjacent to the search bar. <b>(The admin panel doesn't have text, so don't get confused with it.)</b>
+After the installation, login with the username provided at the time of the installation with your SSO password. You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjacent to the search bar. <b>(The admin panel doesn't have text, so don't get confused with it.)</b>
 Public users can register and use the instance as normal users. SSO users can login with their username and password as normal users too.
