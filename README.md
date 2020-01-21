@@ -6,20 +6,20 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2019.01**<br><br>
+**Version: 2019.12**<br><br>
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2019.01 
-* https://github.com/friendica/friendica-addons: 2019.01
+* https://github.com/friendica/friendica: 2019.12 
+* https://github.com/friendica/friendica-addons: 2019.12
 
 ## Important Notes
 
-Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/master/INSTALL.txt) for important information about
+Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/develop/doc/Install.md) for important information about
 - SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
 - Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
 
-<b>Note:</b>You can use accounts from YunoHost's LDAP. There are not yet active SSO.<br><br>
+<b>Note:</b>You can use accounts from YunoHost's LDAP. Single sign-on (SSO) is not yet functional.<br><br>
 
 # To-do
 - [ ] Fail2Ban support
@@ -40,5 +40,5 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 Make sure to select your domain from the previous section as the application domain.
 
-After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it) </b>
-Public users can register and use the instance as normal users. SSO users can login with there username and password as normal users too.
+After the installation, login with the username provided at the time of the installation with your SSO password. You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjacent to the search bar. <b>(The admin panel doesn't have text, so don't get confused with it.)</b>
+Public users can register and use the instance as normal users. SSO users can login with their username and password as normal users too.
