@@ -15,7 +15,7 @@ Current snapshot in *sources*:
 
 ## Important Notes
 
-Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/master/INSTALL.txt) for important information about
+Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/develop/doc/Install.md) for important information about
 - SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
 - Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
 
