@@ -33,56 +33,71 @@ is_public=1
 database="1"
 
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
+### If it's a multi-instance app, meaning it can be installed several times independently
+### The id of the app as stated in the manifest is available as $YNH_APP_ID
+### The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
+### The app instance name is available as $YNH_APP_INSTANCE_NAME
+###    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
+###    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
+###    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
+### The app instance name is probably what interests you most, since this is
+### guaranteed to be unique. This is a good unique identifier to define installation path,
+### db names, ...
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_print_info "Validating installation parameters..."
-
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
-
-# Register (book) web path
-ynh_webpath_register $app $domain $path_url
+### About --weight and --time
+### ynh_script_progression will show to your final users the progression of each scripts.
+### In order to do that, --weight will represent the relative time of execution compared to the other steps in the script.
+### --time is a packager option, it will show you the execution time since the previous call.
+### This option should be removed before releasing your app.
+### Use the execution time, given by --time, to estimate the weight of a step.
+### A common way to do it is to set a weight equal to the execution time in second +1.
+### The execution time is given for the duration since the previous call. So the weight should be applied to this previous call.
+ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
 ### If the app uses nginx as web server (written in HTML/PHP in most cases), the final path should be "/var/www/$app".
 ### If the app provides an internal web server (or uses another application server such as uwsgi), the final path should be "/opt/yunohost/$app"
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
+
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_print_info "Storing installation settings..."
+ynh_script_progression --message="Storing installation settings..." --time --weight=1
 
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path_url
-ynh_app_setting_set $app admin $admin
-ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app email $admin_mail
-ynh_app_setting_set $app database $database
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+ynh_app_setting_set --app=$app --key=email --value=$admin_mail
+ynh_app_setting_set --app=$app --key=database --value=$database
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_print_info "Installing dependencies..."
-ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
+ynh_script_progression --message="Installing dependencies..." --time --weight=1
+
+### `ynh_install_app_dependencies` allows you to add any "apt" dependencies to the package.
+### Those deb packages will be installed as dependencies of this package.
+### If you're not using this helper:
+###		- Remove the section "REMOVE DEPENDENCIES" in the remove script
+###		- Remove the variable "pkg_dependencies" in _common.sh
+###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
+###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
+
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
-ynh_print_info "Creating a MySQL database..."
+ynh_script_progression --message="Creating a MySQL database..." --time --weight=1
+
 ### Use these lines if you need a database for the application.
 ### `ynh_mysql_setup_db` will create a database, an associated user and a ramdom password.
 ### The password will be stored as 'mysqlpwd' into the app settings,
@@ -92,32 +107,34 @@ ynh_print_info "Creating a MySQL database..."
 ###		- Remove also the section "REMOVE THE MYSQL DATABASE" in the remove script
 ###		- As well as the section "RESTORE THE MYSQL DATABASE" in the restore script
 
-db_name=$(ynh_sanitize_dbid $app)
-ynh_app_setting_set $app db_name $db_name
-ynh_mysql_setup_db $db_name $db_name
+db_name=$(ynh_sanitize_dbid --db_name=$app)
+db_user=$db_name
+ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info "Setting up source files..."
+ynh_script_progression --message="Setting up source files..." --time --weight=1
 
 ### `ynh_setup_source` is used to install an app from a zip or tar.gz file,
 ### downloaded from an upstream source, like a git repository.
 ### `ynh_setup_source` use the file conf/app.src
 
-ynh_app_setting_set $app final_path $final_path
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+ynh_setup_source --dest_dir="$final_path"
+
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Addons
 sudo mkdir $final_path/addon
-ynh_setup_source "$final_path/addon" "addons"
+ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Configuring nginx web server..."
+ynh_script_progression --message="Configuring nginx web server..." --time --weight=1
 
 ### `ynh_add_nginx_config` will use the file conf/nginx.conf
 
@@ -127,36 +144,36 @@ ynh_add_nginx_config
 
 # configure friendica
 sudo cp -f "/var/www/$app/config/local-sample.config.php" "/var/www/$app/config/local.config.php"
-ynh_replace_string "your.mysqlhost.com" "localhost"                 "$final_path/config/local.config.php"
-ynh_replace_string "mysqlusername"      "$db_name"                  "$final_path/config/local.config.php"
-ynh_replace_string "mysqldatabasename"  "$db_name"                  "$final_path/config/local.config.php"
-ynh_replace_string "mysqlpassword"      "$db_pwd"                   "$final_path/config/local.config.php"
-ynh_replace_string "'admin_email' => '',"      "'admin_email' => '$admin_mail'," "$final_path/config/local.config.php"
-ynh_replace_string "REGISTER_OPEN" "REGISTER_CLOSED" "$final_path/config/local.config.php"
+ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"                 --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"                   --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail'," --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="REGISTER_OPEN" --replace_string="REGISTER_CLOSED" --target_file="$final_path/config/local.config.php"
 
 
 # init db
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
 
 # addon config
-sudo  cp  "../conf/addon.config.php" "$final_path/config/."
+cp  "../conf/addon.config.php" "$final_path/config/."
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info "Configuring system user..."
+ynh_script_progression --message="Configuring system user..." --time --weight=1
 
 # Create a system user
-ynh_system_user_create $app
+ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info "Configuring php-fpm..."
+ynh_script_progression --message="Configuring php-fpm..." --time --weight=1
 
 ### `ynh_add_fpm_config` is used to set up a PHP config.
 ### You can remove it if your app doesn't use PHP.
-### `ynh_add_fpm_config` will use the files conf/php-fpm.conf and conf/php-fpm.ini
+### `ynh_add_fpm_config` will use the files conf/php-fpm.conf
 ### If you're not using these lines:
 ###		- You can remove these files in conf/.
 ###		- Remove the section "BACKUP THE PHP-FPM CONFIGURATION" in the backup script
@@ -169,15 +186,15 @@ ynh_print_info "Configuring php-fpm..."
 ynh_add_fpm_config
 
 
-sudo chown -R www-data:www-data $final_path
+chown -R www-data:www-data $final_path
 # 3 - some extra folders
 sudo mkdir -p "${final_path}/view/smarty3"
 sudo chmod -R 775 $final_path/view/smarty3
 
 # Set up poller
-ynh_replace_string "__YNH_WWW_PATH__" "$final_path" ../conf/poller-cron
-ynh_replace_string "__USER__" "$app" ../conf/poller-cron
-sudo cp ../conf/poller-cron /etc/cron.d/$app
+ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
+ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
+cp ../conf/poller-cron /etc/cron.d/$app
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -188,7 +205,7 @@ sudo cp ../conf/poller-cron /etc/cron.d/$app
 ### you can make a backup of this file before modifying it again if the admin had modified it.
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/config/local.config.php"
+ynh_store_file_checksum --file="$final_path/config/local.config.php"
 
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)
@@ -202,18 +219,18 @@ chown -R $app: $final_path
 
 
 # unprotected_uris allows SSO credentials to be passed anyway.
-ynh_app_setting_set $app unprotected_uris "/"
+ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Installation of $app completed"
+ynh_script_progression --message="Installation of $app completed" --time --last

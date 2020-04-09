@@ -6,12 +6,12 @@
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2019.01**<br><br>
+**Version:2020.03**<br><br>
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2019.01 
-* https://github.com/friendica/friendica-addons: 2019.01
+* https://github.com/friendica/friendica: 2020.03 
+* https://github.com/friendica/friendica-addons: 2020.03 
 
 ## Important Notes
 
