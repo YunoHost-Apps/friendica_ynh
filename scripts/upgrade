@@ -74,10 +74,6 @@ ynh_abort_if_errors
 # safely remove this line
 path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
-# Add Dependencies
-ynh_install_app_dependencies 'php-mbstring|base-files(<<9.0)' php5-cli 'php5-imagick|php-imagick' php5-gd php5-mcrypt 'php-xml|base-files(<<9.0)'
-
-
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
