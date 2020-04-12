@@ -28,7 +28,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url='/'
 admin=$YNH_APP_ARG_ADMIN
-admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
+admin_mail=$(yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 is_public=1
 database="1"
 
