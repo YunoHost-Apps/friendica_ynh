@@ -15,7 +15,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_clean_setup () {
-	### Remove this function if there's nothing to clean before calling the remove script.
 	true
 }
 # Exit if an error occurs during the execution of the script
@@ -64,7 +63,13 @@ ynh_script_progression --message="Backing up the MySQL database..." --time --wei
 
 ynh_mysql_dump_db --database="$db_name" > db.sql
 
-# Backup cron job
+#=================================================
+# SPECIFIC BACKUP
+#=================================================
+# BACKUP A CRON FILE
+#=================================================
+ynh_script_progression --message="Backing up a cron file..." --time --weight=1
+
 ynh_backup --src_path="/etc/cron.d/$app" 
 
 #=================================================

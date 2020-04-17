@@ -7,6 +7,7 @@
 #=================================================
 
 source _common.sh
+source ynh_composer__2
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -28,12 +29,6 @@ admin=$(ynh_app_setting_get --app=$app --key=admin)
 # CHECK VERSION
 #=================================================
 
-### This helper will compare the version of the currently installed app and the version of the upstream package.
-### $upgrade_type can have 2 different values
-### - UPGRADE_APP if the upstream app version has changed
-### - UPGRADE_PACKAGE if only the YunoHost package has changed
-### ynh_check_app_version_changed will stop the upgrade if the app is up to date.
-### UPGRADE_APP should be used to upgrade the core app only if there's an upgrade to do.
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
@@ -60,7 +55,6 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
-
 
 #=================================================
 # CHECK THE PATH
@@ -97,6 +91,8 @@ if [ -z $admin_mail ]; then
 fi
 
 #=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
@@ -106,27 +102,13 @@ then
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
+	
+	#Copy Addons
+	rm -Rf "$final_path/addon"
+	ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
+	# 3 - some extra folders
+	chmod -R 775 $final_path/view/smarty3
 fi
-
-# Copy config file for correct place
-cp -f "/var/www/$app/config/local-sample.config.php" "/var/www/$app/config/local.config.php"
-
-# Replace strings in config file
-ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"                 --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"                  --target_file= "$final_path/config/local.config.php"
-ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail'," --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="REGISTER_OPEN"  --replace_string="REGISTER_CLOSED" --target_file="$final_path/config/local.config.php"
-
-
-#Copy Addons
-rm -Rf "$final_path/addon"
-ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
-
-# 3 - some extra folders
-chmod -R 775 $final_path/view/smarty3
-
 
 #=================================================
 # NGINX CONFIGURATION
@@ -159,28 +141,56 @@ ynh_script_progression --message="Upgrading php-fpm configuration..." --time --w
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
 
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# UPGRADE CONFIGURATION
+#=================================================
+
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_backup_if_checksum_is_different --file="$final_path/config/local.config.php"
+	# Copy config file for correct place
+	cp -f "/var/www/$app/config/local-sample.config.php" "$final_path/config/local.config.php"
+	
+	# Replace strings in config file
+	ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"                 --target_file="$final_path/config/local.config.php"
+	ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
+	ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
+	ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"                  --target_file= "$final_path/config/local.config.php"
+	ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail'," --target_file="$final_path/config/local.config.php"
+	ynh_replace_string --match_string="REGISTER_OPEN"  --replace_string="REGISTER_CLOSED" --target_file="$final_path/config/local.config.php"
+	
+	ynh_store_file_checksum --file="$final_path/config/local.config.php"
+fi
 
 
 #=================================================
-# STORE THE CONFIG FILE CHECKSUM
+# SETUP CRON JOB
 #=================================================
 
-### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different --file="$final_path/config/local.config.php"
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/config/local.config.php"
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
+	ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
+	cp "../conf/poller-cron" "/etc/cron.d/$app"
+fi
 
-# Set up cron job
-ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
-cp "../conf/poller-cron" "/etc/cron.d/$app"
+#=================================================
+# INSTALL THE APPLICATION
+#=================================================
 
-# Run composer 
-(cd $final_path && sudo php bin/composer.phar install)
-(cd $final_path && sudo bin/console config system addon ldapauth)
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_install_composer
+	(cd $final_path && sudo bin/console config system addon ldapauth)
+fi
 
-# Set app as owner
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions on app files
 chown -R $app: $final_path
 
 #=================================================
@@ -203,4 +213,3 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Upgrade of $app completed" --time --last
-
