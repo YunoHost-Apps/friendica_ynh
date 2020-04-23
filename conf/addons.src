@@ -1,6 +1,6 @@
-SOURCE_URL=https://github.com/friendica/friendica-addons/archive/2019.01.zip
-SOURCE_SUM=23edfeddf58de1f605f8cb71603fbb31f415641b76f09a102e4bdb2ec78d508d 
+SOURCE_URL=https://github.com/friendica/friendica-addons/archive/2020.03.tar.gz
+SOURCE_SUM=937aa87bbe8a40ef78348387969e77ac0422d2ce8bd00579aaf4ce45ea1362da 
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=zip
+SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
 SOURCE_FILENAME=
