@@ -210,9 +210,14 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 # Run composer 
 (cd $final_path && sudo php bin/composer.phar install)
 (cd $final_path && sudo bin/console config system addon ldapauth)
-ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', '1', '0');"
+ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" << EOF
+REPLACE INTO `addon` SET 
+`name` = 'ldapauth',
+`installed` = 1,
+`timestamp` = UNIX_TIMESTAMP(),
+`plugin_admin` = 0;
+EOF
 chown -R $app: $final_path
-
 #=================================================
 # SETUP SSOWAT
 #=================================================
