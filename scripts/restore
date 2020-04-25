@@ -103,6 +103,7 @@ ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./
 #=================================================
 # RESTORE THE CRON FILE
 #=================================================
+
 ynh_restore_file "/etc/cron.d/$app"
 
 #=================================================

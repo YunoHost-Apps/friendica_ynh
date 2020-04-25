@@ -6,7 +6,7 @@
         "en": "Social Communication Server",
         "fr": "Serveur de Communication Social"
     },
-    "version": "2020.03~ynh1",
+    "version": "2020.03-ynh2",
     "url": "http://friendi.ca",
     "license": "free",
     "maintainer": {

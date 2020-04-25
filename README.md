@@ -21,19 +21,18 @@ Before installing, read the [Friendica installation instructions](https://github
 - SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
 - Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
 
-<b>Note:</b>You can use accounts from YunoHost's LDAP. There are not yet active SSO.<br><br>
+#### Multi-users support
+
+LDAP auth supported. There are not yet active SSO.
+<br><br>
 
 # To-do
 - [ ] Fail2Ban support
-
 
 ## Installation
 
 ### Register a new domain and add it to YunoHost
 Friendica requires a dedicated domain, so obtain one and add it using the YunoHost admin panel. **Domains -> Add domain**. As Friendica uses the full domain and is installed on the root, you can create a subdomain such as friendica.domain.tld. Don't forget to update your DNS if you manage them manually.
-
-Friendica requires browser-approved SSL certificates. If you have certificates not issued by [Let's Encrypt](https://letsencrypt.org/), install them manually as usual.
-
 
 ### Install the Friendica application
 Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL
@@ -58,7 +57,6 @@ Public users can register and use the instance as normal users. SSO users can lo
  * YunoHost website: https://yunohost.org/
 
 ---
-
 Developers info
 ----------------
 
