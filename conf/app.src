@@ -1,5 +1,5 @@
-SOURCE_URL=https://friendi.ca/wp-content/uploads/2020/03/friendica-full-2020.03.tar.gz
-SOURCE_SUM=dbfb001a90533e57fc453ff8d8d5c017236251aef78e5feb9902744d8b8dc1bd
+SOURCE_URL=https://github.com/friendica/friendica/archive/2020.03.tar.gz
+SOURCE_SUM=24aa577b6ef4d98aa3681df07ddd709ea201df9d8b8ded357fa03db3198ccfc5
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
