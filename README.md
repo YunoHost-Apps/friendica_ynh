@@ -1,15 +1,15 @@
 # Friendica social network for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica)  
+[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
-> *This package allow you to install Friendica quickly and simply on a YunoHost server.  
-If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
+> *This package allows you to install Friendica quickly and simply on a YunoHost server.  
+If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
 ## Overview
 Friendica (formerly Friendika, originally Mistpark) is an open, free, distributed social network. It forms one part of the Fediverse, an interconnected and decentralized network of independently operated servers.
 
-**Version:2020.03**<br><br>
+**Shipped version:** 2020.03
 
 ## Screenshots
 
@@ -21,7 +21,7 @@ Before installing, read the [Friendica installation instructions](https://github
 - SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
 - Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
 
-#### Multi-users support
+#### Multi-user support
 
 LDAP auth supported. There are not yet active SSO.
 <br><br>
@@ -46,7 +46,7 @@ Public users can register and use the instance as normal users. SSO users can lo
 
 #### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/friendica%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/friendica%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/friendica%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/friendica/)
 
 ## Links
@@ -57,11 +57,11 @@ Public users can register and use the instance as normal users. SSO users can lo
  * YunoHost website: https://yunohost.org/
 
 ---
-Developers info
+
+Developer info
 ----------------
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
-Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/friendica_ynh/tree/testing).
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/friendica_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
