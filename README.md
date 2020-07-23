@@ -9,7 +9,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Friendica (formerly Friendika, originally Mistpark) is an open, free, distributed social network. It forms one part of the Fediverse, an interconnected and decentralized network of independently operated servers.
 
-**Shipped version:** 2020.03
+**Shipped version:** 2020.07
 
 ## Screenshots
 
