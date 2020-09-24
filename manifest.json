@@ -8,7 +8,7 @@
     },
     "url": "http://friendi.ca",
     "license": "free",
-    "version": "2020.03-ynh2",
+    "version": "2020.09-ynh2",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"
@@ -32,7 +32,7 @@
                 "name": "domain",
                 "type": "domain",
 				"ask": {
-                    "en": "Choose a domain for Friendica.Friendica must be installed on the ROOT domain, so be careful",
+                    "en": "Choose a domain for Friendica. Friendica must be installed on the ROOT domain, so be careful!",
                     "fr": "Choisissez un domaine pour Friendica.Friendica doit etre installe a la racine, soyez prudent"
                 },
                 "example": "domain.org"
