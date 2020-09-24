@@ -9,7 +9,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 
 [Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2020.03**<br><br>
+**Version:2020.09*<br><br>
 
 Current snapshot in *sources*:
 
@@ -18,14 +18,11 @@ Current snapshot in *sources*:
 
 ## Important Notes
 
-Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/master/INSTALL.txt) for important information about
+Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/develop/doc/Install.md) for important information about
 - SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
 - Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
 
-#### Multi-users support
-
-LDAP auth supported. There are not yet active SSO.
-<br><br>
+**Note:** You can use accounts from YunoHost's LDAP. Single sign-on (SSO) is not yet functional.
 
 # To-do
 - [ ] Fail2Ban support
@@ -36,15 +33,19 @@ LDAP auth supported. There are not yet active SSO.
 ### Register a new domain and add it to YunoHost
 Friendica requires a dedicated domain, so obtain one and add it using the YunoHost admin panel. **Domains -> Add domain**. As Friendica uses the full domain and is installed on the root, you can create a subdomain such as friendica.domain.tld. Don't forget to update your DNS if you manage them manually.
 
+Friendica requires browser-approved SSL certificates. If you have certificates not issued by [Let's Encrypt](https://letsencrypt.org/), install them manually as usual.
+
+
 ### Install the Friendica application
-Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL
+Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL:
 
 		https://github.com/YunoHost-Apps/friendica_ynh
 
 Make sure to select your domain from the previous section as the application domain.
 
-After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it) </b>
-Public users can register and use the instance as normal users. SSO users can login with there username and password as normal users too.
+After the installation, login with the username provided at the time of the installation with your SSO password. You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjacent to the search bar. **(The admin panel doesn't have text, so don't get confused with it.)**
+Public users can register and use the instance as normal users. SSO users can login with their username and password as normal users too.
+
 
 Developers info
 ----------------
