@@ -14,8 +14,8 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2020.03 
-* https://github.com/friendica/friendica-addons: 2020.03 
+* https://github.com/friendica/friendica: 2020.09 
+* https://github.com/friendica/friendica-addons: 2020.09 
 
 ## Important Notes
 
