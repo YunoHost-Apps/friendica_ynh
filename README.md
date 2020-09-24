@@ -5,11 +5,12 @@
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
 > *This package allow you to install Friendica quickly and simply on a YunoHost server.  
-If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
+If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to learn how to install and enjoy it.*
 
 
-[Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2020.09*<br><br>
+[Friendica](http://friendi.ca/) integration for YunoHost
+
+**Version:2020.09**
 
 Current snapshot in *sources*:
 
