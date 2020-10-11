@@ -8,7 +8,7 @@
     },
     "url": "http://friendi.ca",
     "license": "free",
-    "version": "2020.03-ynh2",
+    "version": "2020.03~ynh2",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"
