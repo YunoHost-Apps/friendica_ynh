@@ -1,5 +1,5 @@
-SOURCE_URL=https://files.friendi.ca/friendica-full-2020.09.tar.gz
-SOURCE_SUM=fb3b8f07aaf3110d26e0c6226ceab3ad9c206b773c3c310eb1e066e3568ed9a5
+SOURCE_URL=https://github.com/friendica/friendica/archive/2020.09-1.tar.gz
+SOURCE_SUM=ca5d5ece6bff08310b6a87596e431df3ccd84580e33318f1863de32114374b7f
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true

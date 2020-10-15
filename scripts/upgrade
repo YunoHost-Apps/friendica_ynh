@@ -12,7 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --time --weight=1
+ynh_script_progression --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -23,6 +23,7 @@ db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 admin_mail=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # CHECK VERSION
@@ -39,7 +40,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --time --weight=1
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
@@ -50,7 +51,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --time --weight=1
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -80,7 +81,7 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-# Remove files for upgrade compatibilty from previous versions of Friendica 
+# Remove files for upgrade compatibilty from previous versions of Friendica
 if [ -f $final_path/.htconfig.php ]; then
 	rm "$final_path/.htconfig.php"
 fi
@@ -91,7 +92,7 @@ fi
 
 
 # If admin_mail setting doesn't exist, create it
-if [ -z $admin_mail ]; then	
+if [ -z $admin_mail ]; then
 	admin_mail=$(sudo yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
 	ynh_app_setting_set --app=$app --key=email --value=$admin_mail
 fi
@@ -102,22 +103,23 @@ fi
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Upgrading source files..." --time --weight=1
+	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
 fi
 
 # Copy config file for correct place
-cp -f "/var/www/$app/config/local-sample.config.php" "/var/www/$app/config/local.config.php"
+config="$final_path/config/local.config.php"
+cp -f "/var/www/$app/config/local-sample.config.php" $config
 
 # Replace strings in config file
-ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"                 --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"                  --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"                  --target_file= "$final_path/config/local.config.php"
-ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail'," --target_file="$final_path/config/local.config.php"
-ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_file="$final_path/config/local.config.php"
+ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"   --target_file="$config"
+ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"    --target_file="$config"
+ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"    --target_file="$config"
+ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"     --target_file= "$config"
+ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail'," --target_file="$config"
+ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_file="$config"
 
 
 #Copy Addons
@@ -131,7 +133,7 @@ chmod -R 775 $final_path/view/smarty3
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -139,14 +141,13 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
-
+ynh_script_progression --message="Upgrading dependencies..."
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --time --weight=1
+ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app
@@ -154,12 +155,10 @@ ynh_system_user_create --username=$app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config
-
-
+ynh_add_fpm_config --package="$extra_php_dependencies"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -174,19 +173,26 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 # Set up cron job
 ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
 ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
+ynh_replace_string --match_string="__PHP_VERSION__" --replace_string="$phpversion"  --target_file="../conf/poller-cron"
 cp "../conf/poller-cron" "/etc/cron.d/$app"
 
-# Run composer 
-(cd $final_path && sudo php bin/composer.phar install)
-(cd $final_path && sudo bin/console config system addon ldapauth)
+# Run composer
+# Run composer
+pushd "$final_path"
+ 	php$phpversion bin/console dbstructure update
+	sudo bin/console config system addon ldapauth
+popd
 
-# Set app as owner
+#=================================================
+# Folder rights
+#=================================================
 chown -R $app: $final_path
+
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading SSOwat configuration..."
 
 # unprotected_uris allows SSO credentials to be passed anyway.
 ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
@@ -194,7 +200,7 @@ ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+ynh_script_progression --message="Reloading nginx web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -202,5 +208,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --time --last
-
+ynh_script_progression --message="Upgrade of $app completed"
