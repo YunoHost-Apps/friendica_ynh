@@ -77,7 +77,7 @@ ynh_secure_remove --file="/etc/cron.d/$app"
 #=================================================
 # REMOVE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --time --weight=1
+ynh_script_progression --message="Removing the dedicated system user..."
 
 # Delete a system user
 ynh_system_user_delete --username=$app

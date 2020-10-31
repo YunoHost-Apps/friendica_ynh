@@ -114,7 +114,7 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --time --weight=1
+ynh_script_progression --message="Setting up source files..."
 
 ### `ynh_setup_source` is used to install an app from a zip or tar.gz file,
 ### downloaded from an upstream source, like a git repository.
