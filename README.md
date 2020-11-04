@@ -1,15 +1,15 @@
-# Friendica social network for YunoHost
+# Friendica for YunoHost
 
-
-[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica)  
+[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
 > *This package allow you to install Friendica quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
 
+## Overview
+Friendica is a software to create a distributed social network. It is part of the federation of servers that are running with Friendica, Diaspora and Hubzilla which are compatible to each other.
 
-[Friendica](http://friendi.ca/) integration for YunoHost<br>
-**Version:2020.03**<br><br>
+**Version:** 2020.03
 
 Current snapshot in *sources*:
 
@@ -25,11 +25,9 @@ Before installing, read the [Friendica installation instructions](https://github
 #### Multi-users support
 
 LDAP auth supported. There are not yet active SSO.
-<br><br>
 
 # To-do
 - [ ] Fail2Ban support
-
 
 ## Installation
 
@@ -43,19 +41,25 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 Make sure to select your domain from the previous section as the application domain.
 
-After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it) </b>
+After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it)
 Public users can register and use the instance as normal users. SSO users can login with there username and password as normal users too.
 
-Developers info
-----------------
+## Links
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
+ * Report a bug: https://github.com/YunoHost-Apps/friendica_ynh/issues
+ * App website: http://friendi.ca/
+ * Upstream app repository: https://github.com/friendica/friendica
+ * YunoHost website: https://yunohost.org/
+
+---
+
+## Developers info
+
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/friendica_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
+sudo yunohost app upgrade friendica -u https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 ```
-
