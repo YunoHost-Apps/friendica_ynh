@@ -82,11 +82,11 @@ fi
 
 # Remove files for upgrade compatibilty from previous versions of Friendica 
 if [ -f $final_path/.htconfig.php ]; then
-	rm "$final_path/.htconfig.php"
+	ynh_secure_remove "$final_path/.htconfig.php"
 fi
 
 if [ -f $final_path/.htconfig.php ]; then
-	rm "$final_path/config/local.ini.php"
+	ynh_secure_remove "$final_path/config/local.ini.php"
 fi
 
 
@@ -121,7 +121,7 @@ ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_fil
 
 
 #Copy Addons
-rm -Rf "$final_path/addon"
+ynh_secure_remove "$final_path/addon"
 ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
 
 # 3 - some extra folders
