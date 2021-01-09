@@ -9,12 +9,12 @@
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to learn how to install and enjoy it.*
 
 
-**Version:** 2020.09-1
+**Version:** 2021.01
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2020.09-1
-* https://github.com/friendica/friendica-addons: 2020.09-1
+* https://github.com/friendica/friendica: 2021.01
+* https://github.com/friendica/friendica-addons: 2021.01
 
 ## Friendica
 [Friendica](http://friendi.ca/) is a decentralised communications platform that integrates social communication. Our platform links to independent social projects and corporate services.
