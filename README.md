@@ -16,6 +16,8 @@ Current snapshot in *sources*:
 * https://github.com/friendica/friendica: 2021.01
 * https://github.com/friendica/friendica-addons: 2021.01
 
+**Warning:** It's advised to use Barracuda as MySQL DB file format for your Friendica database.
+
 ## Friendica
 [Friendica](http://friendi.ca/) is a decentralised communications platform that integrates social communication. Our platform links to independent social projects and corporate services.
 
@@ -25,7 +27,7 @@ Friendica connects you effortlessly to a federated communications network of sev
 
 
 ## This app claims following features:
-- [X] Ldap integration
+- [ ] Ldap integration(Ldap is broken in the latest version.[See this](https://github.com/friendica/friendica/issues/4140#issuecomment-731579013))
 - [X] Multi-instance
 - [ ] Add php.log in the root folder for debugging php, with logrotate applied on it (can be accesssed by **admin->logs** and entering the **php.log**).
 - [ ] Fail2ban
