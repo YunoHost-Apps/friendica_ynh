@@ -127,7 +127,7 @@ ynh_setup_source --dest_dir="$final_path"
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Addons
-sudo mkdir $final_path/addon
+mkdir $final_path/addon
 ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
 
 #=================================================
@@ -143,7 +143,7 @@ ynh_add_nginx_config
 
 # configure friendica
 config="$final_path/config/local.config.php"
-sudo cp -f "$final_path/config/local-sample.config.php" $config
+cp -f "$final_path/config/local-sample.config.php" $config
 ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"  --target_file="$config"
 ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"   --target_file="$config"
 ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"   --target_file="$config"
@@ -187,8 +187,8 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 ynh_add_fpm_config --package="$extra_php_dependencies"
 
 # 3 - some extra folders
-sudo mkdir -p "${final_path}/view/smarty3"
-sudo chmod -R 775 $final_path/view/smarty3
+mkdir -p "${final_path}/view/smarty3"
+chmod -R 775 $final_path/view/smarty3
 
 # Set up poller
 ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
@@ -210,7 +210,7 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 # Run composer
 pushd "$final_path"
  	php$phpversion bin/composer.phar install
-	sudo bin/console config system addon ldapauth
+	bin/console config system addon ldapauth
 popd
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
 
