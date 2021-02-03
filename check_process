@@ -10,7 +10,6 @@
 			setup_private=0
 			setup_public=1
 			upgrade=1
-			upgrade=1	from_commit=3396188976f75170f2217fcc0e6c9b5f61f7b9e9
 			backup_restore=1
 			multi_instance=1
 			port_already_use=0
