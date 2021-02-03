@@ -1,15 +1,19 @@
-# Friendica social network for YunoHost
-
+# Friendica for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
 
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
+
 > *This package allow you to install Friendica quickly and simply on a YunoHost server.
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to learn how to install and enjoy it.*
 
+## Overview
+Friendica is a software to create a distributed social network. It is part of the federation of servers that are running with Friendica, Diaspora and Hubzilla which are compatible to each other.
+
 
 **Version:** 2021.01
+
 
 Current snapshot in *sources*:
 
@@ -31,7 +35,6 @@ Friendica connects you effortlessly to a federated communications network of sev
 - [X] Multi-instance
 - [ ] Add php.log in the root folder for debugging php, with logrotate applied on it (can be accesssed by **admin->logs** and entering the **php.log**).
 - [ ] Fail2ban
-
 
 ## Installation
 
@@ -62,10 +65,18 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 * Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/friendica%20%28Official%29.svg)](https://ci-stretch.nohost.me/ci/apps/friendica/)
 
 
-Developers info
-----------------
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
+## Links
+
+ * Report a bug: https://github.com/YunoHost-Apps/friendica_ynh/issues
+ * App website: http://friendi.ca/
+ * Upstream app repository: https://github.com/friendica/friendica
+ * YunoHost website: https://yunohost.org/
+
+---
+
+## Developers info
+
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/friendica_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
