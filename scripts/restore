@@ -21,8 +21,6 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-
-
 #=================================================
 # LOAD SETTINGS
 #=================================================
@@ -108,7 +106,6 @@ ynh_restore_file "/etc/cron.d/$app"
 # Folder rights
 #=================================================
 chown -R $app: $final_path
-
 
 # unprotected_uris allows SSO credentials to be passed anyway.
 ynh_app_setting_set $app unprotected_uris "/"

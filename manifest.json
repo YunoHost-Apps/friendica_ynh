@@ -7,14 +7,14 @@
         "fr": "Serveur de Communication Social"
     },
     "url": "http://friendi.ca",
-    "license": "free",
+    "license": "AGPL-3.0-only",
     "version": "2021.01~ynh1",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"
     },
     "requirements": {
-		"yunohost": ">= 3.5"
+		"yunohost": ">= 4.0.0"
     },
     "previous_maintainers": {
         "name": "aymhce",
