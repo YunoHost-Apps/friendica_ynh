@@ -7,8 +7,8 @@
         "fr": "Serveur de Communication Social"
     },
     "url": "http://friendi.ca",
-    "license": "free",
-    "version": "2021.01~ynh1",
+    "license": "AGPL-3.0-only",
+    "version": "2021.01~ynh2",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"

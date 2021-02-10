@@ -20,7 +20,6 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
-
 #=================================================
 # REMOVE THE MYSQL DATABASE
 #=================================================
@@ -48,7 +47,7 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing nginx web server configuration..."
+ynh_script_progression --message="Removing NGINX web server configuration..."
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
@@ -56,7 +55,7 @@ ynh_remove_nginx_config
 #=================================================
 # REMOVE PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing php-fpm configuration..."
+ynh_script_progression --message="Removing PHP-FPM configuration..."
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
