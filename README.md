@@ -1,48 +1,70 @@
 # Friendica for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
+
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=friendica)
 
-> *This package allow you to install Friendica quickly and simply on a YunoHost server.  
-If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
+
+> *This package allow you to install Friendica quickly and simply on a YunoHost server.
+If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to learn how to install and enjoy it.*
 
 ## Overview
 Friendica is a software to create a distributed social network. It is part of the federation of servers that are running with Friendica, Diaspora and Hubzilla which are compatible to each other.
 
-**Version:** 2020.03
+
+**Version:** 2021.01
+
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2020.03 
-* https://github.com/friendica/friendica-addons: 2020.03 
+* https://github.com/friendica/friendica: 2021.01
+* https://github.com/friendica/friendica-addons: 2021.01
 
-## Important Notes
+**Warning:** It's advised to use Barracuda as MySQL DB file format for your Friendica database.
 
-Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/master/INSTALL.txt) for important information about
-- SSL certificate validation requirement (now with support for [Let's Encrypt!](https://letsencrypt.org)). See Installation section below.
-- Dedicated domain (must install under web root like **https://hub.example.com/** not **https://example.com/hub/** )
+## Friendica
+[Friendica](http://friendi.ca/) is a decentralised communications platform that integrates social communication. Our platform links to independent social projects and corporate services.
 
-#### Multi-users support
+Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on **Friendica**, **Mastodon**, **Diaspora**, **GnuSocial**, **Pleroma**, or **Hubzilla**, regardless where each user profile is hosted.
 
-LDAP auth supported. There are not yet active SSO.
+![](https://raw.githubusercontent.com/friendica/friendica/develop/images/screenshots/friendica-frio-green-profle-1.png)
 
-# To-do
-- [ ] Fail2Ban support
+
+## This app claims following features:
+- [ ] Ldap integration(Ldap is broken in the latest version.[See this](https://github.com/friendica/friendica/issues/4140#issuecomment-731579013))
+- [X] Multi-instance
+- [ ] Add php.log in the root folder for debugging php, with logrotate applied on it (can be accesssed by **admin->logs** and entering the **php.log**).
+- [ ] Fail2ban
 
 ## Installation
 
 ### Register a new domain and add it to YunoHost
-Friendica requires a dedicated domain, so obtain one and add it using the YunoHost admin panel. **Domains -> Add domain**. As Friendica uses the full domain and is installed on the root, you can create a subdomain such as friendica.domain.tld. Don't forget to update your DNS if you manage them manually.
 
-### Install the Friendica application
-Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL
+Before installing, read the [Friendica installation instructions](https://github.com/friendica/friendica/blob/develop/doc/Install.md) for important information about installation.
+
+- Dedicated domain (must install under web root like **https://friendica.example.com/** not **https://example.com/friendica/** )
+
+- Friendica requires browser-approved SSL certificates.
+
+
+### Install Friendica
+Use the YunoHost admin panel to install Friendica by entering the GitHub repo address in the custom app URL:
 
 		https://github.com/YunoHost-Apps/friendica_ynh
 
-Make sure to select your domain from the previous section as the application domain.
 
-After the installation,login with the username provided at the time of the installaion with your SSO password.You can then create your profile and access the admin panel from the button in the center of the top nav bar, just adjecent to the search bar.<b>(The admin panel don't have text,so don't get confuse with it)
-Public users can register and use the instance as normal users. SSO users can login with there username and password as normal users too.
+## User with ldap admin rights
+**For admin rights**: When installation is complete, you will need to visit your domain page and login with the **admin account username and password** which was entered at the time of installation process. You can then create your profile and access the admin panel.
+
+ **For normal YunoHost users :** Normal LDAP users can login through Ldap authentication and create there profiles.
+
+#### Supported architectures
+
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/friendica%20%28Official%29.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/friendica%20%28Official%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/friendica/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/friendica%20%28Official%29.svg)](https://ci-stretch.nohost.me/ci/apps/friendica/)
+
+
 
 ## Links
 

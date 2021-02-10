@@ -8,13 +8,13 @@
     },
     "url": "http://friendi.ca",
     "license": "free",
-    "version": "2020.03~ynh2",
+    "version": "2021.01~ynh1",
     "maintainer": {
         "name": "Anmol Sharma",
         "email": "anmol@datamol.org"
     },
     "requirements": {
-		"yunohost": ">= 3.5"
+		"yunohost": ">= 4.0.0"
     },
     "previous_maintainers": {
         "name": "aymhce",
@@ -23,7 +23,7 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php5-fpm",
+        "php7.3-fpm",
         "mysql"
     ],
     "arguments": {
@@ -32,7 +32,7 @@
                 "name": "domain",
                 "type": "domain",
 				"ask": {
-                    "en": "Choose a domain for Friendica.Friendica must be installed on the ROOT domain, so be careful",
+                    "en": "Choose a domain for Friendica. Friendica must be installed on the ROOT domain, so be careful!",
                     "fr": "Choisissez un domaine pour Friendica.Friendica doit etre installe a la racine, soyez prudent"
                 },
                 "example": "domain.org"
