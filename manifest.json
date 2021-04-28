@@ -14,7 +14,7 @@
         "email": "anmol@datamol.org"
     },
     "requirements": {
-		"yunohost": ">= 4.0.0"
+		"yunohost": ">= 4.1.0"
     },
     "previous_maintainers": {
         "name": "aymhce",
