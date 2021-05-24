@@ -94,15 +94,52 @@ fi
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
+
+# Check if the repo can be updated with git
+  if [ `cd $final_path && git rev-parse --is-inside-work-tree` ]; 
+  then
+    # Update through git
+	pushd "$final_path"
+      git fetch
+      git checkout stable
+      git pull
+	popd
+	pushd "$final_path/addon"
+      git fetch
+      git checkout stable
+      git pull
+	popd
+# If git is not present upgrade through manual method 
+else
+
+    # Create a temporary directory and backup smarty3 folder
+	tmpdir="$(ynh_smart_mktemp 6000)"
 	ynh_script_progression --message="Upgrading source files..."
+	cp -a "$final_path/view/smarty3" "$tmpdir/view/smarty3"
+
+	# Remove the app directory securely
+	ynh_secure_remove "$final_path"
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
+    
+    # Remove the addon directory securely
+	ynh_secure_remove "$final_path/addon"
+
+    # Remove addon
+    ynh_secure_remove "$final_path/addon"
+    # Download, check integrity, uncompress and patch addons
+    ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
+    
+    # Restore the smarty3 folder
+	cp -a "$tmpdir/view/smarty3" "${final_path}"
+
+  fi
 fi
 
 # Copy config file for correct place
 config="$final_path/config/local.config.php"
-cp -f "/var/www/$app/config/local-sample.config.php" $config
+cp -a "/var/www/$app/config/local-sample.config.php" $config
 
 # Replace strings in config file
 ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"   --target_file="$config"
@@ -112,9 +149,8 @@ ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd
 ynh_replace_string --match_string="'admin_email' => ''," --replace_string="'admin_email' => '$admin_mail'," --target_file="$config"
 ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_file="$config"
 
-#Copy Addons
-ynh_secure_remove "$final_path/addon"
-ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
+# ldap addon config
+cp -f  "../conf/addon.config.php" "$final_path/config/."
 
 # 3 - some extra folders
 chmod -R 775 $final_path/view/smarty3

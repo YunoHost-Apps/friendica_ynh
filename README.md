@@ -10,12 +10,12 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 Friendica is a software to create a distributed social network. It is part of the federation of servers that are running with Friendica, Diaspora and Hubzilla which are compatible to each other.
 
-**Version:** 2021.01
+**Version:** 2021.04
 
 Current snapshot in *sources*:
 
-* https://github.com/friendica/friendica: 2021.01
-* https://github.com/friendica/friendica-addons: 2021.01
+* https://github.com/friendica/friendica: 2021.04
+* https://github.com/friendica/friendica-addons: 2021.04
 
 **Warning:** It's advised to use Barracuda as MySQL DB file format for your Friendica database.
 

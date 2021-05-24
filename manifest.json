@@ -8,10 +8,10 @@
     },
     "url": "http://friendi.ca",
     "license": "AGPL-3.0-only",
-    "version": "2021.01~ynh2",
+    "version": "2021.04~ynh2",
     "maintainer": {
         "name": "Anmol Sharma",
-        "email": "anmol@datamol.org"
+        "email": ""
     },
     "requirements": {
 		"yunohost": ">= 4.1.0"

@@ -1,5 +1,5 @@
-SOURCE_URL=https://files.friendi.ca/friendica-addons-2021.01.tar.gz
-SOURCE_SUM=13d1a31373ec3e47913386241f5bee7524c18ddb77258cbf7b410450ec2cd601
+SOURCE_URL=https://files.friendi.ca/friendica-addons-2021.04.tar.gz
+SOURCE_SUM=6c798634ce75d25bb71c80a00fcd3b6dd48be3ca2e233ca0f9ed80981cba83af
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
