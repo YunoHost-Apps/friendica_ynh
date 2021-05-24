@@ -125,14 +125,13 @@ else
     
     # Remove the addon directory securely
 	ynh_secure_remove "$final_path/addon"
-
-    # Remove addon
-    ynh_secure_remove "$final_path/addon"
+   
     # Download, check integrity, uncompress and patch addons
     ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
     
     # Restore the smarty3 folder
 	cp -a "$tmpdir/view/smarty3" "${final_path}"
+    ynh_secure_remove "$tmpdir"
 
   fi
 fi

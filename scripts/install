@@ -74,7 +74,7 @@ ynh_script_progression --message="Setting up source files..."
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # 1- Clone stable repo 
-$git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+git clone https://github.com/friendica/friendica.git -b stable "$final_path"
 
 # Copy .htaccess-dist to ..htaccess
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
