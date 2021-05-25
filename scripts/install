@@ -142,7 +142,7 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 
 # Run composer
 pushd "$final_path"
- 	php$phpversion bin/composer.phar install  2> /dav/null
+ 	php$phpversion bin/composer.phar install  2>/dev/null
 	bin/console config system addon ldapauth
 popd
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
