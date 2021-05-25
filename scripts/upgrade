@@ -196,7 +196,7 @@ cp "../conf/poller-cron" "/etc/cron.d/$app"
 
 # Run composer
 pushd "$final_path"
- 	php$phpversion bin/console dbstructure update
+ 	php$phpversion bin/console dbstructure update  2> /dev/null
 	bin/console config system addon ldapauth
 popd
 
