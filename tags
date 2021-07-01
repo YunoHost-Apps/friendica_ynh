@@ -1,0 +1,87 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	//
+0	manifest.json	/^        {$/;"	o	array:arguments.install
+0	manifest.json	/^    "nginx",$/;"	s	array:services
+1	manifest.json	/^        {$/;"	o	array:arguments.install
+1	manifest.json	/^    "php7.3-fpm",$/;"	s	array:services
+2	manifest.json	/^    "mysql"$/;"	s	array:services
+Developers info	README.md	/^## Developers info$/;"	s	chapter:Friendica for YunoHost
+Friendica	README.md	/^## Friendica$/;"	s	chapter:Friendica for YunoHost
+Friendica for YunoHost	README.md	/^# Friendica for YunoHost$/;"	c
+Install Friendica	README.md	/^### Install Friendica$/;"	S	section:Friendica for YunoHost""Installation
+Installation	README.md	/^## Installation$/;"	s	chapter:Friendica for YunoHost
+Links	README.md	/^## Links$/;"	s	chapter:Friendica for YunoHost
+Overview	README.md	/^## Overview$/;"	s	chapter:Friendica for YunoHost
+PR Status	pull_request_template.md	/^## PR Status$/;"	s
+Package_check results	pull_request_template.md	/^## Package_check results$/;"	s
+Problem	pull_request_template.md	/^## Problem$/;"	s
+Register a new domain and add it to YunoHost	README.md	/^### Register a new domain and add it to YunoHost$/;"	S	section:Friendica for YunoHost""Installation
+Solution	pull_request_template.md	/^## Solution$/;"	s
+Supported architectures	README.md	/^#### Supported architectures$/;"	t	section:Friendica for YunoHost""User with ldap admin rights
+This app claims following features:	README.md	/^## This app claims following features:$/;"	s	chapter:Friendica for YunoHost
+User with ldap admin rights	README.md	/^## User with ldap admin rights$/;"	s	chapter:Friendica for YunoHost
+__NAMETOCHANGE__	conf/php-fpm.conf	/^[__NAMETOCHANGE__]$/;"	s
+arguments	manifest.json	/^    "arguments": {$/;"	o
+ask	manifest.json	/^          "ask": {$/;"	o	object:arguments.install.0
+ask	manifest.json	/^          "ask": {$/;"	o	object:arguments.install.1
+chdir	conf/php-fpm.conf	/^chdir = __FINALPATH__$/;"	k	section:__NAMETOCHANGE__
+db_data	conf/htconfig.php	/^	$db_data = getenv('MYSQL_DATABASE');$/;"	v
+db_data	conf/htconfig.php	/^$db_data = 'mysqldatabasename';$/;"	v
+db_host	conf/htconfig.php	/^	$db_host = getenv('MYSQL_HOST') . ':' . getenv('MYSQL_PORT');$/;"	v
+db_host	conf/htconfig.php	/^$db_host = 'your.mysqlhost.com';$/;"	v
+db_pass	conf/htconfig.php	/^	$db_pass = getenv('MYSQL_PASSWORD');$/;"	v
+db_pass	conf/htconfig.php	/^$db_pass = 'mysqlpassword';$/;"	v
+db_user	conf/htconfig.php	/^		$db_user = getenv('MYSQL_USER');$/;"	v
+db_user	conf/htconfig.php	/^		$db_user = getenv('MYSQL_USERNAME');$/;"	v
+db_user	conf/htconfig.php	/^$db_user = 'mysqlusername';$/;"	v
+default_timezone	conf/htconfig.php	/^$default_timezone = 'America\/Los_Angeles';$/;"	v
+description	manifest.json	/^  "description": {$/;"	o
+email	manifest.json	/^    "email": ""$/;"	s	object:maintainer
+email	manifest.json	/^    "email": "aymhce@gmail.com"$/;"	s	object:previous_maintainers
+en	manifest.json	/^            "en": "Choose a domain for Friendica. Friendica must be installed on the ROOT domain/;"	s	object:arguments.install.0.ask
+en	manifest.json	/^            "en": "Choose the Friendica administrator (must be an existing YunoHost user)",$/;"	s	object:arguments.install.1.ask
+en	manifest.json	/^    "en": "Social Communication Server",$/;"	s	object:description
+example	manifest.json	/^          "example": "domain.org"$/;"	s	object:arguments.install.0
+example	manifest.json	/^          "example": "homer"$/;"	s	object:arguments.install.1
+fr	manifest.json	/^            "fr": "Choisissez l'administrateur pour Friendica (l'utilisateur YunoHost doit exist/;"	s	object:arguments.install.1.ask
+fr	manifest.json	/^            "fr": "Choisissez un domaine pour Friendica.Friendica doit etre installe a la racine/;"	s	object:arguments.install.0.ask
+fr	manifest.json	/^    "fr": "Serveur de Communication Social"$/;"	s	object:description
+group	conf/php-fpm.conf	/^group = __USER__$/;"	k	section:__NAMETOCHANGE__
+group	conf/php-fpm.conf	/^listen.group = www-data$/;"	k	section:__NAMETOCHANGE__
+id	manifest.json	/^  "id": "friendica",$/;"	s
+install	manifest.json	/^      "install" : [$/;"	a	object:arguments
+is_there_enough_space	scripts/_common.sh	/^        is_there_enough_space () {$/;"	f
+license	manifest.json	/^  "license": "AGPL-3.0-only",$/;"	s
+listen	conf/php-fpm.conf	/^listen = \/var\/run\/php\/php__PHPVERSION__-fpm-__NAMETOCHANGE__.sock$/;"	k	section:__NAMETOCHANGE__
+maintainer	manifest.json	/^  "maintainer": {$/;"	o
+max_children	conf/php-fpm.conf	/^pm.max_children = 5$/;"	k	section:__NAMETOCHANGE__
+max_spare_servers	conf/php-fpm.conf	/^pm.max_spare_servers = 3$/;"	k	section:__NAMETOCHANGE__
+min_spare_servers	conf/php-fpm.conf	/^pm.min_spare_servers = 1$/;"	k	section:__NAMETOCHANGE__
+multi_instance	manifest.json	/^  "multi_instance": true,$/;"	b
+name	manifest.json	/^          "name": "admin",$/;"	s	object:arguments.install.1
+name	manifest.json	/^          "name": "domain",$/;"	s	object:arguments.install.0
+name	manifest.json	/^    "name": "Anmol Sharma",$/;"	s	object:maintainer
+name	manifest.json	/^    "name": "aymhce",$/;"	s	object:previous_maintainers
+name	manifest.json	/^  "name": "Friendica",$/;"	s
+owner	conf/php-fpm.conf	/^listen.owner = www-data$/;"	k	section:__NAMETOCHANGE__
+packaging_format	manifest.json	/^  "packaging_format": 1,$/;"	n
+pm	conf/php-fpm.conf	/^pm = dynamic$/;"	k	section:__NAMETOCHANGE__
+previous_maintainers	manifest.json	/^  "previous_maintainers": {$/;"	o
+request_terminate_timeout	conf/php-fpm.conf	/^request_terminate_timeout = 1d$/;"	k	section:__NAMETOCHANGE__
+requirements	manifest.json	/^  "requirements": {$/;"	o
+services	manifest.json	/^  "services": [$/;"	a
+start_servers	conf/php-fpm.conf	/^pm.start_servers = 2$/;"	k	section:__NAMETOCHANGE__
+type	manifest.json	/^          "type": "domain",$/;"	s	object:arguments.install.0
+type	manifest.json	/^          "type": "user",$/;"	s	object:arguments.install.1
+url	manifest.json	/^  "url": "http:\/\/friendi.ca",$/;"	s
+user	conf/php-fpm.conf	/^user = __USER__$/;"	k	section:__NAMETOCHANGE__
+version	manifest.json	/^  "version": "2021.04~ynh2",$/;"	s
+ynh_smart_mktemp	scripts/_common.sh	/^ynh_smart_mktemp () {$/;"	f
+yunohost	manifest.json	/^    "yunohost": ">= 4.1.0"$/;"	s	object:requirements

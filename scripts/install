@@ -119,7 +119,7 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Configuring php-fpm..."
 
-# Create a dedicated php-fpm config
+# Create a dedicated php-fpm configy
 ynh_add_fpm_config --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
