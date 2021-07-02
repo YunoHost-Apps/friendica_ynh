@@ -73,14 +73,14 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 ynh_script_progression --message="Setting up source files..."
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path"
+# 1- Clone stable repo 
+git clone https://github.com/friendica/friendica.git -b stable "$final_path"
 
+# Copy .htaccess-dist to ..htaccess
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
-# 2 - Addons
-mkdir $final_path/addon
-ynh_setup_source --dest_dir="$final_path/addon" --source_id="addons"
+# 2 - Clone addons repo 
+git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
 
 #=================================================
 # NGINX CONFIGURATION
@@ -119,7 +119,7 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Configuring php-fpm..."
 
-# Create a dedicated php-fpm config
+# Create a dedicated php-fpm configy
 ynh_add_fpm_config --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
@@ -142,7 +142,7 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 
 # Run composer
 pushd "$final_path"
- 	php$phpversion bin/composer.phar install
+ 	php$phpversion bin/composer.phar install  2>/dev/null
 	bin/console config system addon ldapauth
 popd
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
