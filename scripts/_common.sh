@@ -28,7 +28,7 @@ ynh_smart_mktemp () {
                 local tmpdir=/tmp
         elif is_there_enough_space /var; then
                 local tmpdir=/var
-        elif is_there_enough_space /; then1
+        elif is_there_enough_space /; then
                 local tmpdir=/
         elif is_there_enough_space /home; then
                 local tmpdir=/home
