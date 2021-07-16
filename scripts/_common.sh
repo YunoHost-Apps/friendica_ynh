@@ -4,6 +4,11 @@
 # COMMON VARIABLES
 #=================================================
 
+# commit hashes
+# 2021.04
+version_commit="6434d018c89a880bd667dc7d9185e6a7b16f0718"
+addons_version_commit="47bc4a97f7a5a0ce372c273f5e8123f64ee74313"
+
 # dependencies used by the app
 YNH_PHP_VERSION="7.3"
 
