@@ -101,13 +101,15 @@ then
     # Update through git
 	pushd "$final_path"
       git fetch
-      git checkout stable $version_commit
+      git checkout stable
       git pull
+      git reset --hard $version_commit
 	popd
 	pushd "$final_path/addon"
       git fetch
-      git checkout stable $addons_version_commit
+      git checkout stable
       git pull
+      git reset --hard $addons_version_commit
 	popd
 # If git is not present upgrade through manual method 
 else
