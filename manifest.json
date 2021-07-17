@@ -6,9 +6,17 @@
     "en": "Social Communication Server",
     "fr": "Serveur de Communication Social"
   },
+  "version": "2021.07~ynh1",
   "url": "http://friendi.ca",
+  "upstream": {
+        "license": "AGPL-3.0-only",
+        "website": "http://friendi.ca",
+        "demo": "https://demo.example.com",
+        "admindoc": "https://github.com/friendica/friendica/wiki",
+        "userdoc": "https://wiki.friendi.ca/",
+        "code": "https://github.com/friendica/friendica"
+    },
   "license": "AGPL-3.0-only",
-  "version": "2021.04~ynh2",
   "maintainer": {
     "name": "Anmol Sharma",
     "email": ""
@@ -38,7 +46,6 @@
           "type": "user",
           "example": "johndoe"
         }
-
       ]
     }
 }
