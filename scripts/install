@@ -29,8 +29,6 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url='/'
 admin=$YNH_APP_ARG_ADMIN
 email=$(ynh_user_get_info --username=$admin --key=mail)
-is_public=1
-database="1"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -54,7 +52,6 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=email --value=$email
-ynh_app_setting_set --app=$app --key=database --value=$database
 
 #=================================================
 # CREATE DEDICATED USER
@@ -81,13 +78,13 @@ ynh_script_progression --message="Setting up source files..."
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # 1- Clone stable repo 
-git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+ynh_exec_warn_less git clone https://github.com/friendica/friendica.git -b stable "$final_path"
 
 # Copy .htaccess-dist to ..htaccess
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Clone addons repo 
-git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+ynh_exec_warn_less git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
@@ -101,7 +98,10 @@ ynh_script_progression --message="Configuring NGINX web server..."
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..."
 
 ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 

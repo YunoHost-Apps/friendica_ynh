@@ -121,7 +121,7 @@ then
 else
 
     # Create a temporary directory and backup smarty3 folder
-	tmpdir="$(ynh_smart_mktemp 6000)"
+	tmpdir="$(mktemp -d)"
 	ynh_script_progression --message="Upgrading source files..."
 	cp -a "$final_path/view/smarty3" "$tmpdir/view/smarty3"
 
