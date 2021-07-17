@@ -21,4 +21,3 @@ Notification=none
 	; commit=41c39d47e4e398339b7d6a4167ca2198dae998e3
 		name=Merge pull request #50 from YunoHost-Apps/2021.04 
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
-
