@@ -21,7 +21,7 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-admin_mail=$(ynh_app_setting_get --app=$app --key=email)
+email=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
@@ -76,9 +76,9 @@ if [ -f $final_path/.htconfig.php ]; then
 fi
 
 # If admin_mail setting doesn't exist, create it
-if [ -z $admin_mail ]; then
-	admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
-	ynh_app_setting_set --app=$app --key=email --value=$admin_mail
+if [ -z $email ]; then
+	email=$(ynh_user_get_info --username=$admin --key=mail)
+	ynh_app_setting_set --app=$app --key=email --value=$email
 fi
 
 # Cleaning legacy permissions
@@ -87,6 +87,14 @@ if ynh_legacy_permissions_exists; then
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..."
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -132,24 +140,15 @@ else
     # Restore the smarty3 folder
 	cp -a "$tmpdir/view/smarty3" "${final_path}"
     ynh_secure_remove "$tmpdir"
-
   fi
 fi
 
 # Copy config file for correct place
-config="$final_path/config/local.config.php"
-cp -a "/var/www/$app/config/local-sample.config.php" $config
+ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 
-# Replace strings in config file
-ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"   --target_file="$config"
-ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"    --target_file="$config"
-ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"    --target_file="$config"
-ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"     --target_file= "$config"
-ynh_replace_string --match_string="'admin_email' => ''," --replace_string="'admin_email' => '$admin_mail'," --target_file="$config"
-#ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_file="$config"
-
-# ldap addon config
-cp -f  "../conf/addon.config.php" "$final_path/config/."
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 # 3 - some extra folders
 chmod -R 775 $final_path/view/smarty3
@@ -163,14 +162,6 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..."
 ynh_add_nginx_config
 
 #=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
-
-#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading PHP-FPM configuration..."
@@ -182,29 +173,15 @@ ynh_add_fpm_config --package="$extra_php_dependencies"
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different --file="$final_path/config/local.config.php"
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/config/local.config.php"
-
-# Set up cron job
-ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__PHP_VERSION__" --replace_string="$phpversion"  --target_file="../conf/poller-cron"
-cp "../conf/poller-cron" "/etc/cron.d/$app"
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 # Run composer
 pushd "$final_path"
  	php$phpversion bin/console dbstructure update  2> /dev/null
 	bin/console config system addon ldapauth
 popd
-
-#=================================================
-# Folder rights
-#=================================================
-
-chown -R $app: $final_path
 
 #=================================================
 # RELOAD NGINX

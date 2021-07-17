@@ -28,7 +28,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url='/'
 admin=$YNH_APP_ARG_ADMIN
-admin_mail=$(yunohost user info $admin | grep "mail:" | cut -d' ' -f2)
+email=$(ynh_user_get_info --username=$admin --key=mail)
 is_public=1
 database="1"
 
@@ -53,9 +53,16 @@ ynh_script_progression --message="Storing installation settings..."
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=is_public --value=$is_public
-ynh_app_setting_set --app=$app --key=email --value=$admin_mail
+ynh_app_setting_set --app=$app --key=email --value=$email
 ynh_app_setting_set --app=$app --key=database --value=$database
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # CREATE A MYSQL DATABASE
@@ -82,6 +89,10 @@ cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 # 2 - Clone addons repo 
 git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -90,29 +101,15 @@ ynh_script_progression --message="Configuring NGINX web server..."
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-# configure friendica
-config="$final_path/config/local.config.php"
-cp -f "$final_path/config/local-sample.config.php" $config
-ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"  --target_file="$config"
-ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"   --target_file="$config"
-ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"   --target_file="$config"
-ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"    --target_file="$config"
-ynh_replace_string --match_string="'admin_email' => '',"      --replace_string="'admin_email' => '$admin_mail',"  --target_file="$config"
-#ynh_replace_string --match_string="OPEN" --replace_string="CLOSED" --target_file="$config"
+
+
+ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 
 # init db
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
 
-# ldap addon config
-cp  "../conf/addon.config.php" "$final_path/config/."
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..."
-
-# Create a system user
-ynh_system_user_create --username=$app
+# LDAP addon config
+ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/config/addon.config.php"
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -127,11 +124,14 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 mkdir -p "${final_path}/view/smarty3"
 chmod -R 775 $final_path/view/smarty3
 
-# Set up poller
-ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__PHP_VERSION__" --replace_string="$phpversion" --target_file="../conf/poller-cron"
-cp ../conf/poller-cron /etc/cron.d/$app
+#=================================================
+# SETUP A CRON
+#=================================================
+ynh_script_progression --message="Setuping a cron..."
+
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -145,13 +145,8 @@ pushd "$final_path"
  	php$phpversion bin/composer.phar install  2>/dev/null
 	bin/console config system addon ldapauth
 popd
+
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
-
-#=================================================
-# Folder rights
-#=================================================
-
-chown -R $app: $final_path
 
 #=================================================
 # SETUP SSOWAT

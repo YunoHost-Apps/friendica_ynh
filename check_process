@@ -1,7 +1,7 @@
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		admin="john"	(USER)
+		domain="domain.tld"
+		admin="john"
 		; Checks
 			pkg_linter=1
 			setup_sub_dir=0
