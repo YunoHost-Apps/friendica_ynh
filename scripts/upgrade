@@ -129,7 +129,7 @@ else
     ynh_secure_remove "$final_path"
 
     # 1- Clone stable repo 
-    $git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+    git clone https://github.com/friendica/friendica.git -b stable "$final_path"
     
     # Remove the addon directory securely
     ynh_secure_remove "$final_path/addon"
@@ -138,7 +138,7 @@ else
     git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
     
     # Restore the smarty3 folder
-    cp -a "$tmpdir/view/smarty3" "${final_path}"
+    cp -a "$tmpdir/view/smarty3" "$final_path/view/smarty3"
     ynh_secure_remove "$tmpdir"
   fi
 fi
