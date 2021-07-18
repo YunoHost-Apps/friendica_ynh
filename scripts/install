@@ -77,14 +77,23 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 ynh_script_progression --message="Setting up source files..."
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-# 1- Clone stable repo 
-ynh_exec_warn_less git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+
+# 1 - Clone stable repo 
+git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+# Reset branch to the level of update we needed
+pushd "$final_path"
+	git reset --hard $version_commit
+popd
 
 # Copy .htaccess-dist to ..htaccess
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Clone addons repo 
-ynh_exec_warn_less git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+# Reset addons branch to the level of update we needed
+pushd "$final_path/addon"
+	git reset --hard $addons_version_commit
+popd
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
@@ -142,7 +151,7 @@ ynh_store_file_checksum --file="$final_path/config/local.config.php"
 
 # Run composer
 pushd "$final_path"
- 	php$phpversion bin/composer.phar install  2>/dev/null
+ 	php$phpversion bin/composer.phar install --no-dev
 	bin/console config system addon ldapauth
 popd
 
