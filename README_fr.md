@@ -15,7 +15,7 @@ Serveur de Communication Social
 
 **Version incluse :** 2021.07~ynh1
 
-**Démo :** https://demo.example.com
+**Démo :** https://dir.friendica.social/servers
 
 ## Captures d'écran
 
