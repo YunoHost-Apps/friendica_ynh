@@ -107,7 +107,7 @@ then
 # Check if the repo can be updated with git
   if [ `cd $final_path && git rev-parse --is-inside-work-tree` ]; 
   then
-    # Update through git
+    # Update through Git
 	pushd "$final_path"
       git fetch
       git checkout stable
@@ -120,10 +120,10 @@ then
       git pull
       git reset --hard $addons_version_commit
 	popd
-# If git is not present upgrade through manual method 
+# If Git is not present upgrade through manual method 
 else
 
-    # Create a temporary directory and backup smarty3 folder
+  # Create a temporary directory and backup smarty3 folder
 	tmpdir="$(mktemp -d)"
 	ynh_script_progression --message="Upgrading source files..." --weight=3
 	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
@@ -132,14 +132,14 @@ else
     ynh_secure_remove "$final_path"
 
     # 1 - Clone stable repo 
-    git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+    git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
     # Reset branch to the level of update we needed
     pushd "$final_path"
     	git reset --hard $version_commit
     popd
 
     # 2 - Clone addons repo 
-    git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
     # Reset addons branch to the level of update we needed
     pushd "$final_path/addon"
     	git reset --hard $addons_version_commit
@@ -159,7 +159,7 @@ chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
 # 3 - some extra folders
-chmod -R 775 $final_path/view/smarty3
+chmod -R 775 "$final_path/view/smarty3"
 
 #=================================================
 # NGINX CONFIGURATION

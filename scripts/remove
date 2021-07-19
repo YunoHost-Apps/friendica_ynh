@@ -68,6 +68,11 @@ ynh_script_progression --message="Removing logrotate configuration..." --weight=
 # Remove the app-specific logrotate config
 ynh_remove_logrotate
 
+#=================================================
+# REMOVE CRON FILE
+#=================================================
+ynh_script_progression --message="Removing cron file..." --weight=1
+
 # Remove a cron file
 ynh_secure_remove --file="/etc/cron.d/$app"
 
