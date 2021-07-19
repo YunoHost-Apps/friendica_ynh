@@ -95,6 +95,7 @@ ynh_add_fpm_config --package="$extra_php_dependencies"
 #=================================================
 # RESTORE THE CRON FILE
 #=================================================
+ynh_script_progression --message="Restoring various files..." --weight=1
 
 ynh_restore_file "/etc/cron.d/$app"
 
