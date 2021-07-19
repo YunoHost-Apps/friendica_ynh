@@ -110,9 +110,9 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-
+ynh_script_progression --message="Upgrading source files..." --weight=3
 # Check if the repo can be updated with git
-  if [ `cd $final_path && git rev-parse --is-inside-work-tree` ]; 
+  if [ `cd $final_path && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
   then
     # Update through Git
 	pushd "$final_path"
@@ -132,7 +132,6 @@ else
 
   # Create a temporary directory and backup smarty3 folder
 	tmpdir="$(mktemp -d)"
-	ynh_script_progression --message="Upgrading source files..." --weight=3
 	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
