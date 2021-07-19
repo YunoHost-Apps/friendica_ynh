@@ -5,7 +5,7 @@
 #=================================================
 
 # commit hashes
-# 2021.04
+# 2021.07
 version_commit="d1d208f18b9b43916378ccfd09b963246fe631dd"
 addons_version_commit="b164910032a620bd637574bd4b42423ff8c067bb"
 
