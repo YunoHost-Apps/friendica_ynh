@@ -189,7 +189,8 @@ chmod 644 "/etc/cron.d/$app"
 
 # Run composer
 pushd "$final_path"
- 	php$phpversion bin/console dbstructure update  2> /dev/null
+      php$phpversion bin/composer.phar install --no-dev
+ 	bin/console dbstructure update
 	bin/console config system addon ldapauth
 popd
 
