@@ -15,7 +15,7 @@
         "admindoc": "https://github.com/friendica/friendica/wiki",
         "userdoc": "https://wiki.friendi.ca/",
         "code": "https://github.com/friendica/friendica"
-    },
+  },
   "license": "AGPL-3.0-only",
   "maintainer": {
     "name": "Anmol Sharma",

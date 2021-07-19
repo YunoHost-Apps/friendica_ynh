@@ -24,7 +24,6 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-# Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
 path_url='/'
 admin=$YNH_APP_ARG_ADMIN
@@ -35,7 +34,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_script_progression --message="Validating installation parameters..."
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
@@ -46,7 +45,7 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_script_progression --message="Storing installation settings..."
+ynh_script_progression --message="Storing installation settings..." --weight=1
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
@@ -56,7 +55,7 @@ ynh_app_setting_set --app=$app --key=email --value=$email
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Configuring system user..."
+ynh_script_progression --message="Configuring system user..." --weight=1
 
 # Create a system user
 ynh_system_user_create --username=$app --home_dir="$final_path"
@@ -64,7 +63,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
-ynh_script_progression --message="Creating a MySQL database..."
+ynh_script_progression --message="Creating a MySQL database..." --weight=2
 
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
@@ -74,7 +73,7 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..."
+ynh_script_progression --message="Setting up source files..." --weight=5
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
@@ -102,7 +101,7 @@ chown -R $app:www-data "$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -110,12 +109,12 @@ ynh_add_nginx_config
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression --message="Adding a configuration file..." --weight=1
 
 ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 
 # init db
-ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" < "$final_path/database.sql"
+ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$final_path/database.sql"
 
 # LDAP addon config
 ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/config/addon.config.php"
@@ -123,20 +122,20 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring php-fpm..."
+ynh_script_progression --message="Configuring PHP_FPM..." --weight=1
 
-# Create a dedicated php-fpm configy
+# Create a dedicated PHP-FPM configy
 ynh_add_fpm_config --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 # 3 - some extra folders
-mkdir -p "${final_path}/view/smarty3"
-chmod -R 775 $final_path/view/smarty3
+mkdir -p "$final_path/view/smarty3"
+chmod -R 775 "$final_path/view/smarty3"
 
 #=================================================
 # SETUP A CRON
 #=================================================
-ynh_script_progression --message="Setuping a cron..."
+ynh_script_progression --message="Setuping a cron job..." --weight=1
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
@@ -145,9 +144,6 @@ chmod 644 "/etc/cron.d/$app"
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
-
-# Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum --file="$final_path/config/local.config.php"
 
 # Run composer
 pushd "$final_path"
@@ -167,7 +163,7 @@ ynh_permission_update --permission="main" --add="visitors"
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -175,4 +171,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed"
+ynh_script_progression --message="Installation of $app completed" --last
