@@ -11,7 +11,7 @@
   "upstream": {
         "license": "AGPL-3.0-only",
         "website": "http://friendi.ca",
-        "demo": "https://demo.example.com",
+        "demo": "https://dir.friendica.social/servers",
         "admindoc": "https://github.com/friendica/friendica/wiki",
         "userdoc": "https://wiki.friendi.ca/",
         "code": "https://github.com/friendica/friendica"
