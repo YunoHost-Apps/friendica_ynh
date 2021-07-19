@@ -25,6 +25,7 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 email=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+language=$(ynh_app_setting_get --app=$app --key=language)
 
 #=================================================
 # CHECK VERSION
@@ -82,6 +83,12 @@ if [ -z $email ]; then
 	ynh_app_setting_set --app=$app --key=email --value=$email
 fi
 
+# If language setting doesn't exist, create it
+if [ -z $language ]; then
+  language=en
+  ynh_app_setting_set --app=$app --key=language --value=$language
+fi
+
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
 	ynh_legacy_permissions_delete_all
@@ -128,25 +135,25 @@ else
 	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
-    ynh_secure_remove "$final_path"
+    ynh_secure_remove --file="$final_path"
 
     # 1 - Clone stable repo 
     git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
     # Reset branch to the level of update we needed
     pushd "$final_path"
-    	git reset --hard $version_commit
+    	git reset --hard --quiet $version_commit
     popd
 
     # 2 - Clone addons repo 
     git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
     # Reset addons branch to the level of update we needed
     pushd "$final_path/addon"
-    	git reset --hard $addons_version_commit
+    	git reset --hard --quiet $addons_version_commit
     popd
     
     # Restore the smarty3 folder
     cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
-    ynh_secure_remove "$tmpdir"
+    ynh_secure_remove --file="$tmpdir"
   fi
 fi
 
