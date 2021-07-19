@@ -125,7 +125,7 @@ else
     # Create a temporary directory and backup smarty3 folder
 	tmpdir="$(mktemp -d)"
 	ynh_script_progression --message="Upgrading source files..."
-	cp -a "$final_path/view/smarty3" "$tmpdir/view/smarty3"
+	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
     ynh_secure_remove "$final_path"
