@@ -78,7 +78,7 @@ ynh_script_progression --message="Setting up source files..." --weight=5
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
 # 1 - Clone stable repo 
-git clone https://github.com/friendica/friendica.git -b stable "$final_path"
+git clone  --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
 # Reset branch to the level of update we needed
 pushd "$final_path"
 	git reset --hard $version_commit
@@ -88,7 +88,7 @@ popd
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Clone addons repo 
-git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+git clone  --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
 # Reset addons branch to the level of update we needed
 pushd "$final_path/addon"
 	git reset --hard $addons_version_commit
