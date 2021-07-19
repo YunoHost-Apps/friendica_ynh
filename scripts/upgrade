@@ -148,7 +148,7 @@ else
     popd
     
     # Restore the smarty3 folder
-    cp -a "$tmpdir/view/smarty3" "$final_path/view/smarty3"
+    cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
     ynh_secure_remove "$tmpdir"
   fi
 fi
