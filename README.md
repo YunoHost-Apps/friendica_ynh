@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Social Communication Server
 
-**Shipped version:** 2021.07~ynh1
+**Shipped version:** 2021.07~ynh2
 
 **Demo:** https://dir.friendica.social/servers
 
