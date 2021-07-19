@@ -39,6 +39,6 @@ return [
 	],
 	'system' => [
 		'default_timezone' => 'UTC',
-		'language' => 'en',
+		'language' => '__LANGUAGE__',
 	],
 ];

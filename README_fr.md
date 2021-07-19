@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Serveur de Communication Social
 
-**Version incluse :** 2021.07~ynh1
+**Version incluse :** 2021.07~ynh2
 
 **Démo :** https://dir.friendica.social/servers
 
