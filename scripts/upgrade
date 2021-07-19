@@ -24,6 +24,7 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 email=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+language=$(ynh_app_setting_get --app=$app --key=language)
 
 #=================================================
 # CHECK VERSION
