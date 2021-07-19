@@ -19,7 +19,7 @@ Social Communication Server
 
 **Shipped version:** 2021.07~ynh1
 
-**Demo:** https://demo.example.com
+**Demo:** https://dir.friendica.social/servers
 
 ## Screenshots
 
