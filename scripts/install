@@ -122,7 +122,7 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring PHP_FPM..." --weight=1
+ynh_script_progression --message="Configuring PHP_FPM..." --weight=4
 
 # Create a dedicated PHP-FPM configy
 ynh_add_fpm_config --package="$extra_php_dependencies"
