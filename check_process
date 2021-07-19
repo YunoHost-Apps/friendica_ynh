@@ -1,7 +1,7 @@
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		admin="john"	(USER)
+		domain="domain.tld"
+		admin="john"
 		; Checks
 			pkg_linter=1
 			setup_sub_dir=0
@@ -10,11 +10,14 @@
 			setup_private=0
 			setup_public=1
 			upgrade=1
-            upgrade=1	from_commit=b3642c110f0e927ba36ee32e738a81e6afce958f7ackup_restore=1
+            upgrade=1	from_commit=41c39d47e4e398339b7d6a4167ca2198dae998e3
             backup_restore=1
 			multi_instance=1
-			port_already_use=0
-			change_url=0
-	;;; Options
-	Email=""
-	Notification=change
+			change_url=1
+;;; Options
+Email=
+Notification=none
+;;; Upgrade options
+	; commit=41c39d47e4e398339b7d6a4167ca2198dae998e3
+		name=Merge pull request #50 from YunoHost-Apps/2021.04 
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&

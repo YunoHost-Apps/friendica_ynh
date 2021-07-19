@@ -12,7 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -20,8 +20,9 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-admin_mail=$(ynh_app_setting_get --app=$app --key=email)
+email=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
@@ -34,7 +35,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
@@ -45,7 +46,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=2
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -76,9 +77,9 @@ if [ -f $final_path/.htconfig.php ]; then
 fi
 
 # If admin_mail setting doesn't exist, create it
-if [ -z $admin_mail ]; then
-	admin_mail=$(ynh_user_get_info --username=$admin --key=mail)
-	ynh_app_setting_set --app=$app --key=email --value=$admin_mail
+if [ -z $email ]; then
+	email=$(ynh_user_get_info --username=$admin --key=mail)
+	ynh_app_setting_set --app=$app --key=email --value=$email
 fi
 
 # Cleaning legacy permissions
@@ -89,128 +90,111 @@ if ynh_legacy_permissions_exists; then
 fi
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-
+ynh_script_progression --message="Upgrading source files..." --weight=3
 # Check if the repo can be updated with git
-  if [ `cd $final_path && git rev-parse --is-inside-work-tree` ]; 
+  if [ `cd $final_path && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
   then
-    # Update through git
+    # Update through Git
 	pushd "$final_path"
       git fetch
       git checkout stable
       git pull
+      git reset --hard $version_commit
 	popd
 	pushd "$final_path/addon"
       git fetch
       git checkout stable
       git pull
+      git reset --hard $addons_version_commit
 	popd
-# If git is not present upgrade through manual method 
+# If Git is not present upgrade through manual method 
 else
 
-    # Create a temporary directory and backup smarty3 folder
-    tmpdir="$(ynh_smart_mktemp 6000)"
-    ynh_script_progression --message="Upgrading source files..."
-    mkdir -p "$tmpdir/view/"
-    cp -a "$final_path/view/smarty3" "$tmpdir/view/smarty3"
+  # Create a temporary directory and backup smarty3 folder
+	tmpdir="$(mktemp -d)"
+	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
     ynh_secure_remove "$final_path"
 
-    # 1- Clone stable repo 
-    $git clone https://github.com/friendica/friendica.git -b stable "$final_path"
-    
-    # Remove the addon directory securely
-    ynh_secure_remove "$final_path/addon"
+    # 1 - Clone stable repo 
+    git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
+    # Reset branch to the level of update we needed
+    pushd "$final_path"
+    	git reset --hard $version_commit
+    popd
 
     # 2 - Clone addons repo 
-    git clone https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+    # Reset addons branch to the level of update we needed
+    pushd "$final_path/addon"
+    	git reset --hard $addons_version_commit
+    popd
     
     # Restore the smarty3 folder
-    cp -a "$tmpdir/view/smarty3" "${final_path}"
+    cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
     ynh_secure_remove "$tmpdir"
-
   fi
 fi
 
 # Copy config file for correct place
-config="$final_path/config/local.config.php"
-cp -a "/var/www/$app/config/local-sample.config.php" $config
+ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 
-# Replace strings in config file
-ynh_replace_string --match_string="your.mysqlhost.com" --replace_string="localhost"   --target_file="$config"
-ynh_replace_string --match_string="mysqlusername"      --replace_string="$db_name"    --target_file="$config"
-ynh_replace_string --match_string="mysqldatabasename"  --replace_string="$db_name"    --target_file="$config"
-ynh_replace_string --match_string="mysqlpassword"      --replace_string="$db_pwd"     --target_file= "$config"
-ynh_replace_string --match_string="'admin_email' => ''," --replace_string="'admin_email' => '$admin_mail'," --target_file="$config"
-#ynh_replace_string --match_string="OPEN"  --replace_string="CLOSED" --target_file="$config"
-
-# ldap addon config
-cp -f  "../conf/addon.config.php" "$final_path/config/."
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 # 3 - some extra folders
-chmod -R 775 $final_path/view/smarty3
+chmod -R 775 "$final_path/view/smarty3"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..."
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=4
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config --package="$extra_php_dependencies"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different --file="$final_path/config/local.config.php"
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/config/local.config.php"
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
-# Set up cron job
-ynh_replace_string --match_string="__YNH_WWW_PATH__" --replace_string="$final_path" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="../conf/poller-cron"
-ynh_replace_string --match_string="__PHP_VERSION__" --replace_string="$phpversion"  --target_file="../conf/poller-cron"
-cp "../conf/poller-cron" "/etc/cron.d/$app"
-
-# Run composer
+# Run Composer
 pushd "$final_path"
- 	php$phpversion bin/console dbstructure update  2> /dev/null
-	bin/console config system addon ldapauth
+  ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
+ 	ynh_exec_as "$app" bin/console dbstructure update
+	#ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
-
-#=================================================
-# Folder rights
-#=================================================
-
-chown -R $app: $final_path
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -218,4 +202,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed"
+ynh_script_progression --message="Upgrade of $app completed" --last

@@ -1,0 +1,2 @@
+# Run poller periodically to update Friendica
+*/10 * * * * __APP__ /usr/bin/php__PHPVERSION__ -f __FINALPATH__/bin/worker.php
