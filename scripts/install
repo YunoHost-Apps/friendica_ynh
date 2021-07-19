@@ -124,7 +124,7 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring PHP_FPM..." --weight=1
+ynh_script_progression --message="Configuring PHP_FPM..." --weight=4
 
 # Create a dedicated PHP-FPM configy
 ynh_add_fpm_config --package="$extra_php_dependencies"
@@ -154,14 +154,6 @@ pushd "$final_path"
 popd
 
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-# ynh_script_progression --message="Configuring permissions..." --weight=1
-
-# # unprotected_uris allows SSO credentials to be passed anyway.
-# ynh_permission_update --permission="main" --add="visitors"
 
 #=================================================
 # RELOAD NGINX
