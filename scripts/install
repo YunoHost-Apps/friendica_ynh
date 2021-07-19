@@ -156,10 +156,10 @@ ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id,
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=1
+# ynh_script_progression --message="Configuring permissions..." --weight=1
 
-# unprotected_uris allows SSO credentials to be passed anyway.
-ynh_permission_update --permission="main" --add="visitors"
+# # unprotected_uris allows SSO credentials to be passed anyway.
+# ynh_permission_update --permission="main" --add="visitors"
 
 #=================================================
 # RELOAD NGINX
