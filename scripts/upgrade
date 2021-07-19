@@ -185,11 +185,11 @@ ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
-# Run composer
+# Run Composer
 pushd "$final_path"
   ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
  	ynh_exec_as "$app" bin/console dbstructure update
-	ynh_exec_as "$app" bin/console config system addon ldapauth
+	#ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
 
 #=================================================
