@@ -186,9 +186,9 @@ chmod 644 "/etc/cron.d/$app"
 
 # Run composer
 pushd "$final_path"
-  php$phpversion bin/composer.phar install --no-dev
- 	bin/console dbstructure update
-	bin/console config system addon ldapauth
+  ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev
+ 	ynh_exec_as "$app" bin/console dbstructure update
+	ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
 
 #=================================================
