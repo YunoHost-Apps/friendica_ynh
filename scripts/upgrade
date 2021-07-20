@@ -115,7 +115,7 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]; then
     pushd "$final_path"
     if [ ! `git rev-parse --is-inside-work-tree &> /dev/null` ]; then
         git init --quiet 
-	git remote add origin $repo_url --quiet 
+	git remote add origin $repo_url
 	git fetch origin --quiet 
 	git checkout -b stable --track origin/stable --force --quiet 
     fi
@@ -124,7 +124,7 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]; then
     pushd "$final_path/addon"
     if [ ! `git rev-parse --is-inside-work-tree &> /dev/null` ]; then
         git init --quiet 
-	git remote add origin $addons_repo_url --quiet
+	git remote add origin $addons_repo_url
 	git fetch origin --quiet 
 	git checkout -b stable --track origin/stable --force --quiet 
     fi
