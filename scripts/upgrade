@@ -105,57 +105,46 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
+# SOURCE FILES
 #=================================================
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-ynh_script_progression --message="Upgrading source files..." --weight=3
-# Check if the repo can be updated with git
-  if [ `cd $final_path && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
-  then
-    # Update through Git
-	pushd "$final_path"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $version_commit
-	popd
-	pushd "$final_path/addon"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $addons_version_commit
-	popd
-# If Git is not present upgrade through manual method 
-else
-
-  # Create a temporary directory and backup smarty3 folder
-	tmpdir="$(mktemp -d)"
-	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
-
-    # Remove the app directory securely
-    ynh_secure_remove --file="$final_path"
-
-    # 1 - Clone stable repo 
-    git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
-    # Reset branch to the level of update we needed
-    pushd "$final_path"
-    	git reset --hard --quiet $version_commit
-    popd
-
-    # 2 - Clone addons repo 
-    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
-    # Reset addons branch to the level of update we needed
-    pushd "$final_path/addon"
-    	git reset --hard --quiet $addons_version_commit
-    popd
+if [ "$upgrade_type" == "UPGRADE_APP" ]; then
+    ynh_script_progression --message="Upgrading source files..." --weight=3
     
-    # Restore the smarty3 folder
-    cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
-    ynh_secure_remove --file="$tmpdir"
-  fi
-fi
+    # If current install is not a Git repo then init one
+    pushd "$final_path"
+    if [ ! `git rev-parse --is-inside-work-tree &> /dev/null` ]; then
+        git init --quiet 
+	git remote add origin $repo_url --quiet 
+	git fetch origin --quiet 
+	git checkout -b stable --track origin/stable --force --quiet 
+    fi
+    popd
+	
+    pushd "$final_path/addon"
+    if [ ! `git rev-parse --is-inside-work-tree &> /dev/null` ]; then
+        git init --quiet 
+	git remote add origin $addons_repo_url --quiet
+	git fetch origin --quiet 
+	git checkout -b stable --track origin/stable --force --quiet 
+    fi
+    popd
+
+    # Update through Git
+    pushd "$final_path"
+    git fetch --quiet 
+    git checkout stable --quiet 
+    git pull --quiet 
+    git reset --hard $version_commit --quiet 
+    popd
+
+    pushd "$final_path/addon"
+    git fetch --quiet 
+    git checkout stable --quiet 
+    git pull --quiet 
+    git reset --hard $addons_version_commit --quiet 
+    popd
+fi 
 
 # Copy config file for correct place
 ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
@@ -164,7 +153,7 @@ chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
-# 3 - some extra folders
+# Some extra folders
 chmod -R 775 "$final_path/view/smarty3"
 
 #=================================================
