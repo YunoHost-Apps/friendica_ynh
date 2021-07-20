@@ -4,6 +4,10 @@
 # COMMON VARIABLES
 #=================================================
 
+# repos
+repo_url="https://github.com/friendica/friendica.git"
+addons_repo_url="https://github.com/friendica/friendica-addons.git"
+
 # commit hashes
 # 2021.07
 version_commit="d1d208f18b9b43916378ccfd09b963246fe631dd"
