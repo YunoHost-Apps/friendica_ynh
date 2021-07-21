@@ -121,22 +121,22 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]; then
     fi
     git fetch --quiet
     git checkout stable --quiet
-    git pull --quite
-    git reset --hard $version_commit --quiet 
+    git pull --quiet
+    git reset --hard $version_commit --quiet
     popd
 	
     pushd "$final_path/addon"
     if [ ! `git rev-parse --is-inside-work-tree &> /dev/null` ]; then
         # If current install is not a Git repo then init one
-        git init --quiet 
+        git init --quiet
         git remote add origin $addons_repo_url
-        git fetch origin --quiet 
-        git checkout -b stable --track origin/stable --force --quiet 
+        git fetch origin --quiet
+        git checkout -b stable --track origin/stable --force --quiet
     fi
-    git fetch --quiet 
-    git checkout stable --quiet 
-    git pull --quiet 
-    git reset --hard $addons_version_commit --quiet 
+    git fetch --quiet
+    git checkout stable --quiet
+    git pull --quiet
+    git reset --hard $addons_version_commit --quiet
     popd
 fi 
 
