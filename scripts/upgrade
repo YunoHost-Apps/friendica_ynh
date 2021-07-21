@@ -141,7 +141,7 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]; then
 fi 
 
 # Copy config file for correct place
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
+#ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
