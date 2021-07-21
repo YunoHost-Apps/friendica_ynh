@@ -6,7 +6,7 @@
     "en": "Social Communication Server",
     "fr": "Serveur de Communication Social"
   },
-  "version": "2021.07~ynh2",
+  "version": "2021.07~ynh3",
   "url": "http://friendi.ca",
   "upstream": {
         "license": "AGPL-3.0-only",
