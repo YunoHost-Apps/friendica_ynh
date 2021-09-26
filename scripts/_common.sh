@@ -9,8 +9,8 @@ repo_url="https://github.com/friendica/friendica.git"
 addons_repo_url="https://github.com/friendica/friendica-addons.git"
 
 # commit hashes
-# 2021.07
-version_commit="d1d208f18b9b43916378ccfd09b963246fe631dd"
+# 2021.09
+version_commit="1adbdfb8d1d0a476fb416ffaf3012a7a0f13deb1"
 addons_version_commit="b164910032a620bd637574bd4b42423ff8c067bb"
 
 # dependencies used by the app
