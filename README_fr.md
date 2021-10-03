@@ -11,9 +11,11 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Serveur de Communication Social
+Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.
 
-**Version incluse :** 2021.07~ynh2
+Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
+
+**Version incluse :** 2021.09~ynh1
 
 **Démo :** https://dir.friendica.social/servers
 
