@@ -44,10 +44,17 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 		https://github.com/YunoHost-Apps/friendica_ynh
 
-## User with LDAP admin rights
-**For admin rights**: When installation is complete, you will need to visit your domain page and login with the **admin account username and password** which was entered at the time of installation process. You can then create your profile and access the admin panel.
-
- **For normal YunoHost users :** Normal LDAP users can login through Ldap authentication and create there profiles.
+### First Login
+as explain in the [issue #43](https://github.com/YunoHost-Apps/friendica_ynh/issues/43), 
+you need to **create a user** in the login page after the installation:
+- **same login** as the 'user admin' login choosed during the installation
+- check your mails: you'll have the **password** for this login
+- log in with **mail adress** and sended password by mail
+- you'll log in with admin rights
+- feel free to change your password
+ 
+#### For normal YunoHost users (non-admin):
+Normal LDAP users can login through Ldap authentication and create there profiles.
 
 ## Documentation and resources
 
