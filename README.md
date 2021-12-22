@@ -49,7 +49,7 @@ as explain in the [issue #43](https://github.com/YunoHost-Apps/friendica_ynh/iss
 you need to **create a user** in the login page after the installation:
 - **same login** as the 'user admin' login choosed during the installation
 - check your mails: you'll have the **password** for this login
-- log in with **mail adress** and sended password by mail
+- log in with **mail adress** and passport send by mail
 - you'll log in with admin rights
 - feel free to change your password
  
