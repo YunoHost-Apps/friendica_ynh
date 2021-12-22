@@ -54,7 +54,7 @@ you need to **create a user** in the login page after the installation:
 - feel free to change your password
  
 #### For normal YunoHost users (non-admin):
-Normal LDAP users can login through Ldap authentication and create there profiles.
+Normal LDAP users can login through LDAP authentication and create there profiles.
 
 ## Documentation and resources
 
