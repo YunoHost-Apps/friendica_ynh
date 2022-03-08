@@ -90,7 +90,7 @@ popd
 cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
 
 # 2 - Clone addons repo 
-git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+git clone --quiet https://github.com/friendica/friendica-addons.git -b develop "$final_path/addon" 
 # Reset addons branch to the level of update we needed
 pushd "$final_path/addon"
 	git reset --hard --quiet $addons_version_commit
