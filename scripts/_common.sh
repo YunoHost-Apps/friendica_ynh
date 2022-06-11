@@ -5,9 +5,9 @@
 #=================================================
 
 # commit hashes
-# 2021.09
-version_commit="72c4ed95f16e82239924099254a3d8fc9638cd07"
-addons_version_commit="dd6bf79e194ed5bdf0a40ee3c5ad76cceb24d31d"
+# 2022.03
+version_commit="f660c3894411d5a55ad201b0da8d46715b5b5002"
+addons_version_commit="c35a6d58345ef7f99534f465d8453bccdca80450"
 
 # dependencies used by the app
 YNH_PHP_VERSION="7.3"
