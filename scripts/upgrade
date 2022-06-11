@@ -26,6 +26,7 @@ email=$(ynh_app_setting_get --app=$app --key=email)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 language=$(ynh_app_setting_get --app=$app --key=language)
+timezone=$(cat /etc/timezone)
 
 #=================================================
 # CHECK VERSION
@@ -172,12 +173,19 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=6
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=4
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_add_fpm_config
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
