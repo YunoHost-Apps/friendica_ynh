@@ -10,9 +10,9 @@ version_commit="7fe7d0c90437283bd0e83a7e571e1c032e5168ea"
 addons_version_commit="7bb3595d467868170f95fe231edaecf0dd4e84a1"
 
 # dependencies used by the app
-YNH_PHP_VERSION="8.0"
+YNH_PHP_VERSION="7.3"
 
-pkg_dependencies="php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-cli php${YNH_PHP_VERSION}-imagick php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-zip php${YNH_PHP_VERSION}-mysql php${YNH_PHP_VERSION}-gd"
+pkg_dependencies="php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-cli php${YNH_PHP_VERSION}-json php${YNH_PHP_VERSION}-imagick php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-zip php${YNH_PHP_VERSION}-mysql php${YNH_PHP_VERSION}-gd"
 
 #=================================================
 # EXPERIMENTAL HELPERS
