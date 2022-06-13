@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Friendica for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![Working status](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
 [![Install Friendica with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -19,13 +19,13 @@ Friendica is a decentralised communications platform that integrates social comm
 
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
-**Shipped version:** 2021.09~ynh1
+**Shipped version:** 2022.03~ynh1
 
 **Demo:** https://dir.friendica.social/servers
 
 ## Screenshots
 
-![](./doc/screenshots/friendica-vier-profile.png)
+![Screenshot of Friendica](./doc/screenshots/friendica-vier-profile.png)
 
 ## Disclaimers / important information
 
@@ -51,22 +51,23 @@ Use the YunoHost admin panel to install Friendica by entering the GitHub repo ad
 
 ## Documentation and resources
 
-* Official app website: http://friendi.ca
-* Official user documentation: https://wiki.friendi.ca/
-* Official admin documentation: https://github.com/friendica/friendica/wiki
-* Upstream app code repository: https://github.com/friendica/friendica
-* YunoHost documentation for this app: https://yunohost.org/app_friendica
-* Report a bug: https://github.com/YunoHost-Apps/friendica_ynh/issues
+* Official app website: <http://friendi.ca>
+* Official user documentation: <https://wiki.friendi.ca/>
+* Official admin documentation: <https://github.com/friendica/friendica/wiki>
+* Upstream app code repository: <https://github.com/friendica/friendica>
+* YunoHost documentation for this app: <https://yunohost.org/app_friendica>
+* Report a bug: <https://github.com/YunoHost-Apps/friendica_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/friendica_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade friendica -u https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
