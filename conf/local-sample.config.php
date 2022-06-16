@@ -19,7 +19,7 @@
 return [
 	'database' => [
 		'hostname' => 'localhost',
-		'username' => '__DB_NAME__',
+		'username' => '__DB_USER__',
 		'password' => '__DB_PWD__',
 		'database' => '__DB_NAME__',
 		'charset' => 'utf8mb4',
@@ -38,7 +38,7 @@ return [
 		'register_text' => '',
 	],
 	'system' => [
-		'default_timezone' => 'UTC',
+		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
 	],
 ];

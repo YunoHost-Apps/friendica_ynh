@@ -29,6 +29,7 @@ path_url='/'
 admin=$YNH_APP_ARG_ADMIN
 email=$(ynh_user_get_info --username=$admin --key=mail)
 language=$YNH_APP_ARG_LANGUAGE
+timezone=$(cat /etc/timezone)
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -53,6 +54,13 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=email --value=$email
 ynh_app_setting_set --app=$app --key=language --value=$language
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=6
+
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -127,7 +135,7 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/
 ynh_script_progression --message="Configuring PHP_FPM..." --weight=4
 
 # Create a dedicated PHP-FPM configy
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_add_fpm_config
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 # 3 - some extra folders
@@ -153,7 +161,7 @@ pushd "$final_path"
 	ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
 
-ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
+ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
 
 #=================================================
 # RELOAD NGINX
