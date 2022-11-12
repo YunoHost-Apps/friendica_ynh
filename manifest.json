@@ -6,7 +6,7 @@
         "en": "Social Communication Server",
         "fr": "Serveur de Communication Social"
     },
-    "version": "2022.06~ynh1",
+    "version": "2022.10~ynh1",
     "url": "http://friendi.ca",
     "upstream": {
         "license": "AGPL-3.0-only",
@@ -27,12 +27,12 @@
         "email": "aymhce@gmail.com"
     },
     "requirements": {
-        "yunohost": ">= 4.3.0"
+        "yunohost": ">= 11.0.9"
     },
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.3-fpm",
+        "php7.4-fpm",
         "mysql"
     ],
     "arguments": {
