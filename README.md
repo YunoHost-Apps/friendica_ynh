@@ -21,7 +21,6 @@ Friendica connects you effortlessly to a federated communications network of sev
 
 **Shipped version:** 2022.06~ynh1
 
-
 **Demo:** https://dir.friendica.social/servers
 
 ## Screenshots
