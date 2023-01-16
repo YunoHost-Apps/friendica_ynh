@@ -5,15 +5,15 @@ It shall NOT be edited by hand.
 
 # Friendica pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/friendica.svg)](https://dash.yunohost.org/appci/app/friendica) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)  
 [![Installer Friendica avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Friendica rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Friendica rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.
 
@@ -23,9 +23,9 @@ Friendica connects you effortlessly to a federated communications network of sev
 
 **Démo :** https://dir.friendica.social/servers
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Friendica](./doc/screenshots/friendica-vier-profile.png)
+![Capture d’écran de Friendica](./doc/screenshots/friendica-vier-profile.png)
 
 ## Avertissements / informations importantes
 
@@ -51,10 +51,10 @@ https://github.com/YunoHost-Apps/friendica_ynh
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <http://friendi.ca>
+* Site officiel de l’app : <http://friendi.ca>
 * Documentation officielle utilisateur : <https://wiki.friendi.ca/>
-* Documentation officielle de l'admin : <https://github.com/friendica/friendica/wiki>
-* Dépôt de code officiel de l'app : <https://github.com/friendica/friendica>
+* Documentation officielle de l’admin : <https://github.com/friendica/friendica/wiki>
+* Dépôt de code officiel de l’app : <https://github.com/friendica/friendica>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_friendica>
 * Signaler un bug : <https://github.com/YunoHost-Apps/friendica_ynh/issues>
 
@@ -70,4 +70,4 @@ ou
 sudo yunohost app upgrade friendica -u https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
