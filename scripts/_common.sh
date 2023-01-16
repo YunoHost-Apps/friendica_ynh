@@ -6,7 +6,7 @@
 
 # commit hashes
 # 2022.12
-version_commit="eeadc00e83d8bc7144b0edf74c0fe851ef8636a6"
+version_commit="9d7e172d2c106eee94b3fddfa42cc023532228d3"
 addons_version_commit="f922d69310f5229d2e9404f396d66453b2d19d90"
 
 # dependencies used by the app
