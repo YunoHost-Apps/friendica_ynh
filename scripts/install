@@ -119,12 +119,7 @@ ynh_add_nginx_config
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
-
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
-
-# init db
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$final_path/database.sql"
+ynh_script_progression --message="Adding the LDAP Auth addon configuration file..." --weight=1
 
 # LDAP addon config
 ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/config/addon.config.php"
@@ -145,7 +140,7 @@ chmod -R 775 "$final_path/view/smarty3"
 #=================================================
 # SETUP A CRON
 #=================================================
-ynh_script_progression --message="Setuping a cron job..." --weight=1
+ynh_script_progression --message="Setting up the cron job..." --weight=1
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
@@ -154,14 +149,20 @@ chmod 644 "/etc/cron.d/$app"
 #=================================================
 # INSTALL FRIENDICA
 #=================================================
+ynh_script_progression --message="Install Friendica..." --weight=1
 
-# Run composer
 pushd "$final_path"
- 	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
-	ynh_exec_as "$app" bin/console config system addon ldapauth
-popd
+	# Import Composer dependencies
+	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
 
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
+	# Install application
+	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
+		--dbhost "$db_host" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
+		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path_url"
+
+	# Enable LDAP Auth addon
+	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
+popd
 
 #=================================================
 # RELOAD NGINX
