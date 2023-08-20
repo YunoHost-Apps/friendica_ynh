@@ -12,20 +12,20 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-email=$(ynh_app_setting_get --app=$app --key=email)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-language=$(ynh_app_setting_get --app=$app --key=language)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+#REMOVEME? db_user=$db_name
+#REMOVEME? db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
+#REMOVEME? email=$(ynh_app_setting_get --app=$app --key=email)
+#REMOVEME? admin=$(ynh_app_setting_get --app=$app --key=admin)
+#REMOVEME? phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+#REMOVEME? language=$(ynh_app_setting_get --app=$app --key=language)
 timezone=$(cat /etc/timezone)
 
 #=================================================
@@ -37,16 +37,16 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=2
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=2
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # CHECK THE PATH
@@ -56,22 +56,22 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
   db_name=$(ynh_sanitize_dbid --db_name=$app)
-  ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+#REMOVEME?   ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 fi
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# If install_dir doesn't exist, create it
+if [ -z "$install_dir" ]; then
+#REMOVEME? 	install_dir=/var/www/$app
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 fi
 
 # Remove files for upgrade compatibilty from previous versions of Friendica
-if [ -f $final_path/.htconfig.php ]; then
-	ynh_secure_remove "$final_path/.htconfig.php"
+if [ -f $install_dir/.htconfig.php ]; then
+#REMOVEME? 	ynh_secure_remove "$install_dir/.htconfig.php"
 fi
 
-if [ -f $final_path/.htconfig.php ]; then
-	ynh_secure_remove "$final_path/config/local.ini.php"
+if [ -f $install_dir/.htconfig.php ]; then
+#REMOVEME? 	ynh_secure_remove "$install_dir/config/local.ini.php"
 fi
 
 # If admin_mail setting doesn't exist, create it
@@ -87,8 +87,8 @@ if [ -z $language ]; then
 fi
 
 # Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
+#REMOVEME? if ynh_legacy_permissions_exists; then
+#REMOVEME? 	ynh_legacy_permissions_delete_all
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
@@ -96,10 +96,10 @@ fi
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+#REMOVEME? ynh_system_user_create --username=$app --home_dir="$install_dir"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -109,16 +109,16 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 ynh_script_progression --message="Upgrading source files..." --weight=3
 # Check if the repo can be updated with git
-  if [ `cd $final_path && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
+  if [ `cd $install_dir && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
   then
     # Update through Git
-	pushd "$final_path"
+	pushd "$install_dir"
       git fetch
       git checkout stable
       git pull
       git reset --hard $version_commit
 	popd
-	pushd "$final_path/addon"
+	pushd "$install_dir/addon"
       git fetch
       git checkout stable
       git pull
@@ -129,40 +129,40 @@ else
 
   # Create a temporary directory and backup smarty3 folder
 	tmpdir="$(mktemp -d)"
-	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
+	cp -a "$install_dir/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
-    ynh_secure_remove --file="$final_path"
+#REMOVEME?     ynh_secure_remove --file="$install_dir"
 
     # 1 - Clone stable repo 
-    git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
+    git clone --quiet https://github.com/friendica/friendica.git -b stable "$install_dir"
     # Reset branch to the level of update we needed
-    pushd "$final_path"
+    pushd "$install_dir"
     	git reset --hard --quiet $version_commit
     popd
 
     # 2 - Clone addons repo 
-    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
+    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$install_dir/addon" 
     # Reset addons branch to the level of update we needed
-    pushd "$final_path/addon"
+    pushd "$install_dir/addon"
     	git reset --hard --quiet $addons_version_commit
     popd
     
     # Restore the smarty3 folder
-    cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
+    cp -a "$tmpdir/smarty3" "$install_dir/view/smarty3"
     ynh_secure_remove --file="$tmpdir"
   fi
 fi
 
 # Copy config file for correct place
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
+ynh_add_config --template="../conf/local-sample.config.php" --destination="$install_dir/config/local.config.php"
 
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 # 3 - some extra folders
-chmod -R 775 "$final_path/view/smarty3"
+chmod -R 775 "$install_dir/view/smarty3"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -175,9 +175,9 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=6
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -196,7 +196,7 @@ chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
 # Run Composer
-pushd "$final_path"
+pushd "$install_dir"
   ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
  	ynh_exec_as "$app" bin/console dbstructure update
 	#ynh_exec_as "$app" bin/console config system addon ldapauth
@@ -205,9 +205,9 @@ popd
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
