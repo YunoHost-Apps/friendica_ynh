@@ -157,7 +157,7 @@ pushd "$final_path"
 
 	# Install application
 	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
-		--dbhost "$db_host" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
+		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
 		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path_url"
 
 	# Enable LDAP Auth addon
