@@ -12,20 +12,8 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-
-#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
-#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
-#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
-#REMOVEME? db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-#REMOVEME? db_user=$db_name
-#REMOVEME? db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-#REMOVEME? email=$(ynh_app_setting_get --app=$app --key=email)
-#REMOVEME? admin=$(ynh_app_setting_get --app=$app --key=admin)
-#REMOVEME? phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-#REMOVEME? language=$(ynh_app_setting_get --app=$app --key=language)
 timezone=$(cat /etc/timezone)
 
 #=================================================
@@ -35,43 +23,17 @@ timezone=$(cat /etc/timezone)
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=2
-
-# Backup the current version of the app
-#REMOVEME? ynh_backup_before_upgrade
-#REMOVEME? ynh_clean_setup () {
-	# restore it if the upgrade fails
-#REMOVEME? 	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
 # CHECK THE PATH
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-  db_name=$(ynh_sanitize_dbid --db_name=$app)
-#REMOVEME?   ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-fi
-
-# If install_dir doesn't exist, create it
-if [ -z "$install_dir" ]; then
-#REMOVEME? 	install_dir=/var/www/$app
-#REMOVEME? 	ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
-fi
-
 # Remove files for upgrade compatibilty from previous versions of Friendica
 if [ -f $install_dir/.htconfig.php ]; then
-#REMOVEME? 	ynh_secure_remove "$install_dir/.htconfig.php"
+  ynh_secure_remove "$install_dir/.htconfig.php"
 fi
 
 if [ -f $install_dir/.htconfig.php ]; then
-#REMOVEME? 	ynh_secure_remove "$install_dir/config/local.ini.php"
+  ynh_secure_remove "$install_dir/config/local.ini.php"
 fi
 
 # If admin_mail setting doesn't exist, create it
@@ -85,21 +47,6 @@ if [ -z $language ]; then
   language=en
   ynh_app_setting_set --app=$app --key=language --value=$language
 fi
-
-# Cleaning legacy permissions
-#REMOVEME? if ynh_legacy_permissions_exists; then
-#REMOVEME? 	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-#REMOVEME? ynh_system_user_create --username=$app --home_dir="$install_dir"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -132,7 +79,7 @@ else
 	cp -a "$install_dir/view/smarty3" "$tmpdir/smarty3"
 
     # Remove the app directory securely
-#REMOVEME?     ynh_secure_remove --file="$install_dir"
+    ynh_secure_remove --file="$install_dir"
 
     # 1 - Clone stable repo 
     git clone --quiet https://github.com/friendica/friendica.git -b stable "$install_dir"
@@ -172,20 +119,8 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=6
-
-#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=4
-
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_add_fpm_config --usage=low --footprint=low
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -201,13 +136,6 @@ pushd "$install_dir"
  	ynh_exec_as "$app" bin/console dbstructure update
 	#ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
