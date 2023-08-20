@@ -28,6 +28,8 @@ ynh_app_setting_set --app=$app --key=email --value=$email
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=5
 
+git config --system --add safe.directory $install_dir
+
 # 1 - Clone stable repo
 git clone --quiet https://github.com/friendica/friendica.git -b stable "$install_dir"
 # Reset branch to the level of update we needed
