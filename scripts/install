@@ -36,22 +36,26 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
-
-# Create a dedicated nginx config
-ynh_add_nginx_config
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated PHP-FPM configy
 ynh_add_fpm_config --usage=low --footprint=low
 
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+# Create a dedicated systemd config
 ynh_add_systemd_config
+
+yunohost service add $app --description="Friendica daemon" --log="/var/log/$app/$app.log"
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
 
-yunohost service add $app --description="Friendica daemon" --log="/var/log/$app/$app.log"
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -64,18 +68,6 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir
 # 3 - some extra folders
 mkdir -p "$install_dir/view/smarty3"
 chmod -R 775 "$install_dir/view/smarty3"
-
-#=================================================
-# SETUP A CRON
-#=================================================
-ynh_script_progression --message="Setting up the cron job..." --weight=1
-
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
-chown root: "/etc/cron.d/$app"
-chmod 644 "/etc/cron.d/$app"
-
-# Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
 # INSTALL FRIENDICA

@@ -68,9 +68,9 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
@@ -78,12 +78,14 @@ ynh_add_nginx_config
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=low --footprint=low
 
-# Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
-
 ynh_add_systemd_config
 
 yunohost service add $app --description="Friendica daemon" --log="/var/log/$app/$app.log"
+
+ynh_use_logrotate --non-append
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -92,7 +94,7 @@ yunohost service add $app --description="Friendica daemon" --log="/var/log/$app/
 # Run Composer
 pushd "$install_dir"
   ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
- 	ynh_exec_as "$app" bin/console dbstructure update
+ 	ynh_exec_as "$app" php$phpversion bin/console dbstructure update
 	#ynh_exec_as "$app" bin/console config system addon ldapauth
 popd
 
