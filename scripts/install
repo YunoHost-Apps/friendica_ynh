@@ -69,6 +69,18 @@ mkdir -p "$install_dir/view/smarty3"
 chmod -R 775 "$install_dir/view/smarty3"
 
 #=================================================
+# SETUP A CRON
+#=================================================
+ynh_script_progression --message="Setting up the cron job..." --weight=1
+
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
+
+#=================================================
 # INSTALL FRIENDICA
 #=================================================
 ynh_script_progression --message="Install Friendica..." --weight=1
