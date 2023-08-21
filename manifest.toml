@@ -2,8 +2,8 @@ packaging_format = 2
 
 id = "friendica"
 name = "Friendica"
-description.en = "Social Communication Server"
-description.fr = "Serveur de Communication Social"
+description.en = "Decentralized Social Network"
+description.fr = "Réseau social décentralisé"
 
 version = "2023.05~ynh2"
 
