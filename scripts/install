@@ -38,6 +38,8 @@ chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
+echo "d /run/friendica 0755 www-data www-data -" > /etc/tmpfiles.d/friendica.conf
+
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
