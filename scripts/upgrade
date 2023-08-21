@@ -122,6 +122,9 @@ ynh_add_nginx_config
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --usage=low --footprint=low
 
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
+
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
