@@ -63,6 +63,10 @@ ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 # Backup cron job
 ynh_backup --src_path="/etc/cron.d/$app"
 
+# Put Friendica in maintenance mode
+ynh_print_info --message="Enabling the maintenance mode for Friendica"
+/var/www/friendica/bin/console maintenance 1
+
 #=================================================
 # BACKUP THE MYSQL DATABASE
 #=================================================
@@ -70,8 +74,13 @@ ynh_print_info --message="Backing up the MySQL database..."
 
 ynh_mysql_dump_db --database="$db_name" > db.sql
 
+# Disable the maintenance mode for Friendica
+ynh_print_info --message="Disabling the maintenance mode for Friendica"
+/var/www/friendica/bin/console maintenance 0
+
 #=================================================
 # END OF SCRIPT
 #=================================================
+
 
 ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
