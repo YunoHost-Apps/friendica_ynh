@@ -57,7 +57,11 @@ ynh_backup --src_path="/etc/systemd/system/$app.service"
 #=================================================
 ynh_print_info --message="Backing up the MySQL database..."
 
+(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console maintenance 1)
+
 ynh_mysql_dump_db --database="$db_name" > db.sql
+
+(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console maintenance 0)
 
 #=================================================
 # END OF SCRIPT
