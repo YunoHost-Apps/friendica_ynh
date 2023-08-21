@@ -10,13 +10,6 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-timezone=$(cat /etc/timezone)
-
-#=================================================
 # CHECK VERSION
 #=================================================
 
@@ -36,18 +29,6 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 
 if [ -f "/etc/cron.d/$app" ]; then
   ynh_secure_remove --file="/etc/cron.d/$app"
-fi
-
-# If admin_mail setting doesn't exist, create it
-if [ -z "${email:-}" ]; then
-	email=$(ynh_user_get_info --username=$admin --key=mail)
-	ynh_app_setting_set --app=$app --key=email --value=$email
-fi
-
-# If language setting doesn't exist, create it
-if [ -z "${language:-}" ]; then
-  language=en
-  ynh_app_setting_set --app=$app --key=language --value=$language
 fi
 
 #=================================================
