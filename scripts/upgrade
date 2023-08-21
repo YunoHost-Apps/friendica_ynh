@@ -44,18 +44,18 @@ if [ -f $install_dir/.htconfig.php ]; then
   ynh_secure_remove "$install_dir/.htconfig.php"
 fi
 
-if [ -f /etc/cron.d/$app ]; then
+if [ -f "/etc/cron.d/$app" ]; then
   ynh_secure_remove --file="/etc/cron.d/$app"
 fi
 
 # If admin_mail setting doesn't exist, create it
-if [ -z $email ]; then
+if [ -z "${email:-}" ]; then
 	email=$(ynh_user_get_info --username=$admin --key=mail)
 	ynh_app_setting_set --app=$app --key=email --value=$email
 fi
 
 # If language setting doesn't exist, create it
-if [ -z $language ]; then
+if [ -z "${language:-}" ]; then
   language=en
   ynh_app_setting_set --app=$app --key=language --value=$language
 fi
