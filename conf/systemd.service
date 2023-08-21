@@ -4,10 +4,10 @@ After=network.target mariadb.service
 Requires=network.target remote-fs.target nss-lookup.target
 
 [Service]
+Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-Type=simple
 StandardOutput=null
 StandardError=syslog
 ExecStart=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php start

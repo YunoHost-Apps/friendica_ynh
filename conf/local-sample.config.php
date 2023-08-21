@@ -40,5 +40,6 @@ return [
 	'system' => [
 		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
+		'pidfile' => '/run/friendica/daemon.pid',
 	],
 ];
