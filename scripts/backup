@@ -15,6 +15,8 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_print_info --message="Declaring files to be backed up..."
 
+(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console maintenance 1)
+
 #=================================================
 # BACKUP THE APP MAIN DIR
 #=================================================
@@ -56,8 +58,6 @@ ynh_backup --src_path="/etc/systemd/system/$app.service"
 # BACKUP THE MYSQL DATABASE
 #=================================================
 ynh_print_info --message="Backing up the MySQL database..."
-
-(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console maintenance 1)
 
 ynh_mysql_dump_db --database="$db_name" > db.sql
 
