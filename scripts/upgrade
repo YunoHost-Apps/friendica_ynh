@@ -54,62 +54,16 @@ fi
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-ynh_script_progression --message="Upgrading source files..." --weight=3
-# Check if the repo can be updated with git
-  if [ `cd $install_dir && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
-  then
-    # Update through Git
-	pushd "$install_dir"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $version_commit
-	popd
-	pushd "$install_dir/addon"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $addons_version_commit
-	popd
-# If Git is not present upgrade through manual method 
-else
+  ynh_script_progression --message="Upgrading source files..." --weight=1
 
-  # Create a temporary directory and backup smarty3 folder
-	tmpdir="$(mktemp -d)"
-	cp -a "$install_dir/view/smarty3" "$tmpdir/smarty3"
-
-    # Remove the app directory securely
-    ynh_secure_remove --file="$install_dir"
-
-    # 1 - Clone stable repo 
-    git clone --quiet https://github.com/friendica/friendica.git -b stable "$install_dir"
-    # Reset branch to the level of update we needed
-    pushd "$install_dir"
-    	git reset --hard --quiet $version_commit
-    popd
-
-    # 2 - Clone addons repo 
-    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$install_dir/addon" 
-    # Reset addons branch to the level of update we needed
-    pushd "$install_dir/addon"
-    	git reset --hard --quiet $addons_version_commit
-    popd
-    
-    # Restore the smarty3 folder
-    cp -a "$tmpdir/smarty3" "$install_dir/view/smarty3"
-    ynh_secure_remove --file="$tmpdir"
-  fi
+  # Download, check integrity, uncompress and patch the source from app.src
+  ynh_setup_source --dest_dir="$install_dir" --keep ="config/local.config.php view/smarty3"
+  ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 fi
 
-# Copy config file for correct place
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$install_dir/config/local.config.php"
-
-chmod 750 "$install_dir"
+chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
-
-# 3 - some extra folders
-chmod -R 775 "$install_dir/view/smarty3"
 
 #=================================================
 # NGINX CONFIGURATION

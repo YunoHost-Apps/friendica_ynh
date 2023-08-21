@@ -28,26 +28,13 @@ ynh_app_setting_set --app=$app --key=email --value=$email
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=5
 
-git config --system --add safe.directory $install_dir
-
-# 1 - Clone stable repo
-git clone --quiet https://github.com/friendica/friendica.git -b stable "$install_dir"
-# Reset branch to the level of update we needed
-pushd "$install_dir"
-	git reset --hard --quiet $version_commit
-popd
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
 # Copy .htaccess-dist to ..htaccess
 cp -f "$install_dir/.htaccess-dist" "$install_dir/.htaccess"
 
-# 2 - Clone addons repo
-git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$install_dir/addon"
-# Reset addons branch to the level of update we needed
-pushd "$install_dir/addon"
-	git reset --hard --quiet $addons_version_commit
-popd
-
-chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
@@ -59,6 +46,9 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
+# Create a dedicated PHP-FPM configy
+ynh_add_fpm_config --usage=low --footprint=low
+
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
@@ -66,14 +56,6 @@ ynh_script_progression --message="Adding the LDAP Auth addon configuration file.
 
 # LDAP addon config
 ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir/config/addon.config.php"
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring PHP_FPM..." --weight=4
-
-# Create a dedicated PHP-FPM configy
-ynh_add_fpm_config --usage=low --footprint=low
 
 # 3 - some extra folders
 mkdir -p "$install_dir/view/smarty3"
