@@ -51,10 +51,9 @@ ynh_add_fpm_config --usage=low --footprint=low
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-yunohost service add $app --description="Friendica daemon" --log="/var/log/$app/$app.log"
+ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+chown root: "/etc/cron.d/$app"
+chmod 644 "/etc/cron.d/$app"
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
@@ -88,13 +87,6 @@ pushd "$install_dir"
 	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
 
 popd
-
-#=================================================
-# START SYSTEMD SERVICE
-#=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
-
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT
