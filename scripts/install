@@ -32,6 +32,9 @@ ynh_script_progression --message="Setting up source files..." --weight=5
 ynh_setup_source --dest_dir="$install_dir"
 ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
+mkdir -p "$install_dir/view/smarty3"
+
+chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
@@ -64,10 +67,6 @@ ynh_script_progression --message="Adding the LDAP Auth addon configuration file.
 
 # LDAP addon config
 ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir/config/addon.config.php"
-
-# 3 - some extra folders
-mkdir -p "$install_dir/view/smarty3"
-chmod -R 775 "$install_dir/view/smarty3"
 
 #=================================================
 # INSTALL FRIENDICA
