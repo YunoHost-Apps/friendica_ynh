@@ -76,14 +76,13 @@ ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir
 ynh_script_progression --message="Install Friendica..." --weight=1
 
 pushd "$install_dir"
-	ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$install_dir/database.sql"
 	# Import Composer dependencies
 	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
 
 	# Install application
-	#ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
-	#	--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
-	#	--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path"
+	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
+		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
+		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path"
 
 	# Enable LDAP Auth addon
 	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
