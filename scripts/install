@@ -75,7 +75,7 @@ ynh_script_progression --message="Install Friendica..." --weight=1
 
 pushd "$install_dir"
 	# Import Composer dependencies
-	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
+	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet #--ignore-platform-reqs
 
 	# Install application
 	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
