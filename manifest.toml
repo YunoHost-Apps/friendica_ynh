@@ -5,7 +5,7 @@ name = "Friendica"
 description.en = "Social Communication Server"
 description.fr = "Serveur de Communication Social"
 
-version = "2023.09~ynh1"
+version = "2023.05~ynh1"
 
 maintainers = []
 
