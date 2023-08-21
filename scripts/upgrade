@@ -65,15 +65,6 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-# Remove files for upgrade compatibilty from previous versions of Friendica
-if [ -f $final_path/.htconfig.php ]; then
-	ynh_secure_remove "$final_path/.htconfig.php"
-fi
-
-if [ -f $final_path/.htconfig.php ]; then
-	ynh_secure_remove "$final_path/config/local.ini.php"
-fi
-
 # If admin_mail setting doesn't exist, create it
 if [ -z $email ]; then
 	email=$(ynh_user_get_info --username=$admin --key=mail)
