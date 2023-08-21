@@ -1,0 +1,22 @@
+[Unit]
+Description=Friendica daemon
+After=network.target mariadb.service
+Requires=network.target remote-fs.target nss-lookup.target
+
+[Service]
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/
+Type=simple
+StandardOutput=null
+StandardError=syslog
+ExecStart=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php start
+ExecStop=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php stop
+PIDFile=friendica/daemon.pid
+PrivateTmp=true
+InaccessibleDirectories=/home /root /boot /opt /mnt /media
+ReadOnlyDirectories=/etc /usr
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

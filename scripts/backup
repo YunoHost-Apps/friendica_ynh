@@ -45,8 +45,7 @@ ynh_backup --src_path="/etc/logrotate.d/$app"
 # BACKUP VARIOUS FILES
 #=================================================
 
-# Backup cron job
-ynh_backup --src_path="/etc/cron.d/$app"
+ynh_backup --src_path="/etc/systemd/system/$app.service"
 
 #=================================================
 # BACKUP THE MYSQL DATABASE
