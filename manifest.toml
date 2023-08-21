@@ -66,7 +66,7 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.apt]
-    packages = "mariadb-server php8.0-mbstring php8.0-json php8.0-imagick php8.0-xml php8.0-zip php8.0-mysql php8.0-gd php8.0-gmp"
+    packages = "mariadb-server php7.4-mbstring php7.4-json php7.4-imagick php7.4-xml php7.4-zip php7.4-mysql php7.4-gd php7.4-gmp"
 
     [resources.database]
     type = "mysql"
