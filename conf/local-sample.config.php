@@ -32,12 +32,15 @@ return [
 	// ****************************************************************
 
 	'config' => [
+		'php_path' => '/usr/bin/php'
 		'admin_email' => '__EMAIL__',
 		'sitename' => 'Friendica Social Network',
 		'register_policy' => \Friendica\Module\Register::OPEN,
-		'register_text' => '',
+		'max_import_size' => 200000,
 	],
 	'system' => [
+		'url' => 'https://__DOMAIN__',
+		'basepath' => '__INSTALL_DIR__'
 		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
 	],

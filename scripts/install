@@ -10,165 +10,81 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-ynh_clean_setup () {
-	### Remove this function if there's nothing to clean before calling the remove script.
-	true
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-domain=$YNH_APP_ARG_DOMAIN
-path_url='/'
-admin=$YNH_APP_ARG_ADMIN
 email=$(ynh_user_get_info --username=$admin --key=mail)
-language=$YNH_APP_ARG_LANGUAGE
 timezone=$(cat /etc/timezone)
-
-app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=1
-
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=1
 
-ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path --value=$path_url
-ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=email --value=$email
-ynh_app_setting_set --app=$app --key=language --value=$language
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=6
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=1
-
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
-#=================================================
-# CREATE A MYSQL DATABASE
-#=================================================
-ynh_script_progression --message="Creating a MySQL database..." --weight=2
-
-db_name=$(ynh_sanitize_dbid --db_name=$app)
-db_user=$db_name
-ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=5
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
-# 1 - Clone stable repo
-git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
-# Reset branch to the level of update we needed
-pushd "$final_path"
-	git reset --hard --quiet $version_commit
-popd
+mkdir -p "$install_dir/view/smarty3"
 
-# Copy .htaccess-dist to ..htaccess
-cp -f "$final_path/.htaccess-dist" "$final_path/.htaccess"
-
-# 2 - Clone addons repo
-git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon"
-# Reset addons branch to the level of update we needed
-pushd "$final_path/addon"
-	git reset --hard --quiet $addons_version_commit
-popd
-
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod -R 775 "$install_dir/view/smarty3"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+
+# Create a dedicated PHP-FPM configy
+ynh_add_fpm_config --usage=low --footprint=low
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# ADD A CONFIGURATION
-#=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=1
-
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
-
-# init db
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$final_path/database.sql"
-
-# LDAP addon config
-ynh_add_config --template="../conf/addon.config.php" --destination="$final_path/config/addon.config.php"
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring PHP_FPM..." --weight=4
-
-# Create a dedicated PHP-FPM configy
-ynh_add_fpm_config
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-
-# 3 - some extra folders
-mkdir -p "$final_path/view/smarty3"
-chmod -R 775 "$final_path/view/smarty3"
-
-#=================================================
-# SETUP A CRON
-#=================================================
-ynh_script_progression --message="Setuping a cron job..." --weight=1
 
 ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding the LDAP Auth addon configuration file..." --weight=1
+
+# LDAP addon config
+ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir/config/addon.config.php"
+
 #=================================================
 # INSTALL FRIENDICA
 #=================================================
+ynh_script_progression --message="Install Friendica..." --weight=1
 
-# Run composer
-pushd "$final_path"
- 	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
-	ynh_exec_as "$app" bin/console config system addon ldapauth
+pushd "$install_dir"
+	# Import Composer dependencies
+	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
+
+	# Install application
+	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
+		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
+		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path"
+
+	# Enable LDAP Auth addon
+	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
+
 popd
-
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" <<< "INSERT INTO addon (id, name, version, installed, hidden, timestamp, plugin_admin) VALUES (NULL, 'ldapauth', '', '1', '0', UNIX_TIMESTAMP(), '0');"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
