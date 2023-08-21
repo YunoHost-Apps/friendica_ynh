@@ -10,87 +10,26 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-email=$(ynh_app_setting_get --app=$app --key=email)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-language=$(ynh_app_setting_get --app=$app --key=language)
-timezone=$(cat /etc/timezone)
-
-#=================================================
 # CHECK VERSION
 #=================================================
 
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+# STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=2
+ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # CHECK THE PATH
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-  db_name=$(ynh_sanitize_dbid --db_name=$app)
-  ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+if [ -f "/etc/cron.d/$app" ]; then
+  ynh_secure_remove --file="/etc/cron.d/$app"
 fi
-
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
-
-# If admin_mail setting doesn't exist, create it
-if [ -z $email ]; then
-	email=$(ynh_user_get_info --username=$admin --key=mail)
-	ynh_app_setting_set --app=$app --key=email --value=$email
-fi
-
-# If language setting doesn't exist, create it
-if [ -z $language ]; then
-  language=en
-  ynh_app_setting_set --app=$app --key=language --value=$language
-fi
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -98,107 +37,41 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-ynh_script_progression --message="Upgrading source files..." --weight=3
-# Check if the repo can be updated with git
-  if [ `cd $final_path && git rev-parse --is-inside-work-tree &> /dev/null` ]; 
-  then
-    # Update through Git
-	pushd "$final_path"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $version_commit
-	popd
-	pushd "$final_path/addon"
-      git fetch
-      git checkout stable
-      git pull
-      git reset --hard $addons_version_commit
-	popd
-# If Git is not present upgrade through manual method 
-else
+  ynh_script_progression --message="Upgrading source files..." --weight=1
 
-  # Create a temporary directory and backup smarty3 folder
-	tmpdir="$(mktemp -d)"
-	cp -a "$final_path/view/smarty3" "$tmpdir/smarty3"
-
-    # Remove the app directory securely
-    ynh_secure_remove --file="$final_path"
-
-    # 1 - Clone stable repo 
-    git clone --quiet https://github.com/friendica/friendica.git -b stable "$final_path"
-    # Reset branch to the level of update we needed
-    pushd "$final_path"
-    	git reset --hard --quiet $version_commit
-    popd
-
-    # 2 - Clone addons repo 
-    git clone --quiet https://github.com/friendica/friendica-addons.git -b stable "$final_path/addon" 
-    # Reset addons branch to the level of update we needed
-    pushd "$final_path/addon"
-    	git reset --hard --quiet $addons_version_commit
-    popd
-    
-    # Restore the smarty3 folder
-    cp -a "$tmpdir/smarty3" "$final_path/view/smarty3"
-    ynh_secure_remove --file="$tmpdir"
-  fi
+  # Download, check integrity, uncompress and patch the source from app.src
+  ynh_setup_source --dest_dir="$install_dir" --keep="config/local.config.php"
+  ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 fi
 
-# Copy config file for correct place
-ynh_add_config --template="../conf/local-sample.config.php" --destination="$final_path/config/local.config.php"
-
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
-
-# 3 - some extra folders
-chmod -R 775 "$final_path/view/smarty3"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=6
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=4
-
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_add_fpm_config --usage=low --footprint=low
+
+ynh_use_logrotate --non-append
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
-chown root: "/etc/cron.d/$app"
-chmod 644 "/etc/cron.d/$app"
-
 # Run Composer
-pushd "$final_path"
+pushd "$install_dir"
   ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
- 	ynh_exec_as "$app" bin/console dbstructure update
-	#ynh_exec_as "$app" bin/console config system addon ldapauth
+ 	ynh_exec_as "$app" php$phpversion bin/console dbstructure update
 popd
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

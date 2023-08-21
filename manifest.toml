@@ -1,0 +1,72 @@
+packaging_format = 2
+
+id = "friendica"
+name = "Friendica"
+description.en = "Decentralized Social Network"
+description.fr = "Réseau social décentralisé"
+
+version = "2023.05~ynh2"
+
+maintainers = []
+
+[upstream]
+license = "AGPL-3.0-only"
+website = "http://friendi.ca"
+demo = "https://dir.friendica.social/servers"
+admindoc = "https://github.com/friendica/friendica/wiki"
+userdoc = "https://wiki.friendi.ca/"
+code = "https://github.com/friendica/friendica"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+ldap = true
+sso = true
+disk = "50M"
+ram.build = "150M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+    
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.admin]
+    type = "user"
+
+    [install.language]
+    ask.en = "Choose the application language"
+    ask.fr = "Choisissez la langue de l'application"
+    type = "select"
+    choices = ["de", "en", "es", "fr", "it", "pt"]
+    default = "en"
+
+[resources]
+
+    [resources.sources]
+        [resources.sources.main]
+        url = "https://github.com/friendica/friendica/archive/refs/tags/2023.05.tar.gz"
+        sha256 = "727a8fdab6a2f6424d3dbc895496447e750eb0f8e1e11b70f1e229a7e3c9a31d"
+        autoupdate.strategy = "latest_github_tag"
+     
+        [resources.sources.addons]
+        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2023.05.tar.gz"
+        sha256 = "df29aed28c0208e162c76f91949d0c3a0f77fe09853fe1a6d854b9956075d8a0"
+        autoupdate.strategy = "latest_github_tag"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = "mariadb-server php8.2-curl php8.2-mbstring php8.2-imagick php8.2-xml php8.2-zip php8.2-mysql php8.2-gd php8.2-gmp"
+
+    [resources.database]
+    type = "mysql"
