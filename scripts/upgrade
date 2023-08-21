@@ -34,16 +34,6 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=3
 
-# Remove files for upgrade compatibilty from previous versions of Friendica
-if [ -f $install_dir/.htconfig.php ]; then
-  ynh_secure_remove "$install_dir/.htconfig.php"
-fi
-
-# Remove files for upgrade compatibilty from previous versions of Friendica
-if [ -f $install_dir/.htconfig.php ]; then
-  ynh_secure_remove "$install_dir/.htconfig.php"
-fi
-
 if [ -f "/etc/cron.d/$app" ]; then
   ynh_secure_remove --file="/etc/cron.d/$app"
 fi

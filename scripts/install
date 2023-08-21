@@ -32,9 +32,6 @@ ynh_script_progression --message="Setting up source files..." --weight=5
 ynh_setup_source --dest_dir="$install_dir"
 ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
-# Copy .htaccess-dist to ..htaccess
-cp -f "$install_dir/.htaccess-dist" "$install_dir/.htaccess"
-
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
