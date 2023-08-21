@@ -34,7 +34,15 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
 #=================================================
-# BACKUP SYSTEMD
+# SPECIFIC BACKUP
+#=================================================
+# BACKUP LOGROTATE
+#=================================================
+
+ynh_backup --src_path="/etc/logrotate.d/$app"
+
+#=================================================
+# BACKUP VARIOUS FILES
 #=================================================
 
 ynh_backup --src_path="/etc/systemd/system/$app.service"

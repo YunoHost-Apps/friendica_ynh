@@ -4,11 +4,6 @@
 # COMMON VARIABLES
 #=================================================
 
-# commit hashes
-# 2023.08
-version_commit="2dbfb070083ec395bf5d24ec89fe96b282c6a12d"
-addons_version_commit="f2cc0312ca9a95d99a8330452848180792bf9227"
-
 #=================================================
 # EXPERIMENTAL HELPERS
 #=================================================
