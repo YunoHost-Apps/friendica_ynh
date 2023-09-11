@@ -47,7 +47,7 @@ ynh_script_progression --message="Upgrading system configurations related to $ap
 ynh_add_nginx_config
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --usage=low --footprint=low
+ynh_add_fpm_config
 
 ynh_use_logrotate --non-append
 
