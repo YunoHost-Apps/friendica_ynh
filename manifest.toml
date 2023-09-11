@@ -5,7 +5,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2023.05~ynh2"
+version = "2023.05~ynh3"
 
 maintainers = []
 
@@ -56,7 +56,6 @@ ram.runtime = "50M"
         [resources.sources.addons]
         url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2023.05.tar.gz"
         sha256 = "df29aed28c0208e162c76f91949d0c3a0f77fe09853fe1a6d854b9956075d8a0"
-        autoupdate.strategy = "latest_github_tag"
 
     [resources.system_user]
 
@@ -66,7 +65,7 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.apt]
-    packages = "mariadb-server php8.2-curl php8.2-mbstring php8.2-imagick php8.2-xml php8.2-zip php8.2-mysql php8.2-gd php8.2-gmp"
+    packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp"
 
     [resources.database]
     type = "mysql"
