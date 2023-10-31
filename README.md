@@ -33,7 +33,7 @@ Friendica connects you effortlessly to a federated communications network of sev
 * Official user documentation: <https://wiki.friendi.ca/>
 * Official admin documentation: <https://github.com/friendica/friendica/wiki>
 * Upstream app code repository: <https://github.com/friendica/friendica>
-* YunoHost documentation for this app: <https://yunohost.org/app_friendica>
+* YunoHost Store: <https://apps.yunohost.org/app/friendica>
 * Report a bug: <https://github.com/YunoHost-Apps/friendica_ynh/issues>
 
 ## Developer info
