@@ -19,7 +19,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
-**Version incluse :** 2023.05~ynh3
+**Version incluse :** 2023.12~ynh1
 
 **Démo :** https://dir.friendica.social/servers
 
@@ -33,7 +33,7 @@ Friendica connects you effortlessly to a federated communications network of sev
 * Documentation officielle utilisateur : <https://wiki.friendi.ca/>
 * Documentation officielle de l’admin : <https://github.com/friendica/friendica/wiki>
 * Dépôt de code officiel de l’app : <https://github.com/friendica/friendica>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_friendica>
+* YunoHost Store: <https://apps.yunohost.org/app/friendica>
 * Signaler un bug : <https://github.com/YunoHost-Apps/friendica_ynh/issues>
 
 ## Informations pour les développeurs
