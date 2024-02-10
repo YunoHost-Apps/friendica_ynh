@@ -57,6 +57,13 @@ ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
 
 ynh_systemd_action --service_name=nginx --action=reload
 
+#==============
+# FINALIZATION
+#==============
+
+# exit maintenance mode since the app was backed up while in maintenance mode
+(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console.php maintenance 0)
+
 #=================================================
 # END OF SCRIPT
 #=================================================
