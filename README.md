@@ -16,8 +16,9 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.
+Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.  
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
+
 
 **Shipped version:** 2023.12~ynh2
 
