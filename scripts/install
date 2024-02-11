@@ -13,7 +13,7 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-email=$(ynh_user_get_info --username=$admin --key=mail)
+email=$(ynh_user_get_info --username="$admin" --key=mail)
 timezone=$(cat /etc/timezone)
 
 #=================================================
@@ -21,7 +21,7 @@ timezone=$(cat /etc/timezone)
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=1
 
-ynh_app_setting_set --app=$app --key=email --value=$email
+ynh_app_setting_set --app="$app" --key=email --value="$email"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -36,7 +36,7 @@ mkdir -p "$install_dir/view/smarty3"
 
 chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+chown -R "$app:www-data" "$install_dir"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -49,7 +49,7 @@ ynh_add_fpm_config
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-ynh_add_config --template="../conf/cron" --destination="/etc/cron.d/$app"
+ynh_add_config --template="cron" --destination="/etc/cron.d/$app"
 chown root: "/etc/cron.d/$app"
 chmod 644 "/etc/cron.d/$app"
 
@@ -65,7 +65,7 @@ ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failreg
 ynh_script_progression --message="Adding the LDAP Auth addon configuration file..." --weight=1
 
 # LDAP addon config
-ynh_add_config --template="../conf/addon.config.php" --destination="$install_dir/config/addon.config.php"
+ynh_add_config --template="addon.config.php" --destination="$install_dir/config/addon.config.php"
 
 #=================================================
 # INSTALL FRIENDICA
@@ -74,15 +74,15 @@ ynh_script_progression --message="Install Friendica..." --weight=1
 
 pushd "$install_dir"
 	# Import Composer dependencies
-	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
+	ynh_exec_as "$app" "php$phpversion" bin/composer.phar install --no-dev --quiet
 
 	# Install application
-	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
+	ynh_exec_as "$app" "php$phpversion" bin/console.php autoinstall\
 		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
 		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path"
 
 	# Enable LDAP Auth addon
-	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
+	ynh_exec_as "$app" "php$phpversion" bin/console.php addon enable ldapauth
 
 popd
 
