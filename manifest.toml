@@ -5,9 +5,9 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2023.12~ynh1"
+version = "2023.12~ynh2"
 
-maintainers = []
+maintainers = [ "" ]
 
 [upstream]
 license = "AGPL-3.0-only"
@@ -30,7 +30,7 @@ ram.runtime = "50M"
 [install]
     [install.domain]
     type = "domain"
-    
+
     [install.init_main_permission]
     type = "group"
     default = "visitors"
@@ -42,7 +42,7 @@ ram.runtime = "50M"
     ask.en = "Choose the application language"
     ask.fr = "Choisissez la langue de l'application"
     type = "select"
-    choices = ["de", "en", "es", "fr", "it", "pt"]
+    choices = [ "de", "en", "es", "fr", "it", "pt" ]
     default = "en"
 
 [resources]
@@ -51,21 +51,23 @@ ram.runtime = "50M"
         [resources.sources.main]
         url = "https://github.com/friendica/friendica/archive/refs/tags/2023.12.tar.gz"
         sha256 = "d55475628ae24aab1ee7ed3367d22b2fd3ee49200b5da276c69e97df2afbd943"
-        autoupdate.strategy = "latest_github_tag"
-     
+        autoupdate.strategy = "latest_github_release"
+
         [resources.sources.addons]
         url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2023.12.tar.gz"
         sha256 = "d0228833584dd7dc0301ee04bd41728345c8051d84908849dea52ed04a7c8982"
+        autoupdate.upstream = "https://github.com/friendica/friendica-addons"
+        autoupdate.strategy = "latest_github_tag"
 
-    [resources.system_user]
+[resources.system_user]
 
-    [resources.install_dir]
+[resources.install_dir]
 
-    [resources.permissions]
-    main.url = "/"
+[resources.permissions]
+main.url = "/"
 
-    [resources.apt]
-    packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp"
+[resources.apt]
+packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp, php8.2-intl"
 
-    [resources.database]
-    type = "mysql"
+[resources.database]
+type = "mysql"

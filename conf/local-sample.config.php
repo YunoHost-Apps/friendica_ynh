@@ -32,7 +32,7 @@ return [
 	// ****************************************************************
 
 	'config' => [
-		'php_path' => '/usr/bin/php'
+		'php_path' => '/usr/bin/php',
 		'admin_email' => '__EMAIL__',
 		'sitename' => 'Friendica Social Network',
 		'register_policy' => \Friendica\Module\Register::OPEN,
@@ -40,7 +40,7 @@ return [
 	],
 	'system' => [
 		'url' => 'https://__DOMAIN__',
-		'basepath' => '__INSTALL_DIR__'
+		'basepath' => '__INSTALL_DIR__',
 		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
 	],
