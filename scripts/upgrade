@@ -59,6 +59,16 @@ chmod 644 "/etc/cron.d/$app"
 ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a configuration file..." --weight=1
+
+# fix the url if necessary (there should be no trailing slash)
+if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "'url' => 'https://$domain'," "$install_dir/config/local.config.php"; then
+  ynh_replace_string --match_string="'url' => 'https://.*'," --replace_string="'url' => 'https://$domain'," --target_file="$install_dir/config/local.config.php"
+fi
+
+#=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
