@@ -15,9 +15,9 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_print_info --message="Declaring files to be backed up..."
 
-(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console.php maintenance 1)
+(cd "$install_dir" && ynh_exec_as "$app" "php$phpversion" bin/console.php maintenance 1)
 
-trap "(cd $install_dir && ynh_exec_as "$app" php$phpversion bin/console.php maintenance 0)" EXIT
+trap '(cd $install_dir && ynh_exec_as $app php$phpversion bin/console.php maintenance 0)' EXIT
 
 #=================================================
 # BACKUP THE APP MAIN DIR
