@@ -76,10 +76,12 @@ pushd "$install_dir"
 	# Import Composer dependencies
 	ynh_exec_as "$app" php$phpversion bin/composer.phar install --no-dev --quiet
 
+	path_without_trailing_slash=${path%/}
+
 	# Install application
 	ynh_exec_as "$app" php$phpversion bin/console.php autoinstall\
 		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
-		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path"
+		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain$path_without_trailing_slash"
 
 	# Enable LDAP Auth addon
 	ynh_exec_as "$app" php$phpversion bin/console.php addon enable ldapauth
