@@ -48,7 +48,7 @@ ynh_script_progression --message="Adding system configurations related to $app..
 # Create a dedicated PHP-FPM configy
 ynh_add_fpm_config
 
-ynh_add_systemd_config
+ynh_add_systemd_config --service="$app-daemon"
 
 # Create a dedicated nginx config
 ynh_add_nginx_config

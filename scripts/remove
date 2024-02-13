@@ -27,7 +27,7 @@ ynh_remove_logrotate
 
 ynh_remove_fail2ban_config
 
-ynh_remove_systemd_config
+ynh_remove_systemd_config --service="$app-daemon"
 
 #=================================================
 # END OF SCRIPT
