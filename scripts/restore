@@ -38,13 +38,17 @@ ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
+yunohost service add "$app" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
+
+ynh_restore_file --origin_path="/var/log/$app/daemon.log"
+
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
 
 ynh_restore_file --origin_path="/etc/fail2ban/jail.d/$app.conf"
 ynh_restore_file --origin_path="/etc/fail2ban/filter.d/$app.conf"
 ynh_systemd_action --action=restart --service_name=fail2ban
-
-ynh_restore_file --origin_path="/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
