@@ -73,6 +73,12 @@ if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "'url' => 'http
   ynh_store_file_checksum --file="$install_dir/config/local.config.php"
 fi
 
+# add the path to the pidfile if missing
+if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
+  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir', 'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
+  ynh_store_file_checksum --file="$install_dir/config/local.config.php"
+fi
+
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================

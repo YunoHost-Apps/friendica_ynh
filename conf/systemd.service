@@ -17,6 +17,8 @@ PrivateTmp=true
 InaccessibleDirectories=/home /root /boot /opt /mnt /media
 ReadOnlyDirectories=/etc /usr
 Restart=always
+StartLimitBurst=2
+StartLimitInterval=5
 
 # Sandboxing options to harden security
 # Depending on specificities of your service/app, you may need to tweak these 
