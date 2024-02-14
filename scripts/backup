@@ -54,7 +54,7 @@ ynh_backup --src_path="/etc/logrotate.d/$app"
 # BACKUP VARIOUS FILES
 #=================================================
 
-ynh_backup --src_path="/var/log/$app/daemon.log"
+ynh_backup --src_path="/var/log/$app"
 ynh_backup --src_path="/etc/systemd/system/$app-daemon.service"
 
 #=================================================

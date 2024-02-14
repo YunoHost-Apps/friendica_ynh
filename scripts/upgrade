@@ -55,7 +55,7 @@ if [ -f "/etc/cron.d/$app" ]; then
   ynh_secure_remove --file="/etc/cron.d/$app"
 fi
 
-ynh_add_systemd_config
+ynh_add_systemd_config --service="$app-daemon"
 
 yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
 
