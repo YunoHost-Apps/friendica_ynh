@@ -43,5 +43,6 @@ return [
 		'basepath' => '__INSTALL_DIR__',
 		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
+		'pidfile' => '__INSTALL_DIR__/daemon.pid',
 	],
 ];
