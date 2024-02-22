@@ -79,22 +79,11 @@ pushd "$install_dir"
 	ynh_exec_as "$app" "php$phpversion" bin/composer.phar install --no-dev --quiet
 
 	# Install application
-	ynh_exec_as "$app" "php$phpversion" bin/console.php autoinstall\
-		--dbhost "localhost" --dbdata "$db_name" --dbuser "$db_user" --dbpass "$db_pwd"\
-		--admin "$email" --tz "$timezone" --lang "$language" --url "https://$domain"
+	ynh_exec_as "$app" "php$phpversion" bin/console.php -f "$install_dir/config/local.config.php"
 
 	# Enable LDAP Auth addon
 	ynh_exec_as "$app" "php$phpversion" bin/console.php addon enable ldapauth
 popd
-
-# add the path to the pidfile (we can't do that using the autoinstall)
-# in fact we can using 'autoinstall -f <prepared.config.php>' but i'm tired
-# we definively would dig that:
-# the local.config.php file is overwritten by autoinstall so it's useless
-if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
-  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir', 'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
-  ynh_store_file_checksum --file="$install_dir/config/local.config.php"
-fi
 
 #=================================================
 # START SYSTEMD SERVICE

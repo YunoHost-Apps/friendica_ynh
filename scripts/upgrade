@@ -69,13 +69,15 @@ ynh_script_progression --message="Updating a configuration file..." --weight=1
 
 # fix the url if necessary (there should be no trailing slash)
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "'url' => 'https://$domain'," "$install_dir/config/local.config.php"; then
+  ynh_print_info --message="Patching the Friendica config file: fix the domain setting..."
   ynh_replace_string --match_string="'url' => 'https://.*'," --replace_string="'url' => 'https://$domain'," --target_file="$install_dir/config/local.config.php"
   ynh_store_file_checksum --file="$install_dir/config/local.config.php"
 fi
 
 # add the path to the pidfile if missing
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
-  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir', 'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
+  ynh_print_info --message="Patching the Friendica config file: add the PID file path for the daemon..."
+  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir',\n 'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
   ynh_store_file_checksum --file="$install_dir/config/local.config.php"
 fi
 
