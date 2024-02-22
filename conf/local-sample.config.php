@@ -3,19 +3,6 @@
 // Local configuration
 // Docs: https://github.com/friendica/friendica/blob/stable/static/settings.config.php
 
-/* If automatic system installation fails:
- *
- * Copy this file to local.config.php
- *
- * Why local.config.php? Because it contains sensitive information which could
- * give somebody complete control of your database. Apache's default
- * configuration will interpret any .php file as a script and won't show the values
- *
- * Then set the following for your MySQL installation
- *
- * If you're unsure about what any of the config keys below do, please check the static/defaults.config.php file for
- * detailed documentation of their data type and behavior.
- */
 
 return [
 	'database' => [
