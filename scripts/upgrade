@@ -52,7 +52,7 @@ ynh_add_fpm_config
 ynh_use_logrotate --non-append
 
 if [ -f "/etc/cron.d/$app" ]; then
-  ynh_print_info --message="Removing the cron..."
+  ynh_print_info --message="Removing the legacy cron..."
   ynh_secure_remove --file="/etc/cron.d/$app"
 fi
 
