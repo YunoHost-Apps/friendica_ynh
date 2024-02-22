@@ -19,7 +19,7 @@ source /usr/share/yunohost/helpers
 if ynh_exec_warn_less yunohost service status "$app" >/dev/null
 then
 	ynh_script_progression --message="Removing $app service integration..." --weight=1
-	yunohost service remove "$app"
+	yunohost service remove "$app-daemon"
 fi
 
 #=================================================
