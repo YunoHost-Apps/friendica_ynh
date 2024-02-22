@@ -48,5 +48,7 @@ return [
 		'pidfile' => '__INSTALL_DIR__/daemon.pid',
 		// Blocks search for users who are not logged in to prevent crawlers from blocking your system.
 		'local_search' => false,
+		'logfile' => '/var/log/friendica/friendica.log',
+		'loglevel' => 'notice',
 	],
 ];
