@@ -1,6 +1,7 @@
 <?php
 
 // Local configuration
+// Docs: https://github.com/friendica/friendica/blob/stable/static/settings.config.php
 
 /* If automatic system installation fails:
  *
@@ -37,6 +38,7 @@ return [
 		'sitename' => 'Friendica Social Network',
 		'register_policy' => \Friendica\Module\Register::OPEN,
 		'max_import_size' => 200000,
+		'register_text' => '',
 	],
 	'system' => [
 		'url' => 'https://__DOMAIN__',
@@ -44,5 +46,7 @@ return [
 		'default_timezone' => '__TIMEZONE__',
 		'language' => '__LANGUAGE__',
 		'pidfile' => '__INSTALL_DIR__/daemon.pid',
+		// Blocks search for users who are not logged in to prevent crawlers from blocking your system.
+		'local_search' => false,
 	],
 ];
