@@ -1,9 +1,13 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/tests.v1.schema.json
+
 test_format = 1.0
 
 [default]
 
-    # -------------------------------
-    # Commits to test upgrade from
-    # -------------------------------
+exclude = [ "install.private" ]
 
-    test_upgrade_from.dc7cd3eabe212708375c0dcd4ee994a1373a8122.name = "Upgrade from 2023.01~ynh1"
+# -------------------------------
+# Commits to test upgrade from
+# -------------------------------
+
+test_upgrade_from.dc7cd3eabe212708375c0dcd4ee994a1373a8122.name = "Upgrade from 2023.01~ynh1"

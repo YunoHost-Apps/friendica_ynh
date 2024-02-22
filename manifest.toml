@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "friendica"
@@ -5,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2023.12~ynh2"
+version = "2023.12~ynh3"
 
 maintainers = [ "" ]
 
@@ -30,10 +32,6 @@ ram.runtime = "50M"
 [install]
     [install.domain]
     type = "domain"
-
-    [install.init_main_permission]
-    type = "group"
-    default = "visitors"
 
     [install.admin]
     type = "user"
@@ -65,6 +63,9 @@ ram.runtime = "50M"
 
 [resources.permissions]
 main.url = "/"
+main.show_tile = true
+main.allowed = [ "visitors", "all_users" ]
+main.protected = true
 
 [resources.apt]
 packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp, php8.2-intl"
