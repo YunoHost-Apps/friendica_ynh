@@ -17,6 +17,15 @@ ynh_script_progression --message="Updating NGINX web server configuration..." --
 ynh_change_url_nginx_config
 
 #=================================================
+# MODIFY URL IN FRIENDICA CONF
+#=================================================
+
+ynh_print_info --message="Updating the Friendica config..."
+
+ynh_replace_string --match_string="'url' => 'https://.*'," --replace_string="'url' => 'https://$domain'," --target_file="$install_dir/config/local.config.php"
+ynh_store_file_checksum --file="$install_dir/config/local.config.php"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

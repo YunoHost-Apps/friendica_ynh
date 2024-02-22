@@ -17,6 +17,9 @@ ynh_script_progression --message="Restoring the app main directory..." --weight=
 
 ynh_restore_file --origin_path="$install_dir"
 
+if [ -f "$install_dir/daemon.pid" ]; then ynh_secure_remove --file="$install_dir/daemon.pid"; fi
+
+chmod -R o-rwx "$install_dir"
 chown -R "$app:www-data" "$install_dir"
 chmod -R 775 "$install_dir/view/smarty3"
 
@@ -38,13 +41,18 @@ ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
+ynh_restore_file --origin_path="/etc/systemd/system/$app-daemon.service"
+systemctl enable "$app-daemon.service" --quiet
+
+yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
+
+ynh_restore_file --origin_path="/var/log/$app"
+
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 ynh_restore_file --origin_path="/etc/fail2ban/jail.d/$app.conf"
 ynh_restore_file --origin_path="/etc/fail2ban/filter.d/$app.conf"
 ynh_systemd_action --action=restart --service_name=fail2ban
-
-ynh_restore_file --origin_path="/etc/cron.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -56,6 +64,8 @@ ynh_script_progression --message="Reloading NGINX web server and $app's service.
 ynh_systemd_action --service_name="php$phpversion-fpm" --action=reload
 
 ynh_systemd_action --service_name=nginx --action=reload
+
+ynh_systemd_action --service_name="$app-daemon" --action="start" --log_path="/var/log/$app/daemon.log"
 
 #==============
 # FINALIZATION

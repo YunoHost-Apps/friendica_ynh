@@ -64,7 +64,7 @@ ram.runtime = "50M"
 [resources.permissions]
 main.url = "/"
 main.show_tile = true
-main.allowed = [ "visitors", "all-users" ]
+main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
