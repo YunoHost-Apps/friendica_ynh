@@ -41,6 +41,7 @@ chown -R "$app:www-data" "$install_dir"
 # clear the smarty cache
 # cf: https://github.com/friendica/friendica/issues/11212#issuecomment-1046051750
 ynh_secure_remove --file="$install_dir/view/smarty3/compiled"
+mkdir "$install_dir/view/smarty3/compiled"
 chmod -R 775 "$install_dir/view/smarty3"
 
 #=================================================
