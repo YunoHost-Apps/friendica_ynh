@@ -31,8 +31,8 @@ then
   ynh_script_progression --message="Upgrading source files..." --weight=1
 
   # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --dest_dir="$install_dir" --keep="config/local.config.php"
-  ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
+  ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep="config/local.config.php"
+  ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons" --full_replace=1
 fi
 
 chmod -R o-rwx "$install_dir"
