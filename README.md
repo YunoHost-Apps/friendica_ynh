@@ -19,10 +19,9 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.  
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
+**Shipped version:** 2024.03~ynh1
 
-**Shipped version:** 2023.12~ynh4
-
-**Demo:** https://dir.friendica.social/servers
+**Demo:** <https://dir.friendica.social/servers>
 
 ## Screenshots
 
@@ -30,12 +29,12 @@ Friendica connects you effortlessly to a federated communications network of sev
 
 ## Documentation and resources
 
-* Official app website: <http://friendi.ca>
-* Official user documentation: <https://wiki.friendi.ca/>
-* Official admin documentation: <https://github.com/friendica/friendica/wiki>
-* Upstream app code repository: <https://github.com/friendica/friendica>
-* YunoHost Store: <https://apps.yunohost.org/app/friendica>
-* Report a bug: <https://github.com/YunoHost-Apps/friendica_ynh/issues>
+- Official app website: <http://friendi.ca>
+- Official user documentation: <https://wiki.friendi.ca/>
+- Official admin documentation: <https://github.com/friendica/friendica/wiki>
+- Upstream app code repository: <https://github.com/friendica/friendica>
+- YunoHost Store: <https://apps.yunohost.org/app/friendica>
+- Report a bug: <https://github.com/YunoHost-Apps/friendica_ynh/issues>
 
 ## Developer info
 
@@ -43,7 +42,7 @@ Please send your pull request to the [testing branch](https://github.com/YunoHos
 
 To try the testing branch, please proceed like that.
 
-``` bash
+```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade friendica -u https://github.com/YunoHost-Apps/friendica_ynh/tree/testing --debug
