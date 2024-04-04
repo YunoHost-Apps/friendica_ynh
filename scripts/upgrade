@@ -38,6 +38,12 @@ fi
 chmod -R o-rwx "$install_dir"
 chown -R "$app:www-data" "$install_dir"
 
+# clear the smarty cache
+# cf: https://github.com/friendica/friendica/issues/11212#issuecomment-1046051750
+ynh_secure_remove --file="$install_dir/view/smarty3/compiled"
+mkdir "$install_dir/view/smarty3/compiled"
+chmod -R 775 "$install_dir/view/smarty3"
+
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
@@ -78,7 +84,14 @@ fi
 # add the path to the pidfile if missing
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
   ynh_print_info --message="Patching the Friendica config file: add the PID file path for the daemon..."
-  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir',\n                'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
+  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir',\n		'pidfile' => '$install_dir/daemon.pid'," --target_file="$install_dir/config/local.config.php"
+  ynh_store_file_checksum --file="$install_dir/config/local.config.php"
+fi
+
+# add log path to the config
+if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "logfile" "$install_dir/config/local.config.php"; then
+  ynh_print_info --message="Patching the Friendica config file: add the path for the Friendica logfile..."
+  ynh_replace_string --match_string="'basepath' => '$install_dir'," --replace_string="'basepath' => '$install_dir',\n		'logfile' => '/var/log/friendica/friendica.log',\n		'loglevel' => 'notice'," --target_file="$install_dir/config/local.config.php"
   ynh_store_file_checksum --file="$install_dir/config/local.config.php"
 fi
 
