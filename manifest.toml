@@ -9,7 +9,7 @@ description.fr = "Réseau social décentralisé"
 
 version = "2023.12~ynh3"
 
-maintainers = [ "" ]
+maintainers = []
 
 [upstream]
 license = "AGPL-3.0-only"
