@@ -42,9 +42,9 @@ ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
-systemctl enable "$app-daemon.service" --quiet
+systemctl enable "$app.service" --quiet
 
-yunohost service add "$app-daemon" --description="Decentralized Social Network" --log="/var/log/$app/$app.log"
+yunohost service add "$app" --description="Decentralized Social Network" --log="/var/log/$app/$app.log"
 
 ynh_restore_file --origin_path="/var/log/$app"
 
