@@ -22,11 +22,6 @@ then
 	yunohost service remove "$app"
 fi
 
-#=================================================
-# REMOVE SYSTEMD SERVICE 
-#=================================================
-ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
-
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
 
