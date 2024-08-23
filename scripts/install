@@ -17,13 +17,6 @@ email=$(ynh_user_get_info --username="$admin" --key=mail)
 timezone=$(cat /etc/timezone)
 
 #=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=1
-
-ynh_app_setting_set --app="$app" --key=email --value="$email"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=5
@@ -48,12 +41,12 @@ ynh_script_progression --message="Adding system configurations related to $app..
 # Create a dedicated PHP-FPM configy
 ynh_add_fpm_config
 
-ynh_add_systemd_config --service="$app-daemon"
+ynh_add_systemd_config
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-yunohost service add "$app-daemon" --description="Decentralized Social Network" --log="/var/log/$app/daemon.log"
+yunohost service add "$app" --description="Decentralized Social Network" --log="/var/log/$app/$app.log"
 
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate
@@ -90,7 +83,7 @@ popd
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name="$app-daemon" --action="start" --log_path="systemd"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT

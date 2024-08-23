@@ -39,7 +39,8 @@ ynh_backup --src_path="/etc/fail2ban/filter.d/$app.conf"
 ynh_backup --src_path="/etc/logrotate.d/$app"
 
 ynh_backup --src_path="/var/log/$app"
-ynh_backup --src_path="/etc/systemd/system/$app-daemon.service"
+
+ynh_backup --src_path="/etc/systemd/system/$app.service"
 
 #=================================================
 # BACKUP THE MYSQL DATABASE
