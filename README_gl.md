@@ -5,7 +5,9 @@ NON debe editarse manualmente.
 
 # Friendica para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/friendica.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/friendica)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+![Estado de funcionamento](https://apps.yunohost.org/badge/state/friendica)
+![Estado de mantemento](https://apps.yunohost.org/badge/maintained/friendica)
 
 [![Instalar Friendica con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
