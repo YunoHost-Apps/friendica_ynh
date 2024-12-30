@@ -4,37 +4,23 @@ After=network.target mariadb.service
 Requires=network.target remote-fs.target nss-lookup.target
 
 [Service]
-User=__APP__
-Group=__APP__
-WorkingDirectory=__INSTALL_DIR__/
+User=friendica
+Group=www-data
+WorkingDirectory=/var/www/friendica/
 Type=simple
-StandardOutput=append:/var/log/__APP__/daemon.log
+StandardOutput=append:/var/log/friendica/daemon.log
 StandardError=inherit
-ExecStart=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php start
-ExecStop=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php stop
-PIDFile=__INSTALL_DIR__/daemon.pid
-PrivateTmp=true
-InaccessibleDirectories=/home /root /boot /opt /mnt /media
-ReadOnlyDirectories=/etc /usr
-Restart=always
-RestartSec=10
-StartLimitBurst=1
-
-# Sandboxing options to harden security
-# Depending on specificities of your service/app, you may need to tweak these 
-# .. but this should be a good baseline
-# Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
-NoNewPrivileges=yes
-PrivateTmp=yes
-PrivateDevices=yes
+ExecStart=/usr/bin/php8.2 /var/www/friendica/bin/daemon.php start
+ExecStop=/usr/bin/php8.2 /var/www/friendica/bin/daemon.php stop
+PIDFile=/var/www/friendica/daemon.pid
+NoNewPrivileges=no
+PrivateTmp=no                    # Allow access to system-wide temporary files
+PrivateDevices=no                 # Allow access to device files
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
 RestrictNamespaces=yes
 RestrictRealtime=yes
 DevicePolicy=closed
-ProtectClock=yes
-ProtectHostname=yes
-ProtectProc=invisible
-ProtectSystem=full
+ProtectSystem=restricted           # Change from full to restricted
 ProtectControlGroups=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes
@@ -42,8 +28,7 @@ LockPersonality=yes
 SystemCallArchitectures=native
 SystemCallFilter=~@clock @debug @module @mount @obsolete @reboot @setuid @swap @cpu-emulation @privileged
 
-# Denying access to capabilities that should not be relevant for webapps
-# Doc: https://man7.org/linux/man-pages/man7/capabilities.7.html
+# Allow necessary capabilities
 CapabilityBoundingSet=~CAP_RAWIO CAP_MKNOD
 CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_AUDIT_WRITE
 CapabilityBoundingSet=~CAP_SYS_BOOT CAP_SYS_TIME CAP_SYS_MODULE CAP_SYS_PACCT
@@ -52,7 +37,7 @@ CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_WAKE_ALARM
 CapabilityBoundingSet=~CAP_SYS_TTY_CONFIG
 CapabilityBoundingSet=~CAP_MAC_ADMIN CAP_MAC_OVERRIDE
 CapabilityBoundingSet=~CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW
-CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG 
+CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG
 
 [Install]
 WantedBy=multi-user.target
