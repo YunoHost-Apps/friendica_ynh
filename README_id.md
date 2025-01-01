@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Friendica untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/friendica.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/friendica)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+![Status kerja](https://apps.yunohost.org/badge/state/friendica)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/friendica)
 
 [![Pasang Friendica dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 

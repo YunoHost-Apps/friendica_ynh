@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Friendica YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/friendica.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/friendica)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/friendica)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/friendica)
 
 [![Instalatu Friendica YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
