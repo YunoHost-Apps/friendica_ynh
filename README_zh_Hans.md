@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Friendica
 
-[![集成程度](https://dash.yunohost.org/integration/friendica.svg)](https://ci-apps.yunohost.org/ci/apps/friendica/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/friendica.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/friendica.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/friendica)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+![工作状态](https://apps.yunohost.org/badge/state/friendica)
+![维护状态](https://apps.yunohost.org/badge/maintained/friendica)
 
 [![使用 YunoHost 安装 Friendica](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
@@ -20,7 +22,7 @@ Friendica is a decentralised communications platform that integrates social comm
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
 
-**分发版本：** 2024.08~ynh1
+**分发版本：** 2024.12~ynh1
 
 **演示：** <https://dir.friendica.social/servers>
 
