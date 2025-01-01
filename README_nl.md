@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # Friendica voor Yunohost
 
-
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/friendica)](https://ci-apps.yunohost.org/ci/apps/friendica/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/friendica)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/friendica)
 
 [![Friendica met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=friendica)
 
@@ -20,7 +22,7 @@ Friendica is a decentralised communications platform that integrates social comm
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
 
-
+**Geleverde versie:** 2024.12~ynh1
 
 **Demo:** <https://dir.friendica.social/servers>
 
