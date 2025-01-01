@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2024.12~ynh1"
+version = "2024.12-1~ynh1"
 
 maintainers = []
 
@@ -47,13 +47,13 @@ ram.runtime = "50M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.12.tar.gz"
-        sha256 = "ff82341c65f443d314ad9316cc7d627215c6e87bcc0ff158941e4a5498927b02"
+        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.12-1.tar.gz"
+        sha256 = "44ab54499a66cd632761ce2734ca95afda0f192fd52906d1f9f3ef97d6a00ae0"
         autoupdate.strategy = "latest_github_release"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.12.tar.gz"
-        sha256 = "628ad172aff921b8e5883d7cf757ac695437e252f8460c6a9c5901d55b2da5e7"
+        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.12-1.tar.gz"
+        sha256 = "f63cd7e3fa37d1c946f9bfef0783febfce29c8df26da464f7282cb6d0b15c1f6"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_tag"
 
