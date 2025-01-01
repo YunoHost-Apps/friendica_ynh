@@ -47,13 +47,13 @@ ram.runtime = "50M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.08.tar.gz"
-        sha256 = "ea21891b16e15ac0e13beb3ca4e68e2d0d66e7cf9f326cfce3a69a30e0c90fcb"
+        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.12.tar.gz"
+        sha256 = "ff82341c65f443d314ad9316cc7d627215c6e87bcc0ff158941e4a5498927b02"
         autoupdate.strategy = "latest_github_release"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.08.tar.gz"
-        sha256 = "281a46bbd348fdb4b895c4b07c2b96e419c860725eb502eca83c417689f0c254"
+        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.12.tar.gz"
+        sha256 = "628ad172aff921b8e5883d7cf757ac695437e252f8460c6a9c5901d55b2da5e7"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_tag"
 
