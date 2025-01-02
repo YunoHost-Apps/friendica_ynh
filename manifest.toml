@@ -23,8 +23,10 @@ code = "https://github.com/friendica/friendica"
 yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
+
 ldap = true
 sso = true
+
 disk = "50M"
 ram.build = "150M"
 ram.runtime = "50M"
