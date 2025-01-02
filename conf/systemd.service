@@ -4,14 +4,14 @@ After=network.target mariadb.service
 Requires=network.target remote-fs.target nss-lookup.target
 
 [Service]
+Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-Type=simple
 StandardOutput=append:/var/log/__APP__/daemon.log
 StandardError=inherit
-ExecStart=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php start
-ExecStop=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php stop
+ExecStart=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php start
+ExecStop=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php stop
 PIDFile=__INSTALL_DIR__/daemon.pid
 PrivateTmp=true
 InaccessibleDirectories=/home /root /boot /opt /mnt /media
