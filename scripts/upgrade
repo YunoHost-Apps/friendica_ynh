@@ -15,7 +15,6 @@ ynh_systemctl --service="$app-daemon" --action="stop" --log_path="/var/log/$app/
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir" --keep="config/local.config.php"
 ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
@@ -25,8 +24,6 @@ ynh_safe_rm "$install_dir/view/smarty3/compiled"
 mkdir "$install_dir/view/smarty3/compiled"
 chmod -R 775 "$install_dir/view/smarty3"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:www-data" "$install_dir"
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
