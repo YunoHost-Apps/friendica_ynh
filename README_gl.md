@@ -22,7 +22,7 @@ Friendica is a decentralised communications platform that integrates social comm
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
 
-**Versión proporcionada:** 2024.12~ynh1
+**Versión proporcionada:** 2024.12-1~ynh1
 
 **Demo:** <https://dir.friendica.social/servers>
 
