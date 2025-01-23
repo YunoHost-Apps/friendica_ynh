@@ -67,7 +67,7 @@ ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failreg
 ynh_script_progression --message="Adding the LDAP Auth addon configuration file..." --weight=1
 
 # LDAP addon config
-ynh_add_config --template="addon.config.php" --destination="$install_dir/addon/ldapauth/config/ldapauth.config.php"
+ynh_add_config --template="addon.config.php" --destination="$install_dir/config/addon.config.php"
 
 #=================================================
 # INSTALL FRIENDICA
