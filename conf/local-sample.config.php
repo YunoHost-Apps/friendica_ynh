@@ -20,7 +20,7 @@ return [
 	// ****************************************************************
 
 	'config' => [
-		'php_path' => '/usr/bin/php',
+		'php_path' => '/usr/bin/php__PHPVERSION__',
 		'admin_email' => '__EMAIL__',
 		'sitename' => 'Friendica Social Network',
 		'register_policy' => \Friendica\Module\Register::OPEN,
