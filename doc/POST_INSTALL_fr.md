@@ -1,1 +1,1 @@
-Vous pouvez désormais vous connecter à <https://__DOMAIN__> en utilisant `__EMAIL__` et votre mot de passe YunoHost habituel.
+Vous pouvez maintenant vous connecter sur https://__DOMAIN__ en utilisant n'importe quel identifiant Yunohost valide. La première tentative de connexion peut échouer, si tel est le cas, veuillez retenter.
