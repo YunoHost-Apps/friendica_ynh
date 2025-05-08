@@ -38,7 +38,7 @@ chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R "$app:www-data" "$install_dir"
 
-ynh_add_config --template="local-sample.config.php" --destination="$install_dir/config/local.config.php"
+ynh_add_config --template="local-sample.config.php" --destination="$install_dir/config/temp.config.php"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -79,7 +79,7 @@ pushd "$install_dir"
 	ynh_exec_as "$app" "php$phpversion" bin/composer.phar install --no-dev --quiet
 
 	# Install application
-	ynh_exec_as "$app" "php$phpversion" bin/console.php autoinstall -f "$install_dir/config/local.config.php"
+	ynh_exec_as "$app" "php$phpversion" bin/console.php autoinstall -f "$install_dir/config/temp.config.php"
 
 	# Enable LDAP Auth addon
 	ynh_exec_as "$app" "php$phpversion" bin/console.php addon enable ldapauth
