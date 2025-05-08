@@ -80,6 +80,7 @@ pushd "$install_dir"
 
 	# Install application
 	ynh_exec_as "$app" "php$phpversion" bin/console.php autoinstall -f "$install_dir/config/temp.config.php"
+	ynh_secure_remove --file="$install_dir/config/temp.config.php"
 
 	# Enable LDAP Auth addon
 	ynh_exec_as "$app" "php$phpversion" bin/console.php addon enable ldapauth
