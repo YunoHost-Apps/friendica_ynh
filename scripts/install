@@ -14,7 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 email=$(ynh_user_get_info --username="$admin" --key=mail)
-timezone=$(cat /etc/timezone)
+timezone=$(timedatectl show --value --property=Timezone)
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
