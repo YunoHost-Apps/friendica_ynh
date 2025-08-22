@@ -38,6 +38,10 @@ chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R "$app:www-data" "$install_dir"
 
+mkdir -p "/var/log/$app"
+chmod 770 "/var/log/$app"
+chown "$app:www-data" "/var/log/$app"
+
 ynh_add_config --template="local-sample.config.php" --destination="$install_dir/config/temp.config.php"
 
 #=================================================
