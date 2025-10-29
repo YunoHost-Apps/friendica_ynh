@@ -4,14 +4,14 @@ After=network.target mariadb.service
 Requires=network.target remote-fs.target nss-lookup.target
 
 [Service]
+Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-Type=simple
 StandardOutput=append:/var/log/__APP__/daemon.log
 StandardError=inherit
-ExecStart=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php start
-ExecStop=/usr/bin/php__PHPVERSION__ __INSTALL_DIR__/bin/daemon.php stop
+ExecStart=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php start
+ExecStop=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php stop
 PIDFile=__INSTALL_DIR__/daemon.pid
 PrivateTmp=true
 InaccessibleDirectories=/home /root /boot /opt /mnt /media
@@ -21,7 +21,7 @@ RestartSec=10
 StartLimitBurst=1
 
 # Sandboxing options to harden security
-# Depending on specificities of your service/app, you may need to tweak these 
+# Depending on specificities of your service/app, you may need to tweak these
 # .. but this should be a good baseline
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 NoNewPrivileges=yes
@@ -52,7 +52,7 @@ CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_WAKE_ALARM
 CapabilityBoundingSet=~CAP_SYS_TTY_CONFIG
 CapabilityBoundingSet=~CAP_MAC_ADMIN CAP_MAC_OVERRIDE
 CapabilityBoundingSet=~CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW
-CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG 
+CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG
 
 [Install]
 WantedBy=multi-user.target
