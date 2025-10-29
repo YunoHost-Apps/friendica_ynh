@@ -1,11 +1,15 @@
 #!/bin/bash
 
-source _common.sh
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
 
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
+
 ynh_script_progression "Stopping $app's systemd service..."
 
 ynh_systemctl --service="$app-daemon" --action="stop" --log_path="/var/log/$app/daemon.log"
@@ -13,26 +17,27 @@ ynh_systemctl --service="$app-daemon" --action="stop" --log_path="/var/log/$app/
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+
 ynh_script_progression "Upgrading source files..."
 
 ynh_setup_source --dest_dir="$install_dir" --keep="config/local.config.php"
 ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
 
-# clear the smarty cache
-# cf: https://github.com/friendica/friendica/issues/11212#issuecomment-1046051750
 ynh_safe_rm "$install_dir/view/smarty3/compiled"
 mkdir "$install_dir/view/smarty3/compiled"
 chmod -R 775 "$install_dir/view/smarty3"
 
+chmod -R o-rwx "$install_dir"
+chown -R "$app:www-data" "$install_dir"
+
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
+
 ynh_script_progression "Upgrading system configurations related to $app..."
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create a dedicated PHP-FPM config
 ynh_config_add_phpfpm
 
 ynh_config_add_logrotate
@@ -46,29 +51,26 @@ ynh_config_add_systemd --service="$app-daemon"
 
 yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
 
-# Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
+
 ynh_script_progression "Updating configuration..."
 
-# fix the url if necessary (there should be no trailing slash)
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "'url' => 'https://$domain'," "$install_dir/config/local.config.php"; then
   ynh_print_info "Patching the Friendica config file: fix the domain setting..."
   ynh_replace --match="'url' => 'https://.*'," --replace="'url' => 'https://$domain'," --file="$install_dir/config/local.config.php"
   ynh_store_file_checksum "$install_dir/config/local.config.php"
 fi
 
-# add the path to the pidfile if missing
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
   ynh_print_info "Patching the Friendica config file: add the PID file path for the daemon..."
   ynh_replace --match="'basepath' => '$install_dir'," --replace="'basepath' => '$install_dir',\n		'pidfile' => '$install_dir/daemon.pid'," --file="$install_dir/config/local.config.php"
   ynh_store_file_checksum "$install_dir/config/local.config.php"
 fi
 
-# add log path to the config
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "logfile" "$install_dir/config/local.config.php"; then
   ynh_print_info "Patching the Friendica config file: add the path for the Friendica logfile..."
   ynh_replace --match="'basepath' => '$install_dir'," --replace="'basepath' => '$install_dir',\n		'logfile' => '/var/log/friendica/friendica.log',\n		'loglevel' => 'notice'," --file="$install_dir/config/local.config.php"
@@ -79,7 +81,6 @@ fi
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-# Run Composer
 pushd "$install_dir"
   ynh_exec_as_app "php$php_version" bin/composer.phar install --no-dev --quiet
  	ynh_exec_as_app "php$php_version" bin/console.php dbstructure update
@@ -88,6 +89,7 @@ popd
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
+
 ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service="$app-daemon" --action="start" --log_path="/var/log/$app/daemon.log"

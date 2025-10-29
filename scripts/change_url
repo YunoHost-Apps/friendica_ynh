@@ -1,11 +1,16 @@
 #!/bin/bash
 
-source _common.sh
+
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
+
 ynh_script_progression "Updating NGINX web server configuration..."
 
 ynh_config_change_url_nginx

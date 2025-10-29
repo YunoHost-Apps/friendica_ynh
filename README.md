@@ -13,12 +13,12 @@ It shall NOT be edited by hand.
 
 *[Read this README in other languages.](./ALL_README.md)*
 
-> *This package allows you to install Friendica quickly and simply on a YunoHost server.*  
+> *This package allows you to install Friendica quickly and simply on a YunoHost server.*
 > *If you don't have YunoHost, please consult [the guide](https://yunohost.org/install) to learn how to install it.*
 
 ## Overview
 
-Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.  
+Friendica is a decentralised communications platform that integrates social communication. The platform links to independent social projects and corporate services.
 Friendica connects you effortlessly to a federated communications network of several thousand servers, with more than half a million user registrations. You can directly connect to anyone on Friendica, Mastodon, Diaspora, GnuSocial, Pleroma, or Hubzilla, regardless where each user profile is hosted.
 
 
