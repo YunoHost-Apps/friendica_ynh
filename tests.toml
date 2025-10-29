@@ -4,19 +4,10 @@ test_format = 1.0
 
 [default]
 
-    # ------------
-    # Tests to run
-    # ------------
+exclude = [ "install.private" ]
 
-    exclude = [ "install.private" ]
+# -------------------------------
+# Commits to test upgrade from
+# -------------------------------
 
-    # -------------------------------
-    # Default args to use for install
-    # -------------------------------
-
-    # -------------------------------
-    # Commits to test upgrade from
-    # -------------------------------
-
-    # test_upgrade_from.a93169d04583ff13ba7d29aa4962477fb7e3b468.name = "Upgrade from 2023.12~ynh3"
-    test_upgrade_from.d679e756ddef5ce91417e14cc56c2082e31df07b.name = "Upgrade from 2024.12-1~ynh1"
+test_upgrade_from.a93169d04583ff13ba7d29aa4962477fb7e3b468.name = "Upgrade from 2023.12~ynh3"
