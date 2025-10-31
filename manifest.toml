@@ -50,15 +50,16 @@ ram.runtime = "50M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.12-1.tar.gz"
-        sha256 = "44ab54499a66cd632761ce2734ca95afda0f192fd52906d1f9f3ef97d6a00ae0"
-        autoupdate.strategy = "latest_github_release"
+        url = "https://github.com/friendica/friendica/archive/84c4073992b8621a3613eec679310cda2339806d.tar.gz"
+        sha256 = "033ef18ec14840d3b1aaa6a8acd6911977764872f58ccf8534585a611a39449b"
+        autoupdate.upstream = "https://github.com/friendica/friendica"
+        autoupdate.strategy = "latest_github_commit"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.12-1.tar.gz"
-        sha256 = "f63cd7e3fa37d1c946f9bfef0783febfce29c8df26da464f7282cb6d0b15c1f6"
+        url = "https://github.com/friendica/friendica-addons/archive/97b09d34e9b883eabf5c6246e7788b0545631a39.tar.gz"
+        sha256 = "228e14c541c326068578e0332725c159c340868f8a17d853590689456c896044"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
-        autoupdate.strategy = "latest_github_tag"
+        autoupdate.strategy = "latest_github_commit"
 
 [resources.system_user]
 
@@ -72,7 +73,7 @@ main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
-packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp, php8.2-intl, php8.2-ldap, php8.2-imap"
+packages = "mariadb-server, php8.4-curl, php8.4-mbstring, php8.4-imagick, php8.4-xml, php8.4-zip, php8.4-mysql, php8.4-gd, php8.4-gmp, php8.4-intl, php8.4-ldap, php8.4-imap"
 
 [resources.database]
 type = "mysql"
