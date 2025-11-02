@@ -36,7 +36,7 @@ ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore "/etc/systemd/system/$app-daemon.service"
 systemctl enable "$app-daemon.service" --quiet
 
-yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
+yunohost service add "$app-daemon" --description="$app daemon" --log="/var/log/$app/daemon.log"
 
 ynh_restore "/var/log/$app"
 
