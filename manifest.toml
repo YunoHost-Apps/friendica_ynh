@@ -45,13 +45,6 @@ ram.runtime = "50M"
     type = "select"
     choices = [ "de", "en", "es", "fr", "it", "pt" ]
     default = "en"
-    
-    [install.storage_config]
-    ask.en = "Choose where to store media"
-    help.en = "If you expect to have a large or busy $app instance, `filesystem` is a better choice"
-    type = "select"
-    choices = [ "Database", "Filesystem"]
-    default = "Database"
 
 [resources]
 

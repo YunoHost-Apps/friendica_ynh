@@ -39,7 +39,6 @@ return [
 		'loglevel' => 'notice',
 	],
 	'storage' => [
-		'name' => '__STORAGE_CONFIG__',
 		'filesystem_path' => '__DATA_DIR__/storage'
 	],
 ];
