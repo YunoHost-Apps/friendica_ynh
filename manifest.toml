@@ -45,6 +45,13 @@ ram.runtime = "50M"
     type = "select"
     choices = [ "de", "en", "es", "fr", "it", "pt" ]
     default = "en"
+    
+    [install.storage_config]
+    ask.en = "Choose where to store media"
+    help.en = "If you expect to have a large or busy $app instance, `filesystem` is a better choice"
+    type = "select"
+    choices = [ "Database", "Filesystem"]
+    default = "Database"
 
 [resources]
 
@@ -64,6 +71,10 @@ ram.runtime = "50M"
 
 [resources.install_dir]
 group = "www-data:r-x"
+
+[resources.data_dir]
+subdirs = ["storage"]
+group = "www-data:rwx"
 
 [resources.permissions]
 main.url = "/"
