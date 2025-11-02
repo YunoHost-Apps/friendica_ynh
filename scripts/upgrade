@@ -40,6 +40,21 @@ ynh_config_add_phpfpm
 
 ynh_config_add_logrotate
 
+# Check logfile
+if [ ! -f "/var/log/$app/$app.log" ]; then
+    touch "/var/log/$app/$app.log"
+    chown $app:www-data "/var/log/$app/$app.log"
+    chmod 660 "/var/log/$app/$app.log"
+else
+    if [ "$(stat -c '%U' /var/log/$app/$app.log)" != "$app" ] || [ "$(stat -c '%G' /var/log/$app/$app.log)" != "www-data" ]; then
+        chown $app:www-data "/var/log/$app/$app.log"
+    fi
+
+    if [ "$(stat -c '%a' /var/log/$app/$app.log)" != "660" ]; then
+        chmod 660 "/var/log/$app/$app.log"
+    fi
+fi
+
 if [ -f "/etc/cron.d/$app" ]; then
   ynh_print_info "Removing the legacy cron..."
   ynh_safe_rm "/etc/cron.d/$app"
