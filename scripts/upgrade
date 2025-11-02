@@ -47,7 +47,7 @@ fi
 
 ynh_config_add_systemd --service="$app-daemon"
 
-yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
+yunohost service add "$app-daemon" --description="$app daemon" --log="/var/log/$app/daemon.log"
 
 # Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
@@ -59,22 +59,22 @@ ynh_script_progression "Updating configuration..."
 
 # fix the url if necessary (there should be no trailing slash)
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "'url' => 'https://$domain'," "$install_dir/config/local.config.php"; then
-  ynh_print_info "Patching the Friendica config file: fix the domain setting..."
+  ynh_print_info "Patching the $app config file: fix the domain setting..."
   ynh_replace --match="'url' => 'https://.*'," --replace="'url' => 'https://$domain'," --file="$install_dir/config/local.config.php"
   ynh_store_file_checksum "$install_dir/config/local.config.php"
 fi
 
 # add the path to the pidfile if missing
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "pidfile" "$install_dir/config/local.config.php"; then
-  ynh_print_info "Patching the Friendica config file: add the PID file path for the daemon..."
+  ynh_print_info "Patching the $app config file: add the PID file path for the daemon..."
   ynh_replace --match="'basepath' => '$install_dir'," --replace="'basepath' => '$install_dir',\n		'pidfile' => '$install_dir/daemon.pid'," --file="$install_dir/config/local.config.php"
   ynh_store_file_checksum "$install_dir/config/local.config.php"
 fi
 
 # add log path to the config
 if [ -f "$install_dir/config/local.config.php" ] && ! grep -q -e "logfile" "$install_dir/config/local.config.php"; then
-  ynh_print_info "Patching the Friendica config file: add the path for the Friendica logfile..."
-  ynh_replace --match="'basepath' => '$install_dir'," --replace="'basepath' => '$install_dir',\n		'logfile' => '/var/log/friendica/friendica.log',\n		'loglevel' => 'notice'," --file="$install_dir/config/local.config.php"
+  ynh_print_info "Patching the $app config file: add the path for the $app logfile..."
+  ynh_replace --match="'basepath' => '$install_dir'," --replace="'basepath' => '$install_dir',\n		'logfile' => '/var/log/$app/$app.log',\n		'loglevel' => 'notice'," --file="$install_dir/config/local.config.php"
   ynh_store_file_checksum "$install_dir/config/local.config.php"
 fi
 
