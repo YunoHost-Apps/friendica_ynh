@@ -45,7 +45,7 @@ ynh_config_add_systemd --service="$app-daemon"
 # Create a dedicated nginx config
 ynh_config_add_nginx
 
-yunohost service add "$app-daemon" --description="$app daemon" --log="/var/log/$app/daemon.log"
+yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
 
 # Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate

@@ -47,7 +47,7 @@ fi
 
 ynh_config_add_systemd --service="$app-daemon"
 
-yunohost service add "$app-daemon" --description="$app daemon" --log="/var/log/$app/daemon.log"
+yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/log/$app/daemon.log"
 
 # Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
