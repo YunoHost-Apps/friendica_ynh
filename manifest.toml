@@ -9,7 +9,7 @@ description.fr = "Réseau social décentralisé"
 
 version = "2024.12-1~ynh4"
 
-maintainers = []
+maintainers = ["trendless"]
 
 [upstream]
 license = "AGPL-3.0-only"
@@ -28,9 +28,9 @@ multi_instance = true
 ldap = true
 sso = true
 
-disk = "50M"
-ram.build = "150M"
-ram.runtime = "50M"
+disk = "250M"
+ram.build = "200M"
+ram.runtime = "150M"
 
 [install]
     [install.domain]
