@@ -60,6 +60,12 @@ ram.runtime = "50M"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_tag"
 
+        [resources.sources.bookface]
+        url = "https://gitlab.com/randompenguin/bookface/-/archive/1.8.5/bookface-1.8.5.tar.gz"
+        sha256 = "34a618b6b501552a67ba96f0f0161b788a34104b96a67dff9a6f24a9cba6e920"
+        autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
+        autoupdate.strategy = "latest_gitlab_release"
+
 [resources.system_user]
 
 [resources.install_dir]

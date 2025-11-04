@@ -24,12 +24,17 @@ ynh_script_progression "Setting up source files..."
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 ynh_setup_source --dest_dir="$install_dir/addon" --source_id="addons"
+ynh_setup_source --dest_dir="$install_dir/tempbookface" --source_id="bookface"
+find "$install_dir/tempbookface" \( -name "*.php" -o -name "*.css" \) -type f -exec mv {} "$install_dir/view/theme/frio/scheme/" \;
+chmod 640 "$install_dir/view/theme/frio/scheme/"*.*
+ynh_safe_rm "$install_dir/tempbookface"
 
 mkdir -p "$install_dir/view/smarty3"
 
 chmod -R 775 "$install_dir/view/smarty3"
 chmod -R o-rwx "$install_dir"
 chown -R "$app:www-data" "$install_dir"
+
 ynh_config_add --template="local-sample.config.php" --destination="$install_dir/config/temp.config.php"
 
 #=================================================
@@ -49,6 +54,11 @@ yunohost service add "$app-daemon" --description="Friendica daemon" --log="/var/
 
 # Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate
+
+# Create logfile for friendica and give permissions
+touch "/var/log/$app/$app.log"
+chmod 660 "/var/log/$app/$app.log"
+chown "$app:www-data" "/var/log/$app/$app.log"
 
 # Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="^.*authenticate\: failed login attempt.*\"ip\"\:\"<HOST>\".*$"
