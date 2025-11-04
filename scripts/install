@@ -74,7 +74,7 @@ ynh_config_add --template="addon.config.php" --destination="$install_dir/config/
 #=================================================
 # INSTALL FRIENDICA
 #=================================================
-ynh_script_progression "Install Friendica..."
+ynh_script_progression "Install $app..."
 
 pushd "$install_dir"
 	# Import Composer dependencies
