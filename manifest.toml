@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2024.12-1~ynh3"
+version = "2024.12-1~ynh4"
 
 maintainers = []
 
