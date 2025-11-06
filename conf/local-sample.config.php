@@ -38,4 +38,7 @@ return [
 		'logfile' => '/var/log/__APP__/__APP__.log',
 		'loglevel' => 'notice',
 	],
+	'storage' => [
+		'filesystem_path' => '__DATA_DIR__/storage'
+	],
 ];
