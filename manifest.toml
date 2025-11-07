@@ -65,6 +65,7 @@ ram.runtime = "150M"
         sha256 = "34a618b6b501552a67ba96f0f0161b788a34104b96a67dff9a6f24a9cba6e920"
         autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
         autoupdate.strategy = "latest_gitlab_release"
+        autoupdate.asset = ".*\\.tar\\.gz"
 
 [resources.system_user]
 
