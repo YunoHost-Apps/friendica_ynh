@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2024.12-1~ynh4"
+version = "2024.12-1~ynh5"
 
 maintainers = ["trendless"]
 
@@ -83,7 +83,19 @@ main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
-packages = "mariadb-server, php8.2-curl, php8.2-mbstring, php8.2-imagick, php8.2-xml, php8.2-zip, php8.2-mysql, php8.2-gd, php8.2-gmp, php8.2-intl, php8.2-ldap, php8.2-imap"
+packages = ["mariadb-server", 
+"php8.2-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
+"php8.2-imagick",
+"php8.2-curl", 
+"php8.2-mbstring", 
+"php8.2-xml", 
+"php8.2-zip", 
+"php8.2-mysql", 
+"php8.2-gd", 
+"php8.2-gmp", 
+"php8.2-intl", 
+"php8.2-ldap", 
+"php8.2-imap"]
 
 [resources.database]
 type = "mysql"
