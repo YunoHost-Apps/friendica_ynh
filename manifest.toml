@@ -84,7 +84,7 @@ main.protected = true
 
 [resources.apt]
 packages = ["mariadb-server", 
-"php8.2-fpm",
+"php8.2-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
 "php8.2-imagick",
 "php8.2-curl", 
 "php8.2-mbstring", 
