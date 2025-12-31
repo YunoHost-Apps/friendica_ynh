@@ -20,7 +20,7 @@ userdoc = "https://wiki.friendi.ca/"
 code = "https://github.com/friendica/friendica"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
