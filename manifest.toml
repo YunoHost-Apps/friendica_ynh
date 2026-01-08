@@ -7,9 +7,9 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2024.12-1~ynh3"
+version = "2024.12-1~ynh5"
 
-maintainers = []
+maintainers = ["trendless"]
 
 [upstream]
 license = "AGPL-3.0-only"
@@ -28,9 +28,9 @@ multi_instance = true
 ldap = true
 sso = true
 
-disk = "50M"
-ram.build = "150M"
-ram.runtime = "50M"
+disk = "250M"
+ram.build = "200M"
+ram.runtime = "150M"
 
 [install]
     [install.domain]
@@ -61,10 +61,21 @@ ram.runtime = "50M"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_commit"
 
+        [resources.sources.bookface]
+        url = "https://gitlab.com/randompenguin/bookface/-/archive/1.8.5/bookface-1.8.5.tar.gz"
+        sha256 = "34a618b6b501552a67ba96f0f0161b788a34104b96a67dff9a6f24a9cba6e920"
+        autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
+        autoupdate.strategy = "latest_gitlab_release"
+        autoupdate.asset = ".*\\.tar\\.gz"
+
 [resources.system_user]
 
 [resources.install_dir]
 group = "www-data:r-x"
+
+[resources.data_dir]
+subdirs = ["storage"]
+group = "www-data:rwx"
 
 [resources.permissions]
 main.url = "/"
@@ -73,7 +84,19 @@ main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
-packages = "mariadb-server, php8.4-curl, php8.4-mbstring, php8.4-imagick, php8.4-xml, php8.4-zip, php8.4-mysql, php8.4-gd, php8.4-gmp, php8.4-intl, php8.4-ldap, php8.4-imap"
+packages = ["mariadb-server", 
+"php8.2-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
+"php8.2-imagick",
+"php8.2-curl", 
+"php8.2-mbstring", 
+"php8.2-xml", 
+"php8.2-zip", 
+"php8.2-mysql", 
+"php8.2-gd", 
+"php8.2-gmp", 
+"php8.2-intl", 
+"php8.2-ldap", 
+"php8.2-imap"]
 
 [resources.database]
 type = "mysql"
