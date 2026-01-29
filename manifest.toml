@@ -74,7 +74,6 @@ group = "www-data:r-x"
 
 [resources.data_dir]
 subdirs = ["storage"]
-group = "www-data:rwx"
 
 [resources.permissions]
 main.url = "/"
