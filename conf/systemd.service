@@ -1,5 +1,5 @@
 [Unit]
-Description=Friendica daemon
+Description=Friendica: Decentralized Social Network
 After=network.target mariadb.service
 Requires=network.target remote-fs.target nss-lookup.target
 
@@ -10,11 +10,11 @@ WorkingDirectory=__INSTALL_DIR__/
 Type=simple
 StandardOutput=append:/var/log/__APP__/daemon.log
 StandardError=inherit
-ExecStart=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php start
-ExecStop=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/daemon.php stop
+ExecStart=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/console.php daemon start
+ExecStop=/usr/bin/php__PHP_VERSION__ __INSTALL_DIR__/bin/console.php daemon stop
 PIDFile=__INSTALL_DIR__/daemon.pid
 PrivateTmp=true
-InaccessibleDirectories=/home /root /boot /opt /mnt /media
+InaccessibleDirectories=/root /boot /opt /mnt /media
 ReadOnlyDirectories=/etc /usr
 Restart=always
 RestartSec=10

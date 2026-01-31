@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2024.12-1~ynh5"
+version = "2026.01~ynh1"
 
 maintainers = ["trendless"]
 
@@ -20,7 +20,7 @@ userdoc = "https://wiki.friendi.ca/"
 code = "https://github.com/friendica/friendica"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -50,19 +50,19 @@ ram.runtime = "150M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2024.12-1.tar.gz"
-        sha256 = "44ab54499a66cd632761ce2734ca95afda0f192fd52906d1f9f3ef97d6a00ae0"
+        url = "https://github.com/friendica/friendica/archive/refs/tags/2026.01.tar.gz"
+        sha256 = "743ff44afb14003af6d7b180b6269c17fdde2b399367b4c224d019dc0a224ec8"
         autoupdate.strategy = "latest_github_release"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2024.12-1.tar.gz"
-        sha256 = "f63cd7e3fa37d1c946f9bfef0783febfce29c8df26da464f7282cb6d0b15c1f6"
+        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2026.01.tar.gz"
+        sha256 = "43c55f157f717ea615f4b45d88544b3db344858016c010fe349080cafb92247e"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_tag"
 
         [resources.sources.bookface]
-        url = "https://gitlab.com/randompenguin/bookface/-/archive/1.8.5/bookface-1.8.5.tar.gz"
-        sha256 = "34a618b6b501552a67ba96f0f0161b788a34104b96a67dff9a6f24a9cba6e920"
+        url = "https://gitlab.com/randompenguin/bookface/-/archive/1.9.0-rc/bookface-1.9.0-rc.tar.gz"
+        sha256 = "f41d79da2bfb775d8c13a6986b359efd3a8ff58e319fecbfb40cbaa6eaca3ef6"
         autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
         autoupdate.strategy = "latest_gitlab_release"
         autoupdate.asset = ".*\\.tar\\.gz"
@@ -84,18 +84,18 @@ main.protected = true
 
 [resources.apt]
 packages = ["mariadb-server", 
-"php8.2-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
-"php8.2-imagick",
-"php8.2-curl", 
-"php8.2-mbstring", 
-"php8.2-xml", 
-"php8.2-zip", 
-"php8.2-mysql", 
-"php8.2-gd", 
-"php8.2-gmp", 
-"php8.2-intl", 
-"php8.2-ldap", 
-"php8.2-imap"]
+"php8.4-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
+"php8.4-imagick",
+"php8.4-curl", 
+"php8.4-mbstring", 
+"php8.4-xml", 
+"php8.4-zip", 
+"php8.4-mysql", 
+"php8.4-gd", 
+"php8.4-gmp", 
+"php8.4-intl", 
+"php8.4-ldap", 
+"php8.4-imap"]
 
 [resources.database]
 type = "mysql"
