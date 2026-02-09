@@ -62,7 +62,7 @@ ram.runtime = "150M"
 
         [resources.sources.bookface]
         url = "https://gitlab.com/randompenguin/bookface/-/archive/2.0/bookface-2.0.tar.gz"
-        sha256 = "9d936b62cffb2270583f4689b75290ba34f8c8983dd506668aeafde28aaa5583"
+        sha256 = "a0318f862b421c4fdfe03cef20198ec6520ac9e143d92322399875e4e0de1607"
         #autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
         #autoupdate.strategy = "latest_gitlab_release"
         #autoupdate.asset = ".*\\.tar\\.gz"
