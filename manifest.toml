@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2026.01~ynh2"
+version = "2026.01~ynh3"
 
 maintainers = ["trendless"]
 
@@ -61,11 +61,11 @@ ram.runtime = "150M"
         autoupdate.strategy = "latest_github_tag"
 
         [resources.sources.bookface]
-        url = "https://gitlab.com/randompenguin/bookface/-/archive/1.8.5/bookface-1.8.5.tar.gz"
-        sha256 = "34a618b6b501552a67ba96f0f0161b788a34104b96a67dff9a6f24a9cba6e920"
-        autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
-        autoupdate.strategy = "latest_gitlab_release"
-        autoupdate.asset = ".*\\.tar\\.gz"
+        url = "https://gitlab.com/randompenguin/bookface/-/archive/2.0/bookface-2.0.tar.gz"
+        sha256 = "9d936b62cffb2270583f4689b75290ba34f8c8983dd506668aeafde28aaa5583"
+        #autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
+        #autoupdate.strategy = "latest_gitlab_release"
+        #autoupdate.asset = ".*\\.tar\\.gz"
 
 [resources.system_user]
 
