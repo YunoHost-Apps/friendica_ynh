@@ -50,21 +50,21 @@ ram.runtime = "150M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2026.01.tar.gz"
-        sha256 = "743ff44afb14003af6d7b180b6269c17fdde2b399367b4c224d019dc0a224ec8"
-        autoupdate.strategy = "latest_github_release"
+        url = "https://github.com/friendica/friendica/archive/c62cbe52f31f6e01a5293cc838f01ce0421a65b0.tar.gz"
+        sha256 = "fa2021240e80509fd01f26d27fb173cc5bc80c5085d5123b606ede1668eda2d7"
+        autoupdate.strategy = "latest_github_commit"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2026.01.tar.gz"
-        sha256 = "43c55f157f717ea615f4b45d88544b3db344858016c010fe349080cafb92247e"
+        url = "https://github.com/friendica/friendica-addons/archive/ecbdbe3ea988b1a57bc5f68f98f2f09a00e0c6da.tar.gz"
+        sha256 = "dd9d9de53ae7ee65823e79b83c5d2c48aebfe4a71a8fbe592e997605b1d1f72c"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
-        autoupdate.strategy = "latest_github_tag"
+        autoupdate.strategy = "latest_github_commit"
 
         [resources.sources.bookface]
-        url = "https://gitlab.com/randompenguin/bookface/-/archive/2.0/bookface-2.0.tar.gz"
-        sha256 = "a0318f862b421c4fdfe03cef20198ec6520ac9e143d92322399875e4e0de1607"
-        #autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
-        #autoupdate.strategy = "latest_gitlab_release"
+        url = "https://gitlab.com/randompenguin/bookface/-/archive/310b3b4c229fdffc660554df708590d361ffdffe/bookface-310b3b4c229fdffc660554df708590d361ffdffe.tar.gz"
+        sha256 = "d11e56bb4254d204b8246d3d5902aef533f2a28bc8cc4748ce02d6e5550382d6"
+        autoupdate.upstream = "https://gitlab.com/randompenguin/bookface"
+        autoupdate.strategy = "latest_gitlab_commit"
         #autoupdate.asset = ".*\\.tar\\.gz"
 
 [resources.system_user]
