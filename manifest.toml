@@ -7,7 +7,7 @@ name = "Friendica"
 description.en = "Decentralized Social Network"
 description.fr = "Réseau social décentralisé"
 
-version = "2026.01~ynh3"
+version = "2026.05-1~ynh1"
 
 maintainers = ["trendless"]
 
@@ -50,13 +50,13 @@ ram.runtime = "150M"
 
     [resources.sources]
         [resources.sources.main]
-        url = "https://github.com/friendica/friendica/archive/refs/tags/2026.01.tar.gz"
-        sha256 = "743ff44afb14003af6d7b180b6269c17fdde2b399367b4c224d019dc0a224ec8"
+        url = "https://github.com/friendica/friendica/archive/refs/tags/2026.05-1.tar.gz"
+        sha256 = "0bfd8e0e6c20a6afb9449e11c2a3f7c083f5bc611bad4421fba1589192c5efe6"
         autoupdate.strategy = "latest_github_release"
 
         [resources.sources.addons]
-        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2026.01.tar.gz"
-        sha256 = "43c55f157f717ea615f4b45d88544b3db344858016c010fe349080cafb92247e"
+        url = "https://github.com/friendica/friendica-addons/archive/refs/tags/2026.05.tar.gz"
+        sha256 = "73cd67ad6c4278232fe661a350736c6382eb770fb129d02a6af53be8216898c1"
         autoupdate.upstream = "https://github.com/friendica/friendica-addons"
         autoupdate.strategy = "latest_github_tag"
 
@@ -83,7 +83,8 @@ main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
-packages = ["mariadb-server", 
+packages = [
+"mariadb-server", 
 "php8.4-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
 "php8.4-imagick",
 "php8.4-curl", 
@@ -95,7 +96,9 @@ packages = ["mariadb-server",
 "php8.4-gmp", 
 "php8.4-intl", 
 "php8.4-ldap", 
-"php8.4-imap"]
+"php8.4-imap",
+"php8.4-apcu",
+]
 
 [resources.database]
 type = "mysql"
