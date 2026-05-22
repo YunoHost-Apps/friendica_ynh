@@ -83,7 +83,8 @@ main.allowed = [ "visitors", "all_users" ]
 main.protected = true
 
 [resources.apt]
-packages = ["mariadb-server", 
+packages = [
+"mariadb-server", 
 "php8.4-fpm", # DO NOT DROP THIS LINE, this fixes `phpapi` selection going south
 "php8.4-imagick",
 "php8.4-curl", 
@@ -95,7 +96,9 @@ packages = ["mariadb-server",
 "php8.4-gmp", 
 "php8.4-intl", 
 "php8.4-ldap", 
-"php8.4-imap"]
+"php8.4-imap",
+"php8.4-apcu",
+]
 
 [resources.database]
 type = "mysql"
