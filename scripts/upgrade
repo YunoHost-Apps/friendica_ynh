@@ -104,7 +104,7 @@ ynh_script_progression "Upgrading $app and database..."
 
 # Run Composer
 pushd "$install_dir"
-	ynh_exec_as_app "php$php_version" bin/composer.phar run install:prod --quiet
+	ynh_exec_as_app "php$php_version" bin/composer.phar install:prod --quiet
 	ynh_exec_as_app "php$php_version" bin/console.php dbstructure update
 popd
 
