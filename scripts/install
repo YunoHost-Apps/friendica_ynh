@@ -78,7 +78,7 @@ ynh_script_progression "Install $app..."
 
 pushd "$install_dir"
 	# Import Composer dependencies
-	ynh_exec_as_app "php$php_version" bin/composer.phar install:prod --quiet
+	ynh_exec_as_app "php$php_version" bin/composer.phar run install:prod --quiet
 
 	# Install application
 	ynh_exec_as_app "php$php_version" bin/console.php autoinstall -f "$install_dir/config/temp.config.php"
